@@ -365,3 +365,299 @@ const { numbers, users, products, orders, students } = require('./data/training-
 // }
 // console.log(getUserSummary(users[0]));
 
+// function compareAges({age: a}, {age: b}){
+//     if (a > b){
+//         return true;
+//     }
+//     return false;
+// }
+// console.log(compareAges(users[0], users[1]));
+
+// function combineNames({name: a},{name: b}){
+//     return a + " and " + b;
+// }
+// console.log(combineNames(users[0], users[1]));
+
+// function   isSameRole({role: a}, {role: b}){
+//     if (a === b){
+//         return true;
+//     }
+//     return false;
+// }
+// console.log(isSameRole(users[2], users[1]));
+
+// function totalSalary({salary: a}, {salary: b}){
+//     return a + b;
+// }
+// console.log(totalSalary(users[0], users[1]));
+
+// function olderUser({age: a}, {age: b}){
+//     if (a > b){
+//         return a;
+//     }
+//     return b;
+// }
+// console.log(olderUser(users[2], users[1]));
+
+// function getProductInfo({name, price}){
+//     return name +":"+ "$" + price;
+// }
+// console.log(getProductInfo(products[0]));
+
+// function isExpensive({price}){
+//     if (price > 100){
+//         return true;
+//     }
+//     return false;
+// }
+// console.log(isExpensive(products[3]));
+
+// function getProductValue({price, quantity}){
+//     return price * quantity;
+// }
+// console.log(getProductValue(products[0]));
+
+// function isInStock({inStock}){
+//     return inStock;
+// }
+// console.log(isInStock(products[2]));
+
+// const [{grades}] = students;
+// console.log(grades);
+
+// const [,{attendance}] = students;
+// console.log(attendance);
+
+// const [{grades: [a]}] = students;
+// console.log(a);
+
+// const [{name, grades:[a]}] = students;    
+// console.log(name, a);
+
+// const [,{name, grades: [a,b]}] = students;
+// console.log(name, a, b);
+
+// const [,,{name, attendance, grades}] = students;
+// console.log(name, grades, attendance);
+
+// const [{name, grades:[,a]}] = students;
+// console.log(name, a);
+
+// const[,{name, grades:[,,,a]}] = students;
+// console.log(name, a);
+
+// const [,,{grades:[a,,,b]}] = students;
+// console.log(a, b);
+
+// const [,,,{grades}] = students;
+// console.log(grades.reduce((a,grade) => a + grade, 0)/grades.length); 
+
+// const object = {
+//     name: "Test",
+//     address: {city: "NYC"}
+// }
+
+// const {address:{city}} = object;
+// console.log(city);
+
+// const object = 
+//     {
+//         name: "Test", 
+//         profile: {bio: "Hello"}
+//     };
+
+// const {profile: {bio}} = object;
+// console.log(bio);
+
+// const object = {data: {user: {name: "Alice"}}}
+// const {data:{user:{name}}} = object;
+// console.log(name);
+
+// const object = [{name: "A"}, {name: "B"}];
+// const [{name: a}, {name: b}] = object;
+// console.log(a);
+// console.log(b);
+
+// const [{name: a}, {name: b}] = users;
+// console.log(a);
+// console.log(b);
+
+// const [{name}, {age}] = users;
+// console.log(name);
+// console.log(age);
+
+// const [{id, role}, {name, salary}] = users;
+// console.log(id);
+// console.log(role);
+// console.log(name);
+// console.log(salary);
+
+// const [[,,{name}],[{grades:[a]}]] = [users, students];
+// console.log(name);
+// console.log(a);
+
+// const object = {a: {b: {c: 1}}};
+// const {a: {b: {c}}} = object;
+// console.log(c);
+
+// const object = {x: [1, {y: 2}]};
+// const {x: [a, {y: b}]} = object;
+// console.log(a);
+// console.log(b);
+
+// const [{name, category}] = products;
+// console.log(name);
+// console.log(category);
+
+// const [{price}, {quantity}] = products;
+// console.log(price);
+// console.log(quantity);
+
+// const [{userId, productId}] = orders;
+// console.log(userId);
+// console.log(productId);
+
+// const [{status, total}] = orders;
+// console.log(status);
+// console.log(total);
+
+// const [,{...all}] = products;
+// console.log(all);
+
+// const [{name: a}, {name: b}, {name: c}] = users;
+// console.log(a);
+// console.log(b);
+// console.log(c);
+
+// const [{price: a}, {price: b}] = products;
+// console.log(a);
+// console.log(b);
+
+// const [{name}, ...rest] = students;
+// const [{attendance}] = rest.slice(-1);   
+// console.log(name, attendance)
+
+// const object = {users: [{name: "A"}, {name: "B"}]};
+// const {users: [{name: a}, {name: b}]} = object;
+// console.log(a);
+// console.log(b);
+
+// const object = {data: {items: [1, 2, 3]}};
+// const {data: {items: [...rest]}} = object;
+// console.log(rest);
+
+// const userNames = users.map(({name}) => name);
+// console.log(userNames);
+
+// const ages = users.map(({age}) => age);
+// console.log(ages);
+
+// const userIdName = users.map(({name, id}) => name + " " + id);
+// console.log(userIdName);
+
+// const namePrice = products.map(({name, price}) => name + ":$" + price);
+// console.log(namePrice);
+
+// const admins = users.filter(({role}) => role === "admin");
+// console.log(admins);
+
+// const actives = users.filter(({isActive}) => isActive);
+// console.log(actives);
+
+// const expensive = products.filter(({price}) => price > 100);
+// console.log(expensive);
+
+// const userFive = users.find(({id}) => id === 5);
+// console.log(userFive);
+
+// const firstAdmin = users.find(({role}) => role === "admin");
+// console.log(firstAdmin);
+
+// const sumAges = users.reduce((sum, {age}) => sum + age, 0);
+// console.log(sumAges);
+
+// const sumSalary = users.reduce((sum, {salary}) => sum + salary, 0);
+// console.log(sumSalary);
+
+// const sumPrices = products.reduce((sum, {price})=> sum + price, 0);
+// console.log(sumPrices);
+
+// const studentGrades = students.map(({grades}) => 
+//     grades.reduce((sum, grade) => sum + grade, 0)/grades.length);
+// console.log(studentGrades);
+
+// const greater_90 = students.filter(({attendance}) => attendance > 90);
+// console.log(greater_90); 
+
+// const activeNames = users.filter(({isActive}) => 
+//     isActive).map(({name}) => name);
+// console.log(activeNames)
+
+// const adminSalary = users.filter(({role}) => 
+//     role === "admin").map(({salary}) => salary);
+// console.log(adminSalary)
+
+// const nameAge = users.map(({name, age}) => name + " is " + age + " years old");
+// console.log(nameAge);
+
+// const inStockName = products.filter(({inStock}) => inStock).map(({name}) => name);
+// console.log(inStockName)
+
+// const activeUsersCount = users.reduce((count, {isActive}) => 
+//     isActive ? count + 1 : count, 0);
+// console.log(activeUsersCount)
+
+// const addTenPercent = products.map(({price}) => parseInt(price*1.1));
+// console.log(addTenPercent)
+
+// const completedOrders = orders.filter(({status}) => status === "completed");
+// console.log(completedOrders)
+
+// const orderIdTotal = orders.map(({userId, total}) => {
+//     return {
+//         userId,
+//         total
+//     }
+// });
+
+// console.log(orderIdTotal)
+
+// const orderTotal = orders.reduce((sum, {total}) => sum + total, 0);
+// console.log(orderTotal)
+
+// const over30 = users.filter(({age}) => age > 30).map(({name}) => name);
+// console.log(over30)
+
+// const firstWeapon = products.find(({category}) => category === "weapon");    
+// console.log(firstWeapon)
+
+// const firstStudent = students[0].grades.map((a) => {
+//     return{
+//         Grade:  a
+//     }
+// });    
+// console.log(firstStudent)
+
+// const greaterFive = users.filter(({name}) => name.length > 5);
+// console.log(greaterFive)
+
+// const usersAddAdult = users.map(({...rest}) => {
+//     return {
+//         ...rest,
+//         isAdult: rest.age >= 18
+//     }
+// })
+// console.log(usersAddAdult)
+
+// const countPerCategory = products.reduce((count, {category}) => {
+//     if (!count[category]){
+//         count[category] = 0; // create count[category] ex. count.weapon = 0
+//     }
+//     count[category]++; //add to the created count[category]
+//     return count;
+// },[])
+// console.log(countPerCategory)
+
+// const inStockPriceQty = products.filter(({inStock}) => inStock).map(({price, quantity}) => 
+//     price * quantity).reduce((sum, price) => sum + price)
+// console.log(inStockPriceQty)

@@ -59,3 +59,51 @@ const { numbers, users, products, orders, students } = require('./data/training-
 // const augment = {inStock: true}
 // console.log([...filtered, augment])
 
+// const f = (name, age,salary) => { /MUST REPEAT
+//     console.log(name, age, salary)
+// }
+// const argList = [users[0].name, users[0].role, users[0].salary];
+// f(...argList)
+
+// const defaults = { disabled: false, value: "" }; 
+// const computed = { value: "hello" }
+// const a = {...defaults, ...computed};
+// console.log(a)
+
+// const baseStyle = { color: "red", fontSize: 14 }; 
+// const override = { fontSize: 16 }
+// const a = {...baseStyle, ...override};
+// console.log(a)
+
+// const source1 = { q: "sword" }; 
+// const source2 = { limit: 10 }
+// const a = {...source1, ...source2};
+// console.log(a)
+
+// const cart = [{ id: 1, qty: 2 }] 
+// const add = { id: 2, qty: 1 }
+// const a = [...cart, add];
+// console.log(a)
+
+// const cart = [{ id: 1, qty: 2 }] 
+// const a = [...cart.map(({id})=> id === 1 && {id, qty: 3})];
+// console.log(a)
+
+// const defaultRenderProps = { color: "blue" }; 
+// const userRenderProps = { size: "lg" }
+// const a = {...defaultRenderProps, ...userRenderProps};
+// console.log(a)
+
+// const baseChildren = [users[0], users[2]]; 
+// const extra = users[4]
+// const a = [...baseChildren, extra];
+// console.log(a)
+
+// const  cardA = { title: "Shipped", data: orders.filter(o => o.status === "shipped") }; 
+// const cardB = { color: "green" }
+// const a = {...cardA, ...cardB};
+// console.log(a)
+
+
+// const usersList = users.map(({id, name, age}) => id+ " " + name + " " + age).join("\n")
+// console.log(["name" , "age", "id"], usersList)

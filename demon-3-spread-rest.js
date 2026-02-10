@@ -284,4 +284,33 @@ console.log(users.map((user) => ({
     ...user,
     ...(totalSpent[user.id] > 300 && {vip: true})
 })))
+console.log(products.reduce((productCatalog, {id, name}) => {
+        productCatalog[id] = (productCatalog[id] || {})
+        return productCatalog;
+},{}))
 
+const productCatalog = products.reduce((acc, product) => {
+    acc[product.id] = product; 
+    return acc;
+}, {}); 
+
+
+console.log(productCatalog[2])
+
+
+console.log(products.reduce((acc, {category: targetCategory})=> {
+    acc[targetCategory] = (acc[targetCategory] || {
+        products: products.filter(({category}) => category === targetCategory).map(({name}) => name),
+        totalRevenue: "test",
+        unitsSold: "test",
+        customers: "test",
+        avgPrice: "test",
+        performance: "test"
+    })
+    return acc;
+},{}))
+
+console.log(products.reduce((acc, p) => {
+    acc[p.id] = p; // Store the whole product object under its ID
+    return acc;
+}, {}))

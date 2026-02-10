@@ -661,3 +661,304 @@ const { numbers, users, products, orders, students } = require('./data/training-
 // const inStockPriceQty = products.filter(({inStock}) => inStock).map(({price, quantity}) => 
 //     price * quantity).reduce((sum, price) => sum + price)
 // console.log(inStockPriceQty)
+
+// const [{name, ...rest}] = users;
+// console.log({name, rest})
+
+// const [{id,name,...rest}] =products;
+// console.log({id,name,rest})
+
+console.log(users.filter(({isActive}) => isActive).map(({isActive, ...rest}) => ({isActive, rest})))
+
+console.log(users.map(({id, ...rest}) => ({
+    ...rest,
+    id,
+    processed: true
+})))
+
+// const [a, ...rest] = numbers;
+// console.log({a,rest})
+
+// const [a,b,c,...rest] = users;
+// console.log({a,b,c,rest})
+
+console.log(products.map(({price, ...rest}) => {
+     return {
+        ...rest,
+        taxedPrice: price * 1.15
+    }
+}))
+
+
+// const [{name, attendance, grades: testScores}] = students;
+// console.log({name, attendance, testScores})
+
+console.log(users.filter(({role}) => role === "admin")
+.map(({name, ...rest}) => ({name, ...rest})))
+
+console.log(orders.map(({status, ...rest}) => ({status, rest, deliveryDate: "2024-01-15"})))
+
+console.log(students.map(({grades: [first, ...rest]}) => ({first, rest})))
+
+console.log(products.filter(({inStock}) => inStock).map(({name, quantity, ...rest}) => ({
+    name, quantity, details: rest
+})))
+
+// const [{role, salary, ...rest}] = users;
+// console.log({
+//     role, salary, rest
+// })
+
+console.log(orders.map(({userId, ...rest}) => ({
+    userId,
+    rest,
+    customerName: users.find(({id}) => id === userId).name
+})))
+
+// const [a,b,...rest] = products;
+// console.log({a,b,rest})
+
+console.log(users.filter(({salary}) => salary > 45000).map(({name,...rest}) => ({
+    name,
+    rest,
+    tier: "premium"
+})))
+
+// const [,,{id, ...rest}] = products;
+// console.log(rest)
+
+console.log(students.map(({name,...rest}) => ({
+    name, rest, status: rest.attendance > 90 ? "excellent" : "good"
+})))
+
+// const [a,b,c,d,e,...rest] = numbers;
+// console.log({a,b,c,d,e,rest})
+
+console.log(orders.filter(({status}) => status === "completed").map(({total, ...rest}) => ({
+    rest, total, commission: total * 0.1
+})))
+
+// const [,,,{id,name,role,...metadata}] = users;
+// console.log({id,name,role,metadata})
+
+console.log(products.filter(({category}) => category === "armor").map(({price,...rest}) => ({
+    price,rest
+})))
+
+// const [{grades: [a,b,...rest]}] = students;
+// console.log({a,b,rest})
+
+console.log(users.filter(({isActive}) => isActive).map(({salary,...rest}) => ({
+    rest, salary, bonus: salary * 0.05
+})))
+
+console.log(orders.map(({id, status, ...rest}) => ({
+    id, status, rest, trackingNumber: `TRK-${id})`
+})))
+
+// const copy = {...users[0]}
+// console.log({copy})
+
+// const copy = {...products[0],featured: true}
+// console.log({copy})
+
+// const copy = {...users[0],age: 26}
+// console.log({copy})
+
+// const copy = {...orders[0],status: "delivered", deliveredAt: Date.now()}
+// console.log({copy})
+
+// const copy = {...users[0],...users[1]}
+// console.log({copy})
+
+// const copy = {...products[0], price: products[0].price * 1.1}
+// console.log({copy})
+
+// const copy = [...numbers]
+// console.log(copy)
+
+// const copy = [0, ...numbers];
+// console.log(copy)
+
+// const copy = [...numbers,21];
+// console.log(copy)
+
+// const copy = [...users.slice(0,3),...users.slice(-3)]
+// console.log(copy)
+
+// const copy = {...users[0], isActive: !users[0].isActive}
+// console.log(copy)
+
+// const copy = {...students[0], grades: [...students[0].grades, 95]}
+// console.log(copy)
+
+// const copy = {theme: "dark", fontSize: 14, fontSize: 16, lang: "en"}
+// console.log(copy)
+
+// const copy = {...orders[0], quantity: orders[0].quantity + 1, total: orders[0].total + (orders[0].total/orders[0].quantity)}
+// console.log(copy)
+
+// const copy = [...numbers.slice(0,10), 999, ...numbers.slice(10)]
+// console.log(copy)
+
+// const [,...rest] = users;
+// console.log(rest)
+
+// const copy = products.slice(0,-1)
+// console.log(copy)
+
+// const [a] = users;
+// const copy = {...a, age: 30, salary: 60000, isActive: false}
+// console.log(copy)
+
+console.log(students.map(({grades}) => grades).flat())
+
+// const [,a] = products;
+// const copy = {...a, discount: 0.2, category: "defense"}
+// console.log(copy)
+
+// const copy = {...users[0], id: 99, name: "Clone"}
+// console.log(copy)
+
+// const copy = [...products, {id: 11, name: "Dagger", price: 60, category: "weapon", inStock: true, quantity: 7}]
+// console.log(copy)
+
+// const [a] = students;
+// const copy = {...a, grades: [a.grades.slice(0,-1)]}
+// console.log(copy)
+
+// const [a] = users;
+// const copy = {...a, name: "Modified"}
+// console.log(a)
+// console.log(copy)
+
+console.log(users.map(({id,salary, ...user}) => id === 3 ? ({
+    id, user, salary: 50000
+}): ({id, user, salary})))
+
+console.log(products.map(({inStock,id, ...rest}) => id === 5? ({
+    rest, inStock: !inStock
+}):({rest, id, inStock})))
+
+console.log(users.map(({isActive, ...rest}) => isActive? ({
+    rest, isActive, verified: true
+}):({rest,isActive, verified: false})))
+
+console.log(products.map(({category, ...rest}) => category === "weapon"? ({
+    rest, category, price: rest.price * 1.15
+}):({rest, category})))
+
+console.log(users.map((user) => user.id === 7 ? ({
+    ...user, age: 28, salary: 45000, role: "admin"
+}) :(user)))
+
+console.log(products.map((product) => product.quantity < 3 ? ({
+    ...product,
+    lowStock: true
+}):(product)))
+
+console.log(orders.map((order) => order.status === "pending"? ({
+    ...order,
+    status: "processing",
+    processedAt: Date.now()
+}):(order)))
+
+console.log(students.map((student) => student.attendance < 90? ({
+    ...student,
+    attendance: student.attendance +5
+}):(student)))
+
+console.log(products.map((product) => product.id === 1? ({
+    ...product,
+    lastUpdated: Date.now()
+}) :(product)))
+
+console.log(users.map((user) => user.isActive === false?({
+    ...user, role: "user"
+}):(user)))
+
+console.log(students.map((student) => student.id === 3? ({
+    ...student,
+    grades: [...student.grades, 100]
+}):(student)))
+
+console.log(products.map((product) => product.id === 6 ? ({
+    ...product,
+    quantity: product.quantity - 1,
+    inStock: product.quantity - 1 > 0
+}):(product)))
+
+console.log(products.map((product) => product.price > 100?({
+    ...product,
+    discount: 0.1
+}):(product)))
+
+console.log(users.map((user) => user.id === 4? ({
+    ...user,
+    salary: user.salary * 1.10,
+    promoted: true,
+    role: "senior-admin"
+}):(user)))
+
+console.log(orders.map((order) => order.status === "completed"? ({
+    ...order,
+    refundable: true,
+    refundDeadline: "2024-12-31"
+}):(order)))
+
+console.log(products.map((product) => product.id === 9? ({
+    ...product,
+    inStock: true,
+    quantity: 5
+}):(product)))
+
+console.log(users.map((user) => user.age > 35? ({
+    ...user,
+    seniority: "senior"
+}) :(user)))
+
+console.log(products.map((product) => product.category === "armor" ?({
+    ...product,
+    price: product.price +5,
+    durability: "high"
+}) :product))
+
+console.log(students.map((student) => student.id === 4? ({
+    ...student,
+    grades: [80, ...student.grades.slice(1)]
+}) :student))
+
+console.log(users.map((user) => user.salary < 40000? ({
+    ...user,
+    salary: user.salary * 1.1,
+    raisedSalary: true
+}): user))
+
+console.log(orders.map((order) => order.id === 5? ({
+    ...order,
+    status: "reinstated",
+    total: 90
+}):order))
+
+console.log(orders.map((order) => order.total > 150? ({
+    ...order,
+    priority: "high"
+}):order))
+
+const getAvg = (grades) => {
+    return grades.reduce((sum, grade) => sum + grade, 0)/grades.length
+}
+console.log(students.map(({grades, ...rest}) => ({
+    rest,
+    grades,
+    passing: getAvg(grades) > 75
+})))
+
+const activeAdmin = users.filter(({role, isActive}) => role === "admin" && isActive)
+const addProps = activeAdmin.map((user) => ({
+    ...user,
+    salary: user.salary * 1.02,
+    bonus: user.salary * 0.05,
+    tier: "executive"
+}))
+console.log(addProps.sort((a,b) => b.salary - a.salary).slice(0,2))

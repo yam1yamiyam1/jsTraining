@@ -284,33 +284,47 @@ console.log(users.map((user) => ({
     ...user,
     ...(totalSpent[user.id] > 300 && {vip: true})
 })))
-console.log(products.reduce((productCatalog, {id, name}) => {
-        productCatalog[id] = (productCatalog[id] || {})
-        return productCatalog;
-},{}))
 
-const productCatalog = products.reduce((acc, product) => {
-    acc[product.id] = product; 
+const productMap = products.reduce((acc, p) => {
+    acc[p.id] = p
     return acc;
-}, {}); 
+}, {})
 
+const userMap = users.reduce((acc, u) => {
+    acc[u.id] = u
+    return acc;
+}, {})
 
-console.log(productCatalog[2])
-
-
-console.log(products.reduce((acc, {category: targetCategory})=> {
-    acc[targetCategory] = (acc[targetCategory] || {
-        products: products.filter(({category}) => category === targetCategory).map(({name}) => name),
-        totalRevenue: "test",
-        unitsSold: "test",
-        customers: "test",
-        avgPrice: "test",
-        performance: "test"
+console.log(orders.reduce((acc, {productId, userId, total, quantity}) => {
+    const {category, name : productName} = productMap[productId] //find product involved in the order
+    const {name: userName} = userMap[userId]
+    acc[category] = (acc[category] || { //initialize
+        products: [],
+        totalRevenue: 0,
+        unitsSold: 0,
+        customers: [],
+        avgPrice: 0,
+        performance: ""
     })
+    acc[category] = {
+        ...acc[category],
+        products:   acc[category].products.includes(productName) 
+                    ? acc[category].products 
+                    : [...acc[category].products, productName],
+        totalRevenue: acc[category].totalRevenue + total,
+        unitsSold: acc[category].unitsSold + quantity,
+        customers: acc[category].customers.includes(userName) 
+                    ? acc[category].customers 
+                    : [...acc[category].customers, userName]
+    }
+    acc[category] = {
+        ...acc[category],
+        avgPrice: acc[category].totalRevenue / acc[category].unitsSold,
+        performance: acc[category].totalRevenue > 400 ? 
+            "high"
+            : (acc[category].totalRevenue > 150 ? "stable" : "low")
+    }
+
     return acc;
 },{}))
 
-console.log(products.reduce((acc, p) => {
-    acc[p.id] = p; // Store the whole product object under its ID
-    return acc;
-}, {}))

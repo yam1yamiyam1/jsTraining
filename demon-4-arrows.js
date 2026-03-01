@@ -17,6 +17,8 @@ console.log = (...args) =>
     process.stdout.write(output + "\n");
   });
 const { execSync } = require("child_process");
+const { count } = require("console");
+const { inflate } = require("zlib");
 try {
   execSync("cls", { stdio: "inherit" });
 } catch (e) {
@@ -316,8 +318,129 @@ try {
 //   user.id === 5 ? { ...user, isActive: !user.isActive } : user;
 // console.log(users.map(toggleIsActive));
 
-const addTenPercent = ({ price, ...product }) => ({
-  ...product,
-  price: price * 1.1,
-});
-console.log(products.map(addTenPercent));
+// const addTenPercent = ({ price, ...product }) => ({
+//   ...product,
+//   price: price * 1.1,
+// });
+// console.log(products.map(addTenPercent));
+
+// const addSelected = (user) =>
+//   user.id === 2 ? { ...user, selected: true } : user;
+// console.log(users.map(addSelected));
+
+// const addVerified = (user) => ({ ...user, verified: true });
+// console.log(users.map(addVerified));
+
+// const increaseArmor = (product) =>
+//   product.category === "armor"
+//     ? { ...product, price: product.price * 1.2 }
+//     : product;
+// console.log(products.map(increaseArmor));
+
+// const addDate = (order) =>
+//   order.status === "completed" ? { ...order, processed: Date.now() } : order;
+// console.log(orders.map(addDate));
+
+// const changeAdmin = (user) =>
+//   user.id === 7 ? { ...user, role: "admin" } : user;
+// console.log(users.map(changeAdmin));
+
+// const setZero = (product) =>
+//   product.id === 3 ? { ...product, quantity: 0 } : product;
+// console.log(products.map(setZero));
+
+// const addBonus = (user) =>
+//   user.salary > 45000 ? { ...user, bonus: user.salary * 0.1 } : user;
+// console.log(users.map(addBonus));
+
+// const addPriority = (order) =>
+//   order.total > 150 ? { ...order, priority: true } : order;
+// console.log(orders.map(addPriority));
+
+// const setUppercase = (product) => ({
+//   ...product,
+//   name: product.name.toUpperCase(),
+// });
+// console.log(products.map(setUppercase));
+
+// const addDiscount = (product) =>
+//   product.price > 100 ? { ...product, discount: 0.15 } : product;
+// console.log(products.map(addDiscount));
+
+// const addGrade = (student) =>
+//   student.id === 1 ? { ...student, grades: [...student.grades, 95] } : student;
+// console.log(students.map(addGrade));
+
+// const removeFirst = ([, ...rest]) => rest;
+// console.log(removeFirst(users));
+
+// const newArray = (x, y) => [...x, y];
+// console.log(newArray([1, 2, 3], 4));
+
+// const newObject = (obj, key, value) => ({ ...obj, [key]: value });
+// console.log(newObject({ name: "Alice" }, "age", 25));
+
+// const mergeObj = (obj1, obj2) => ({ ...obj1, ...obj2 });
+// console.log(mergeObj({ a: 1, b: 2 }, { b: 3, c: 4 }));
+
+// const sumAges = (sum, { age }) => sum + age;
+// console.log(users.reduce(sumAges, 0));
+
+// const sumProduct = (sum, { price }) => sum + price;
+// console.log(products.reduce(sumProduct, 0));
+
+// const countActive = (activeUserCount, { isActive }) =>
+//   isActive ? activeUserCount + 1 : activeUserCount;
+// console.log(users.reduce(countActive, 0));
+
+// const maxSalary = (max, { salary }) => (salary > max ? salary : max);
+// console.log(users.reduce(maxSalary, 0));
+
+// const minPrice = (min, { price }) => (min > price ? price : min);
+// console.log(products.reduce(minPrice, Infinity));
+
+// const totalInventory = (total, { price, quantity }) => total + price * quantity;
+// console.log(products.reduce(totalInventory, 0));
+
+// const countByRole = (count, { role }) => ({
+//   ...count,
+//   [role]: (count[role] || 0) + 1,
+// });
+// console.log(users.reduce(countByRole, {}));
+
+// const groupByCat = (group, { category, ...product }) => ({
+//   ...group,
+//   [category]: [...(group[category] || []), product],
+// });
+// console.log(products.reduce(groupByCat, {}));
+
+// const aveAge = (sum, { age }, _, arr) => sum + age / arr.length;
+// console.log(users.reduce(aveAge, 0));
+
+// const sumTotal = (sum, { total }) => sum + total;
+// console.log(orders.reduce(sumTotal, 0));
+
+// const idByUser = (ids, { id, ...user }) => ({
+//   ...ids,
+//   [id]: { ...(ids[id] || {}), ...user },
+// });
+// console.log(users.reduce(idByUser, {}));
+
+// const allStudentGrades = (allGrades, { grades }) => [...allGrades, ...grades];
+// console.log(students.reduce(allStudentGrades, []));
+
+// const isStocked = (count, { inStock }) => {
+//   const status = inStock ? "inStock" : "outOfStock";
+//   return {
+//     ...count,
+//     [status]: (count[status] || 0) + 1,
+//   };
+// };
+// console.log(products.reduce(isStocked, {}));
+
+// const sumSalaryActiveUsers = (sum, { isActive, salary }) =>
+//   sum + (isActive ? salary : 0);
+// console.log(users.reduce(sumSalaryActiveUsers, 0  ));
+
+// const allName = (names, { name }) => [...names, name];
+// console.log(users.reduce(allName, []));

@@ -1,0 +1,12 @@
+{
+  "Arrow Function with Console": {
+    "prefix": "qwe",
+    "body": ["const ${1} = (${2}) => ${3}"],
+    "description": "Arrow function with mirrored console.log",
+  },
+  "easyformats": {
+    "prefix": "asd",
+    "body": ["${${1}}"],
+    "description": "easyformats",
+  },
+}

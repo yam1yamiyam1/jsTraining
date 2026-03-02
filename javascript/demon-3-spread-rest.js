@@ -4,7 +4,7 @@ const {
   products,
   orders,
   students,
-} = require("./data/training-data.js");
+} = require("../data/training-data.js");
 const util = require("util");
 console.log = (...args) =>
   args.forEach((arg) =>

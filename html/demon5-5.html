@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Level 5: DEMON MODE</title>
+    <style>
+      body {
+        font-family: Arial;
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .app {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        margin-top: 0;
+        color: #333;
+      }
+
+      .input-section {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      #todoInput {
+        flex: 1;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+      #addBtn {
+        padding: 12px 24px;
+        background: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      #addBtn:hover {
+        background: #45a049;
+      }
+
+      .filters {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .filter-btn {
+        padding: 8px 16px;
+        border: 2px solid #ddd;
+        background: white;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      .filter-btn.active {
+        background: #2196f3;
+        color: white;
+        border-color: #2196f3;
+      }
+
+      .todo-item {
+        padding: 15px;
+        margin: 10px 0;
+        background: #f9f9f9;
+        border-left: 4px solid #4caf50;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .todo-item.completed {
+        opacity: 0.6;
+        border-left-color: #999;
+      }
+      .todo-item.completed .todo-text {
+        text-decoration: line-through;
+      }
+      .todo-text {
+        flex: 1;
+        font-size: 16px;
+      }
+      .complete-btn {
+        padding: 6px 12px;
+        background: #2196f3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .delete-btn {
+        padding: 6px 12px;
+        background: #f44336;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .stats {
+        margin-top: 20px;
+        padding: 15px;
+        background: #e3f2fd;
+        border-radius: 4px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <h1>🔥 DEMON TODO LIST</h1>
+
+      <div class="input-section">
+        <input
+          type="text"
+          id="todoInput"
+          placeholder="What needs to be done?"
+        />
+        <button id="addBtn">Add</button>
+      </div>
+
+      <div class="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="active">Active</button>
+        <button class="filter-btn" data-filter="completed">Completed</button>
+      </div>
+
+      <div id="todoList"></div>
+
+      <div class="stats" id="stats"></div>
+    </div>
+
+    <script>
+      // DEMON MODE: Build the complete Todo app
+
+      // 1. Initialize state
+      let state = {
+        todos: [],
+        filter: "all", // 'all' | 'active' | 'completed'
+        nextId: 1,
+      };
+      let todo = {
+        id: null,
+        text: "",
+        completed: false,
+      };
+      // 2. Render function (the brain of the app)
+      const render = ({ todos }) => {
+        const todoList = document.querySelector("#todoList");
+        todoList.innerHTML = todos.map((a) => `<div>${a.text}</div>`).join("");
+        console.log(todos);
+        // Filter todos based on current filter
+        // Map filtered todos to HTML
+        // Update todoList innerHTML
+        // Update stats (total, active, completed counts)
+        // Update active filter button styling
+      };
+
+      // 3. Add todo handler
+      // Get input value, create new todo object: { id, text, completed: false }
+      const todoInput = document.querySelector("#todoInput");
+      todoInput.addEventListener("input", (e) => {
+        todo = { ...todo, text: e.target.value };
+        console.log(todo);
+      });
+      // Update state IMMUTABLY with new todos array
+      // Clear input, call render()        const addBtn = document.querySelector("#addBtn");
+      const addBtn = document.querySelector("#addBtn");
+      addBtn.addEventListener("click", () => {
+        state = { ...state, todos: [...state.todos, todo] };
+        render(state);
+      });
+      // 4. Toggle complete handler
+      // Map over todos, if id matches, toggle completed
+      // Update state, call render()
+
+      // 5. Delete handler
+      // Filter out the todo with matching id
+      // Update state, call render()
+
+      // 6. Filter buttons handler
+      // Update state.filter
+      // Update button styling
+      // Call render()
+
+      // 7. Initial render
+      render(state);
+
+      // REQUIREMENTS:
+      // ✅ State drives everything
+      // ✅ Never mutate state directly (use spread/map/filter)
+      // ✅ Single render() function updates entire UI
+      // ✅ Event handlers only update state, then call render()
+      // ✅ Filter buttons visually show active state
+      // ✅ Stats show: X total, Y active, Z completed
+
+      // BONUS CHALLENGES:
+      // 🔥 Add "Clear Completed" button
+      // 🔥 Add "Toggle All" checkbox
+      // 🔥 Add edit functionality (double-click todo)
+      // 🔥 Save to localStorage and load on page refresh
+    </script>
+  </body>
+</html>

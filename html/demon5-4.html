@@ -3,262 +3,195 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Level 3: State Object</title>
+    <title>Level 4: Arrays to HTML</title>
     <style>
       body {
         font-family: Arial;
         padding: 20px;
       }
-      .output {
+      .list-container {
+        margin: 15px 0;
+        padding: 10px;
+        background: #f9f9f9;
+        border: 1px solid #ddd;
+      }
+      .item {
+        padding: 10px;
+        margin: 5px 0;
+        background: white;
+        border-left: 3px solid #4caf50;
+      }
+      .user-card {
         padding: 15px;
         margin: 10px 0;
-        background: #f0f0f0;
-        border-left: 4px solid #4caf50;
+        background: white;
+        border: 1px solid #ddd;
       }
       button {
         padding: 10px 20px;
         margin: 5px;
         cursor: pointer;
       }
-      input {
-        padding: 10px;
-        margin: 5px;
-        width: 200px;
-      }
     </style>
   </head>
   <body>
-    <h1>Level 3: State Object</h1>
+    <h1>Level 4: Arrays to HTML</h1>
 
-    <!-- Ex 1: Counter -->
-    <div>
-      <button id="inc1">Increment</button>
-      <div class="output" id="out1">Count: 0</div>
-    </div>
+    <!-- Ex 1: Simple list -->
+    <button id="render1">Render List</button>
+    <div class="list-container" id="list1"></div>
 
-    <!-- Ex 2: Decrement -->
-    <div>
-      <button id="dec2">Decrement</button>
-      <div class="output" id="out2">Count: 0</div>
-    </div>
+    <!-- Ex 2: Numbers -->
+    <button id="render2">Render Numbers</button>
+    <div class="list-container" id="list2"></div>
 
-    <!-- Ex 3: Reset -->
-    <div>
-      <button id="inc3">+</button>
-      <button id="reset3">Reset</button>
-      <div class="output" id="out3">Count: 0</div>
-    </div>
+    <!-- Ex 3: User names -->
+    <button id="render3">Render Users</button>
+    <div class="list-container" id="list3"></div>
 
-    <!-- Ex 4: Name input -->
-    <div>
-      <input type="text" id="input4" placeholder="Enter name" />
-      <div class="output" id="out4">Name:</div>
-    </div>
+    <!-- Ex 4: Product cards -->
+    <button id="render4">Render Products</button>
+    <div class="list-container" id="list4"></div>
 
-    <!-- Ex 5: Toggle -->
-    <div>
-      <button id="toggle5">Toggle</button>
-      <div class="output" id="out5">Status: OFF</div>
-    </div>
+    <!-- Ex 5: Filtered list -->
+    <button id="render5">Show Active Only</button>
+    <div class="list-container" id="list5"></div>
 
-    <!-- Ex 6: Multiple properties -->
-    <div>
-      <input type="text" id="name6" placeholder="Name" />
-      <input type="number" id="age6" placeholder="Age" />
-      <div class="output" id="out6">Name: , Age:</div>
-    </div>
+    <!-- Ex 6: Sorted list -->
+    <button id="render6">Sort by Age</button>
+    <div class="list-container" id="list6"></div>
 
-    <!-- Ex 7: Counter with step -->
-    <div>
-      <button id="plus7">+5</button>
-      <button id="minus7">-5</button>
-      <div class="output" id="out7">Count: 0</div>
-    </div>
+    <!-- Ex 7: Mapped data -->
+    <button id="render7">Render Formatted</button>
+    <div class="list-container" id="list7"></div>
 
-    <!-- Ex 8: Text length -->
-    <div>
-      <input type="text" id="input8" placeholder="Type something" />
-      <div class="output" id="out8">Length: 0</div>
-    </div>
+    <!-- Ex 8: Conditional rendering -->
+    <button id="render8">Render Expensive</button>
+    <div class="list-container" id="list8"></div>
 
-    <!-- Ex 9: Double counter -->
-    <div>
-      <button id="inc9">Increment</button>
-      <div class="output" id="out9">Count: 0, Double: 0</div>
-    </div>
+    <!-- Ex 9: Indexed items -->
+    <button id="render9">Render with Index</button>
+    <div class="list-container" id="list9"></div>
 
-    <!-- Ex 10: Shopping cart -->
-    <div>
-      <button id="add10">Add Item</button>
-      <button id="clear10">Clear Cart</button>
-      <div class="output" id="out10">Items: 0</div>
-    </div>
+    <!-- Ex 10: Empty state -->
+    <button id="render10">Render (Empty Check)</button>
+    <div class="list-container" id="list10"></div>
 
     <script>
-      // LEVEL 3 EXERCISES
+      // Data for exercises
+      const fruits = ["Apple", "Banana", "Orange", "Mango"];
+      const numbers = [1, 2, 3, 4, 5];
+      const users = [
+        { name: "Alice", age: 25, active: true },
+        { name: "Bob", age: 30, active: false },
+        { name: "Charlie", age: 35, active: true },
+      ];
+      const products = [
+        { name: "Laptop", price: 999 },
+        { name: "Mouse", price: 25 },
+        { name: "Keyboard", price: 75 },
+      ];
+      const emptyArray = [];
 
-      // Ex 1: State-driven counter
-      // Initialize: let state1 = { count: 0 }
-      // Create render1 function that updates out1 with "Count: [count]"
-      // On click inc1, update state and call render1
-      let state1 = { count: 0 };
-      const inc1 = document.querySelector("#inc1");
-      const out1 = document.querySelector("#out1");
-      const render1 = ({ count }) => {
-        out1.textContent = `Count: ${count}`;
-      };
-      inc1.addEventListener("click", () => {
-        {
-          state1 = { count: state1.count + 1 };
-          render1(state1);
-        }
+      // LEVEL 4 EXERCISES
+
+      // Ex 1: Render fruits array as <div class="item">Apple</div> for each
+      // Click render1 → show all fruits in list1
+      const render1 = document.querySelector("#render1");
+      const list1 = document.querySelector("#list1");
+      render1.addEventListener("click", () => {
+        list1.innerHTML = fruits.map((fruit) => `<div>${fruit}</div>`).join("");
       });
-      // Ex 2: Decrement counter
-      // Initialize: let state2 = { count: 0 }
-      // On click dec2, decrease count and render
-      let state2 = { count: 0 };
-      const dec2 = document.querySelector("#dec2");
-      const out2 = document.querySelector("#out2");
-      const render2 = ({ count }) => {
-        out2.textContent = `Count: ${count}`;
-      };
-      dec2.addEventListener("click", () => {
-        {
-          state2 = { count: state2.count - 1 };
-          render2(state2);
-        }
+      // Ex 2: Render numbers array, each as <div class="item">Number: 1</div>
+      const render2 = document.querySelector("#render2");
+      const list2 = document.querySelector("#list2");
+      render2.addEventListener("click", () => {
+        list2.innerHTML = numbers.map((x) => `<div>${x}</div>`).join("");
       });
-      // Ex 3: Counter with reset
-      // Initialize: let state3 = { count: 0 }
-      // inc3 increases, reset3 sets to 0
-      let state3 = { count: 0 };
-      const inc3 = document.querySelector("#inc3");
-      const out3 = document.querySelector("#out3");
-      const reset3 = document.querySelector("#reset3");
-      const render3 = ({ count }) => {
-        out3.textContent = `Count: ${count}`;
-      };
-      inc3.addEventListener("click", () => {
-        {
-          state3 = { count: state3.count + 1 };
-          render3(state3);
-        }
+      // Ex 3: Render users array, show names: <div class="item">Alice</div>
+      const render3 = document.querySelector("#render3");
+      const list3 = document.querySelector("#list3");
+      render3.addEventListener("click", () => {
+        list3.innerHTML = users
+          .map(({ name }, index) => `<div id= user${index + 1}>${name}</div>`)
+          .join("");
       });
-      reset3.addEventListener("click", () => {
-        {
-          state3 = { count: 0 };
-          render3(state3);
-        }
+
+      // Ex 4: Render products as cards:
+      // <div class="user-card">
+      //   <h3>Laptop</h3>
+      //   <p>$999</p>
+      // </div>
+      const render4 = document.querySelector("#render4");
+      const list4 = document.querySelector("#list4");
+      render4.addEventListener("click", () => {
+        list4.innerHTML = products.map(
+          ({ name, price }, index) =>
+            `<div class="user-card" id = product-${index}>
+            <h3>${name}</h3>
+            <p>$${price}</p>
+          </div>`,
+        );
       });
-      // Ex 4: Name input
-      // Initialize: let state4 = { name: '' }
-      // On input change, update state.name and render "Name: [name]"
-      let state4 = { name: "" };
-      const input4 = document.querySelector("#input4");
-      const out4 = document.querySelector("#out4");
-      const render4 = ({ name }) => {
-        out4.textContent = `Name: ${name}`;
-      };
-      input4.addEventListener("input", (e) => {
-        state4 = { name: e.target.value };
-        render4(state4);
+      // Ex 5: Render only ACTIVE users from users array
+      // Filter first, then map
+      const render5 = document.querySelector("#render5");
+      const list5 = document.querySelector("#list5");
+      render5.addEventListener("click", () => {
+        list5.innerHTML = users
+          .filter(({ active }) => active)
+          .map(({ name, age }) => `<div>${name}, ${age} years old</div>`)
+          .join("");
       });
-      // Ex 5: Toggle ON/OFF
-      // Initialize: let state5 = { isOn: false }
-      // Toggle between true/false, render "Status: ON/OFF"
-      let state5 = { isOn: false };
-      const toggle5 = document.querySelector("#toggle5");
-      const out5 = document.querySelector("#out5");
-      const render5 = ({ isOn }) => {
-        out5.textContent = `Status: ${isOn ? "ON" : "OFF"}`;
-      };
-      toggle5.addEventListener("click", () => {
-        state5 = { isOn: !state5.isOn };
-        render5(state5);
+
+      // Ex 6: Render users sorted by age (ascending)
+      // Sort first, then map showing "Name (Age)"
+      const render6 = document.querySelector("#render6");
+      const list6 = document.querySelector("#list6");
+      render6.addEventListener("click", () => {
+        list6.innerHTML = users
+          .map(({ name, age }) => `<div>${name} (${age})</div>`)
+          .sort((a, b) => a.localeCompare(b))
+          .join("");
       });
-      // Ex 6: Multiple properties
-      // Initialize: let state6 = { name: '', age: 0 }
-      // Update state on each input change, render both
-      let state6 = { name: "", age: 0 };
-      const name6 = document.querySelector("#name6");
-      const age6 = document.querySelector("#age6");
-      const out6 = document.querySelector("#out6");
-      const render6 = ({ name, age }) => {
-        out6.textContent = `Name: ${name} ,Age: ${age}`;
-      };
-      name6.addEventListener("input", (e) => {
-        state6 = { ...state6, name: e.target.value };
-        render6(state6);
+
+      // Ex 7: Render users formatted as "Alice - 25 years old"
+      const render7 = document.querySelector("#render7");
+      const list7 = document.querySelector("#list7");
+      render7.addEventListener("click", () => {
+        list7.innerHTML = users
+          .map(({ name, age }) => `<div>${name} - ${age} years old</div>`)
+          .join("");
       });
-      age6.addEventListener("input", (e) => {
-        state6 = { ...state6, age: e.target.value };
-        render6(state6);
+
+      // Ex 8: Render products with price > 50
+      const render8 = document.querySelector("#render8");
+      const list8 = document.querySelector("#list8");
+      render8.addEventListener("click", () => {
+        list8.innerHTML = products
+          .filter(({ price }) => price > 50)
+          .map(({ name, price }) => `<div>${name} ${price}</div>`)
+          .join("");
       });
-      // Ex 7: Counter with step
-      // Initialize: let state7 = { count: 0 }
-      // plus7 adds 5, minus7 subtracts 5
-      let state7 = { count: 0 };
-      const plus7 = document.querySelector("#plus7");
-      const minus7 = document.querySelector("#minus7");
-      const out7 = document.querySelector("#out7");
-      const render7 = ({ count }) => {
-        out7.textContent = `Count: ${count}`;
-      };
-      plus7.addEventListener("click", () => {
-        {
-          state7 = { count: state7.count + 5 };
-          render7(state7);
-        }
+      // Ex 9: Render fruits with index numbers
+      // "1. Apple", "2. Banana", etc.
+      // Hint: .map() second parameter is index
+      const render9 = document.querySelector("#render9");
+      const list9 = document.querySelector("#list9");
+      render9.addEventListener("click", () => {
+        list9.innerHTML = fruits
+          .map((fruit, index) => `<div>${index + 1}. ${fruit}</div>`)
+          .join("");
       });
-      minus7.addEventListener("click", () => {
-        {
-          state7 = { count: state7.count - 5 };
-          render7(state7);
-        }
-      });
-      // Ex 8: Text length tracker
-      // Initialize: let state8 = { text: '', length: 0 }
-      // Update both text and length on input
-      const input8 = document.querySelector("#input8");
-      const out8 = document.querySelector("#out8");
-      let state8 = { text: "", length: 0 };
-      const render8 = ({ length }) => {
-        out8.textContent = `Length: ${length}`;
-      };
-      input8.addEventListener("input", (e) => {
-        state8 = { text: e.target.value, length: e.target.value.length };
-        render8(state8);
-      });
-      // Ex 9: Computed property (double)
-      // Initialize: let state9 = { count: 0 }
-      // Render "Count: [count], Double: [count*2]"
-      let state9 = { count: 0 };
-      const inc9 = document.querySelector("#inc9");
-      const out9 = document.querySelector("#out9");
-      const render9 = ({ count }) => {
-        out9.textContent = `Count: ${count} Double: ${count * 2}`;
-      };
-      inc9.addEventListener("click", () => {
-        state9 = { count: state9.count + 1 };
-        render9(state9);
-      });
-      // Ex 10: Shopping cart counter
-      // Initialize: let state10 = { items: 0 }
-      // add10 increments, clear10 resets to 0
-      let state10 = { items: 0 };
-      const add10 = document.querySelector("#add10");
-      const clear10 = document.querySelector("#clear10");
-      const out10 = document.querySelector("#out10");
-      const render10 = ({ items }) => {
-        out10.textContent = `Items: ${items}`;
-      };
-      add10.addEventListener("click", () => {
-        state10 = { items: state10.items + 1 };
-        render10(state10);
-      });
-      clear10.addEventListener("click", () => {
-        state10 = { items: 0 };
-        render10(state10);
+      // Ex 10: Render emptyArray with fallback
+      // If array empty, show "No items", else show items
+      const render10 = document.querySelector("#render10");
+      const list10 = document.querySelector("#list10");
+      render10.addEventListener("click", () => {
+        list10.innerHTML =
+          emptyArray.length === 0
+            ? "No items"
+            : emptyArray.map((x) => `<div>${x}</div>`).join("");
       });
     </script>
   </body>

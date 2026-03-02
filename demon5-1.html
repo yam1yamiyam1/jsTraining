@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Level 1: Basic Listeners</title>
+    <style>
+      body {
+        font-family: Arial;
+        padding: 20px;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+      }
+      input {
+        padding: 10px;
+        margin: 5px;
+        width: 200px;
+      }
+      .output {
+        margin: 10px 0;
+        padding: 10px;
+        background: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Level 1: Basic Listeners</h1>
+
+    <!-- Exercise placeholders -->
+    <div id="ex1">
+      <button id="btn1">Click Me</button>
+      <div class="output" id="output1"></div>
+    </div>
+
+    <div id="ex2">
+      <input type="text" id="input2" placeholder="Type something..." />
+      <div class="output" id="output2"></div>
+    </div>
+
+    <div id="ex3">
+      <button id="btn3">Button 3</button>
+      <div class="output" id="output3"></div>
+    </div>
+
+    <div id="ex4">
+      <input type="text" id="input4" placeholder="Username" />
+      <div class="output" id="output4"></div>
+    </div>
+
+    <div id="ex5">
+      <button id="btn5">Double Click</button>
+      <div class="output" id="output5"></div>
+    </div>
+
+    <div id="ex6">
+      <input type="number" id="input6" placeholder="Enter number" />
+      <div class="output" id="output6"></div>
+    </div>
+
+    <div id="ex7">
+      <button id="btn7">Hover Me</button>
+      <div class="output" id="output7"></div>
+    </div>
+
+    <div id="ex8">
+      <input type="text" id="input8" placeholder="Email" />
+      <div class="output" id="output8"></div>
+    </div>
+
+    <div id="ex9">
+      <button id="btn9">Click Counter</button>
+      <div class="output" id="output9">Count: 0</div>
+    </div>
+
+    <div id="ex10">
+      <input type="text" id="input10" placeholder="Search" />
+      <div class="output" id="output10"></div>
+    </div>
+
+    <div id="ex11">
+      <button id="btn11">Toggle</button>
+      <div class="output" id="output11">OFF</div>
+    </div>
+
+    <div id="ex12">
+      <input type="range" id="input12" min="0" max="100" />
+      <div class="output" id="output12">Value: 50</div>
+    </div>
+
+    <div id="ex13">
+      <button id="btn13">Alert</button>
+    </div>
+
+    <div id="ex14">
+      <input type="checkbox" id="input14" />
+      <label for="input14">Agree to terms</label>
+      <div class="output" id="output14"></div>
+    </div>
+
+    <div id="ex15">
+      <button id="btn15">Submit</button>
+      <div class="output" id="output15"></div>
+    </div>
+
+    <script>
+      // LEVEL 1 EXERCISES - Complete each one
+
+      // Ex 1: When btn1 is clicked, display "Hello!" in output1
+      const btn1 = document.querySelector("#btn1");
+      const output1 = document.querySelector("#output1");
+      btn1.addEventListener("click", () => {
+        output1.innerText = "asd";
+      });
+      // Ex 2: When input2 changes, display its value in output2
+      const input2 = document.querySelector("#input2");
+      const output2 = document.querySelector("#output2");
+      input2.addEventListener(
+        "input",
+        (e) => (output2.innerText = e.target.value),
+      );
+
+      // Ex 3: When btn3 is clicked, display "Button 3 clicked!" in output3
+      const btn3 = document.querySelector("#btn3");
+      const output3 = document.querySelector("#output3");
+      btn3.addEventListener("click", () => {
+        output3.innerText = `${btn3.textContent} clicked!`;
+      });
+      // Ex 4: When input4 changes, display "Username: [value]" in output4
+      const input4 = document.querySelector("#input4");
+      const output4 = document.querySelector("#output4");
+      input4.addEventListener("input", (e) => {
+        output4.innerText = `Username: ${e.target.value}`;
+      });
+      // Ex 5: When btn5 is double-clicked (dblclick), display "Double clicked!" in output5
+      const btn5 = document.querySelector("#btn5");
+      const output5 = document.querySelector("#output5");
+      btn5.addEventListener("dblclick", () => {
+        output5.innerText = "Double clicked!";
+      });
+      // Ex 6: When input6 changes, display the value multiplie d by 2 in output6
+      const input6 = document.querySelector("#input6");
+      const output6 = document.querySelector("#output6");
+      input6.addEventListener("input", (e) => {
+        output6.innerText = e.target.value * 2;
+      });
+      // Ex 7: When btn7 is hovered (mouseenter), display "Hovering!" in output7
+      const btn7 = document.querySelector("#btn7");
+      const output7 = document.querySelector("#output7");
+      btn7.addEventListener("mouseenter", () => {
+        output7.innerText = "Hovering!";
+      });
+      // Ex 8: When input8 changes, display its length in output8
+      const input8 = document.querySelector("#input8");
+      const output8 = document.querySelector("#output8");
+      input8.addEventListener("input", (e) => {
+        output8.innerText = e.target.value.length;
+      });
+      // Ex 9: When btn9 is clicked, increment a counter and display in output9
+      // Hint: Use a variable outside the listener to track count
+      const btn9 = document.querySelector("#btn9");
+      const output9 = document.querySelector("#output9");
+      let count = 0;
+      btn9.addEventListener("click", () => {
+        count++;
+        output9.innerText = `Count: ${count}`;
+      });
+      // Ex 10: When input10 changes, display "Searching for: [value]" in output10
+      const input10 = document.querySelector("#input10");
+      const output10 = document.querySelector("#output10");
+      input10.addEventListener("input", (e) => {
+        output10.innerText = `Searching for: ${e.target.value}`;
+      });
+      // Ex 11: When btn11 is clicked, toggle between "ON" and "OFF" in output11
+      const btn11 = document.querySelector("#btn11");
+      const output11 = document.querySelector("#output11");
+      let isOn = false;
+      btn11.addEventListener("click", () => {
+        isOn = !isOn;
+        output11.innerText = isOn ? "ON" : "OFF";
+      });
+      // Ex 12: When input12 (slider) changes, display "Value: [value]" in output12
+      const input12 = document.querySelector("#input12");
+      const output12 = document.querySelector("#output12");
+      input12.addEventListener("input", (e) => {
+        output12.innerText = `Value: ${e.target.value}`;
+      });
+      // Ex 13: When btn13 is clicked, show a browser alert with "Alert triggered!"
+      const btn13 = document.querySelector("#btn13");
+      btn13.addEventListener("click", () => {
+        alert("Alert triggered!");
+      });
+      // Ex 14: When input14 (checkbox) changes, display "Checked: true/false" in output14
+      const input14 = document.querySelector("#input14");
+      const output14 = document.querySelector("#output14");
+      let isChecked = false;
+      input14.addEventListener("input", (e) => {
+        isChecked = !isChecked;
+        output14.innerText = isChecked;
+      });
+      // Ex 15: When btn15 is clicked, display the current time in output15
+      // Hint: new Date().toLocaleTimeString()
+      const btn15 = document.querySelector("#btn15");
+      const output15 = document.querySelector("#output15");
+      btn15.addEventListener("click", () => {
+        output15.innerText = new Date(Date.now()).toLocaleString();
+      });
+    </script>
+  </body>
+</html>

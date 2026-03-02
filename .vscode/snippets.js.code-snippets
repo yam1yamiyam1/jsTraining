@@ -1,12 +1,33 @@
 {
-  "Arrow Function with Console": {
-    "prefix": "qwe",
-    "body": ["const ${1} = (${2}) => ${3}"],
-    "description": "Arrow function with mirrored console.log",
+  "Query Selector ID": {
+    "prefix": "qw",
+    "body": ["const ${1} = document.querySelector('#${1}');"],
+    "description": "document.querySelector for an ID",
   },
-  "easyformats": {
-    "prefix": "asd",
-    "body": ["${${1}}"],
-    "description": "easyformats",
+  "Query Selector Pair": {
+    "prefix": "qwe",
+    "body": [
+      "const ${1} = document.querySelector('#${1}');",
+      "const output${2} = document.querySelector('#output${2}');",
+    ],
+    "description": "Selects both the trigger element and the output div",
+  },
+  "Add Event Listener Basic": {
+    "prefix": "ew",
+    "body": [
+      "${1}.addEventListener('${2}', () => {",
+      "  output${3}.innerText = ${4};",
+      "});",
+    ],
+    "description": "Basic event listener (No 'e' parameter)",
+  },
+  "Add Event Listener Input (with event object)": {
+    "prefix": "ewq",
+    "body": [
+      "${1}.addEventListener('input', (e) => {",
+      "  output${3}.innerText = e.target.value;",
+      "});",
+    ],
+    "description": "Event listener specifically for inputs/tracking e.target",
   },
 }

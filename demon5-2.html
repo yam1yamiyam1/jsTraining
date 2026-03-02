@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Level 2: Dynamic Styling</title>
+    <style>
+      body {
+        font-family: Arial;
+        padding: 20px;
+      }
+      .box {
+        padding: 20px;
+        margin: 10px 0;
+        background: #f0f0f0;
+        cursor: pointer;
+        border: 2px solid #ccc;
+      }
+      .active {
+        background: #4caf50;
+        color: white;
+      }
+      .hidden {
+        display: none;
+      }
+      .highlight {
+        background: yellow;
+      }
+      .large {
+        font-size: 24px;
+      }
+      .danger {
+        background: #f44336;
+        color: white;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Level 2: Dynamic Styling</h1>
+
+    <!-- Ex 1 -->
+    <div class="box" id="box1">Click to toggle active</div>
+
+    <!-- Ex 2 -->
+    <button id="btn2">Toggle Box 2</button>
+    <div class="box" id="box2">Box 2</div>
+
+    <!-- Ex 3 -->
+    <button id="btn3">Hide/Show Box 3</button>
+    <div class="box" id="box3">Box 3</div>
+
+    <!-- Ex 4 -->
+    <div class="box" id="box4">Click to highlight</div>
+
+    <!-- Ex 5 -->
+    <button id="btn5">Make Large</button>
+    <div class="box" id="box5">Text here</div>
+
+    <!-- Ex 6 -->
+    <div class="box" id="box6">Click for danger mode</div>
+
+    <!-- Ex 7 -->
+    <button id="btn7a">Activate</button>
+    <button id="btn7b">Deactivate</button>
+    <div class="box" id="box7">Box 7</div>
+
+    <!-- Ex 8 -->
+    <div class="box" id="box8">Double click me</div>
+
+    <!-- Ex 9 -->
+    <button id="btn9">Toggle All</button>
+    <div class="box box-group">Box A</div>
+    <div class="box box-group">Box B</div>
+    <div class="box box-group">Box C</div>
+
+    <!-- Ex 10 -->
+    <button id="btn10">Cycle Styles</button>
+    <div class="box" id="box10">Cycle Box</div>
+
+    <script>
+      // LEVEL 2 EXERCISES
+
+      // Ex 1: Click box1 to toggle 'active' class
+      const box1 = document.querySelector("#box1");
+      box1.addEventListener("click", () => {
+        box1.classList.toggle("active");
+      });
+      // Ex 2: Click btn2 to toggle 'active' class on box2
+      const btn2 = document.querySelector("#btn2");
+      btn2.addEventListener("click", () => {
+        box2.classList.toggle("active");
+      });
+      // Ex 3: Click btn3 to toggle 'hidden' class on box3
+      const btn3 = document.querySelector("#btn3");
+      btn3.addEventListener("click", () => {
+        box3.classList.toggle("hidden");
+      });
+      // Ex 4: Click box4 to toggle 'highlight' class
+      const box4 = document.querySelector("#box4");
+      box4.addEventListener("click", () => {
+        box4.classList.toggle("highlight");
+      });
+      // Ex 5: Click btn5 to toggle 'large' class on box5
+      const btn5 = document.querySelector("#btn5");
+      btn5.addEventListener("click", () => {
+        box5.classList.toggle("large");
+      });
+      // Ex 6: Click box6 to toggle 'danger' class
+      const box6 = document.querySelector("#box6");
+      box6.addEventListener("click", () => {
+        box6.classList.toggle("danger");
+      });
+      // Ex 7: btn7a adds 'active' to box7, btn7b removes it
+      // Hint: Use classList.add() and classList.remove()
+      const btn7a = document.querySelector("#btn7a");
+      const btn7b = document.querySelector("#btn7b");
+      btn7a.addEventListener("click", () => {
+        box7.classList.add("active");
+      });
+      btn7b.addEventListener("click", () => {
+        box7.classList.remove("active");
+      });
+      // Ex 8: Double-click box8 to toggle 'highlight' class
+      const box8 = document.querySelector("#box8");
+      box8.addEventListener("dblclick", () => {
+        box8.classList.toggle("highlight");
+      });
+      // Ex 9: Click btn9 to toggle 'active' on ALL elements with class 'box-group'
+      // Hint: Use querySelectorAll and forEach
+      const btn9 = document.querySelector("#btn9");
+      const boxGroup = document.querySelectorAll(".box-group");
+      btn9.addEventListener("click", () => {
+        boxGroup.forEach((box) => {
+          box.classList.toggle("active");
+        });
+      });
+      // Ex 10: Click btn10 to cycle through: normal → active → danger → normal
+      // Hint: Check which class is present, remove it, add next one
+      const btn10 = document.querySelector("#btn10");
+      const box10 = document.querySelector("#box10");
+      let cycle = 1;
+      btn10.addEventListener("click", () => {
+        cycle > 2 ? (cycle = 1) : (cycle = cycle + 1);
+        console.log(cycle);
+        box10.classList.remove("danger", "active");
+        cycle === 3
+          ? box10.classList.add("danger")
+          : cycle === 2
+            ? box10.classList.add("active")
+            : box10.classList.remove("danger", "active");
+      });
+    </script>
+  </body>
+</html>

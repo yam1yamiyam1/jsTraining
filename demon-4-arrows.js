@@ -629,34 +629,34 @@ try {
 //   );
 // console.log(lookupIds());
 
-const filterRole =
-  (roleFilter) =>
-  ({ role }) =>
-    role === roleFilter;
-const salaryIncrease = (rate, bonus) => (user) => ({
-  ...user,
-  salary: user.salary * (1 + rate),
-  bonus: bonus,
-});
-const sortingOption = (sortOrder) =>
-  sortOrder === "asc"
-    ? (a, b) => a.salary - b.salary
-    : (a, b) => b.salary - a.salary;
+// const filterRole =
+//   (roleFilter) =>
+//   ({ role }) =>
+//     role === roleFilter;
+// const salaryIncrease = (rate, bonus) => (user) => ({
+//   ...user,
+//   salary: user.salary * (1 + rate),
+//   bonus: bonus,
+// });
+// const sortingOption = (sortOrder) =>
+//   sortOrder === "asc"
+//     ? (a, b) => a.salary - b.salary
+//     : (a, b) => b.salary - a.salary;
 
-const minimumSalary =
-  (minSalary) =>
-  ({ salary }) =>
-    salary > minSalary;
+// const minimumSalary =
+//   (minSalary) =>
+//   ({ salary }) =>
+//     salary > minSalary;
 
-const boss =
-  (roleFilter) =>
-  (salaryIncreaseRate, bonusValue) =>
-  (minSalary) =>
-  (sortOrder, topCount) =>
-    users
-      .filter(filterRole(roleFilter))
-      .map(salaryIncrease(salaryIncreaseRate, bonusValue))
-      .filter(minimumSalary(minSalary))
-      .sort(sortingOption(sortOrder))
-      .slice(0, topCount);
-console.log(boss("admin")(0.1, 5000)(50000)("asc", 2));
+// const boss =
+//   (roleFilter) =>
+//   (salaryIncreaseRate, bonusValue) =>
+//   (minSalary) =>
+//   (sortOrder, topCount) =>
+//     users
+//       .filter(filterRole(roleFilter))
+//       .map(salaryIncrease(salaryIncreaseRate, bonusValue))
+//       .filter(minimumSalary(minSalary))
+//       .sort(sortingOption(sortOrder))
+//       .slice(0, topCount);
+// console.log(boss("admin")(0.1, 5000)(50000)("asc", 2));

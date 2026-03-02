@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Level 3: State Object</title>
+    <style>
+      body {
+        font-family: Arial;
+        padding: 20px;
+      }
+      .output {
+        padding: 15px;
+        margin: 10px 0;
+        background: #f0f0f0;
+        border-left: 4px solid #4caf50;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 5px;
+        cursor: pointer;
+      }
+      input {
+        padding: 10px;
+        margin: 5px;
+        width: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Level 3: State Object</h1>
+
+    <!-- Ex 1: Counter -->
+    <div>
+      <button id="inc1">Increment</button>
+      <div class="output" id="out1">Count: 0</div>
+    </div>
+
+    <!-- Ex 2: Decrement -->
+    <div>
+      <button id="dec2">Decrement</button>
+      <div class="output" id="out2">Count: 0</div>
+    </div>
+
+    <!-- Ex 3: Reset -->
+    <div>
+      <button id="inc3">+</button>
+      <button id="reset3">Reset</button>
+      <div class="output" id="out3">Count: 0</div>
+    </div>
+
+    <!-- Ex 4: Name input -->
+    <div>
+      <input type="text" id="input4" placeholder="Enter name" />
+      <div class="output" id="out4">Name:</div>
+    </div>
+
+    <!-- Ex 5: Toggle -->
+    <div>
+      <button id="toggle5">Toggle</button>
+      <div class="output" id="out5">Status: OFF</div>
+    </div>
+
+    <!-- Ex 6: Multiple properties -->
+    <div>
+      <input type="text" id="name6" placeholder="Name" />
+      <input type="number" id="age6" placeholder="Age" />
+      <div class="output" id="out6">Name: , Age:</div>
+    </div>
+
+    <!-- Ex 7: Counter with step -->
+    <div>
+      <button id="plus7">+5</button>
+      <button id="minus7">-5</button>
+      <div class="output" id="out7">Count: 0</div>
+    </div>
+
+    <!-- Ex 8: Text length -->
+    <div>
+      <input type="text" id="input8" placeholder="Type something" />
+      <div class="output" id="out8">Length: 0</div>
+    </div>
+
+    <!-- Ex 9: Double counter -->
+    <div>
+      <button id="inc9">Increment</button>
+      <div class="output" id="out9">Count: 0, Double: 0</div>
+    </div>
+
+    <!-- Ex 10: Shopping cart -->
+    <div>
+      <button id="add10">Add Item</button>
+      <button id="clear10">Clear Cart</button>
+      <div class="output" id="out10">Items: 0</div>
+    </div>
+
+    <script>
+      // LEVEL 3 EXERCISES
+
+      // Ex 1: State-driven counter
+      // Initialize: let state1 = { count: 0 }
+      // Create render1 function that updates out1 with "Count: [count]"
+      // On click inc1, update state and call render1
+      let state1 = { count: 0 };
+      const inc1 = document.querySelector("#inc1");
+      const out1 = document.querySelector("#out1");
+      const render1 = ({ count }) => {
+        out1.textContent = `Count: ${count}`;
+      };
+      inc1.addEventListener("click", () => {
+        {
+          state1 = { count: state1.count + 1 };
+          render1(state1);
+        }
+      });
+      // Ex 2: Decrement counter
+      // Initialize: let state2 = { count: 0 }
+      // On click dec2, decrease count and render
+      let state2 = { count: 0 };
+      const dec2 = document.querySelector("#dec2");
+      const out2 = document.querySelector("#out2");
+      const render2 = ({ count }) => {
+        out2.textContent = `Count: ${count}`;
+      };
+      dec2.addEventListener("click", () => {
+        {
+          state2 = { count: state2.count - 1 };
+          render2(state2);
+        }
+      });
+      // Ex 3: Counter with reset
+      // Initialize: let state3 = { count: 0 }
+      // inc3 increases, reset3 sets to 0
+      let state3 = { count: 0 };
+      const inc3 = document.querySelector("#inc3");
+      const out3 = document.querySelector("#out3");
+      const reset3 = document.querySelector("#reset3");
+      const render3 = ({ count }) => {
+        out3.textContent = `Count: ${count}`;
+      };
+      inc3.addEventListener("click", () => {
+        {
+          state3 = { count: state3.count + 1 };
+          render3(state3);
+        }
+      });
+      reset3.addEventListener("click", () => {
+        {
+          state3 = { count: 0 };
+          render3(state3);
+        }
+      });
+      // Ex 4: Name input
+      // Initialize: let state4 = { name: '' }
+      // On input change, update state.name and render "Name: [name]"
+      let state4 = { name: "" };
+      const input4 = document.querySelector("#input4");
+      const out4 = document.querySelector("#out4");
+      const render4 = ({ name }) => {
+        out4.textContent = `Name: ${name}`;
+      };
+      input4.addEventListener("input", (e) => {
+        state4 = { name: e.target.value };
+        render4(state4);
+      });
+      // Ex 5: Toggle ON/OFF
+      // Initialize: let state5 = { isOn: false }
+      // Toggle between true/false, render "Status: ON/OFF"
+      let state5 = { isOn: false };
+      const toggle5 = document.querySelector("#toggle5");
+      // Ex 6: Multiple properties
+      // Initialize: let state6 = { name: '', age: 0 }
+      // Update state on each input change, render both
+
+      // Ex 7: Counter with step
+      // Initialize: let state7 = { count: 0 }
+      // plus7 adds 5, minus7 subtracts 5
+
+      // Ex 8: Text length tracker
+      // Initialize: let state8 = { text: '', length: 0 }
+      // Update both text and length on input
+
+      // Ex 9: Computed property (double)
+      // Initialize: let state9 = { count: 0 }
+      // Render "Count: [count], Double: [count*2]"
+
+      // Ex 10: Shopping cart counter
+      // Initialize: let state10 = { items: 0 }
+      // add10 increments, clear10 resets to 0
+    </script>
+  </body>
+</html>

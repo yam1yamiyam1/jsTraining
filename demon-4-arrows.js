@@ -17,8 +17,12 @@ console.log = (...args) =>
     process.stdout.write(output + "\n");
   });
 const { execSync } = require("child_process");
-const { count } = require("console");
+const { count, time } = require("console");
 const { inflate } = require("zlib");
+const { CLIENT_RENEG_LIMIT } = require("tls");
+const { totalmem } = require("os");
+const { join } = require("path");
+const { get } = require("http");
 try {
   execSync("cls", { stdio: "inherit" });
 } catch (e) {
@@ -444,3 +448,215 @@ try {
 
 // const allName = (names, { name }) => [...names, name];
 // console.log(users.reduce(allName, []));
+
+//121
+// const returnAdd1= (x) => () => x+1
+// console.log(returnAdd1(6)())
+
+// const logName = (name) =>() => console.log(name)
+// console.log(logName("alice")())
+
+// const timesThree = (x) =>() => console.log(x*3)
+// timesThree(5)()
+
+// const addPrefix = (str) =>() =>  `${str} World`
+// console.log(addPrefix("Hello")())
+
+// const threshold = (x) =>(y) => y > x
+// console.log(threshold(10)(15))
+
+// const applyDiscount = (discount) => (price) => (1 - discount) * price;
+// console.log(applyDiscount(0.1)(100));
+
+// const filterAdmin = (arr) => (roleFilter) =>
+//   arr.filter(({ role }) => role === roleFilter);
+// console.log(filterAdmin(users)("admin"));
+
+// const extractor = (key) => (obj) => obj[key];
+// const getName = extractor("name");
+// console.log(getName({ name: "Alice", age: 25 }));
+
+// const returnValue = (x) => () => x;
+// console.log(returnValue(42)());
+
+// const removeById = (idX) => (arr) => arr.filter(({ id }) => id !== idX);
+// const removeThree = removeById(3);
+// console.log(removeThree(products));
+
+// const triple = (x) => (y) => (z) => x + y + z;
+// console.log(triple(1)(2)(3));
+
+// const createCounter = (x) => ({
+//   increment: () => x + 1,
+// });
+// const counterObj = createCounter(5);
+// console.log(counterObj.increment());
+
+// const add = (initial) => (toAdd) => initial + toAdd;
+// const setInitial = add(5);
+// console.log(setInitial(2));
+
+// const setTax = (taxValue) => (toBeTaxed) => toBeTaxed + taxValue * toBeTaxed;
+// const toTax = setTax(0.2);
+// console.log(toTax(100));
+
+// const setCategory = (categoryFilter) => (arr) =>
+//   arr.filter(({ category }) => category === categoryFilter);
+// const filterByWeapon = setCategory("weapon");
+// console.log(filterByWeapon(products));
+
+// const filterBy = (filterKey) => (joinBy) => () =>
+//   users
+//     .filter((obj) => obj[filterKey])
+//     .map(({ name }) => name)
+//     .join(joinBy);
+
+// const getActiveNames = filterBy("isActive")(", ");
+// console.log(getActiveNames());
+
+// const setMinPrice = (minPrice) => (increaseRate) =>
+//   products
+//     .filter(({ price }) => price > minPrice)
+//     .map(({ price }) => price + price * increaseRate);
+// const setIncrease = setMinPrice(100);
+// console.log(setIncrease(0.15));
+
+// const filterByRole = (role) => (sortOrder, sortBy) => (outputCount) => {
+//   const ascending = (a, b) =>
+//     typeof a[sortBy] === "number"
+//       ? a[sortBy] - b[sortBy]
+//       : a[sortBy].localeCompare(b[sortBy]);
+//   const descending = (a, b) =>
+//     typeof a[sortBy] === "number"
+//       ? b[sortBy] - a[sortBy]
+//       : b[sortBy].localeCompare(a[sortBy]);
+//   return users
+//     .filter((user) => user.role === role)
+//     .sort(sortOrder === "asc" ? ascending : descending)
+//     .slice(0, outputCount);
+// };
+// console.log(filterByRole("user")("asc", "salary")(3));
+
+// const sumTotal = (sum, total) => sum + total;
+// const inventoryTotal = ({ price, quantity }) => price * quantity;
+// const getAllInventory = (filterKey) => (filter) =>
+//   products
+//     .filter((product) => product[filterKey] === filter)
+//     .map(inventoryTotal)
+//     .reduce(sumTotal, 0);
+// console.log(getAllInventory("inStock")(true));
+
+// const groupUsers = (groupBy) =>
+//   users.reduce(
+//     (group, user) => ({
+//       ...group,
+//       [user[groupBy]]: (group[user[groupBy]] || 0) + 1,
+//     }),
+//     {},
+//   );
+// console.log(groupUsers("role"));
+
+// const getAverage = (sum, { salary }, _, arr) => sum + salary / arr.length;
+// const filterBy = (filterKey, filterValue) =>
+//   users.filter((user) => user[filterKey] === filterValue).reduce(getAverage, 0);
+// console.log(filterBy("role", "admin"));
+
+// const highestSalary = () =>
+//   users.reduce((high, user) => (high.salary > user.salary ? high : user), {});
+// console.log(highestSalary());
+
+// const top3Products = (sortBy, sortOrder) => {
+//   const ascending = (a, b) =>
+//     typeof a[sortBy] === "number"
+//       ? a[sortBy] - b[sortBy]
+//       : a[sortBy].localeCompare(b[sortBy]);
+//   const descending = (a, b) =>
+//     typeof a[sortBy] === "number"
+//       ? b[sortBy] - a[sortBy]
+//       : b[sortBy].localeCompare(a[sortBy]);
+//   return products
+//     .sort(sortOrder === "asc" ? ascending : descending)
+//     .slice(0, 3);
+// };
+// console.log(top3Products("price", "desc"));
+
+// const aveIsActive = () =>
+//   users.reduce(
+//     (count, { isActive }, _, arr) =>
+//       isActive ? count + (1 / arr.length) * 100 : count,
+//     0,
+//   );
+// console.log(aveIsActive());
+
+// const joinValues = (joinBy, joinWith) =>
+//   users.map((user) => user[joinBy]).join(`${joinWith} `);
+// console.log(joinValues("name", ","));
+
+// const getByRole = (roleFilter) => {
+//   const list = users.reduce(
+//     (collection, { role, name }) =>
+//       role === roleFilter ? [...collection, name] : collection,
+//     [],
+//   );
+//   return list.length !== 0 ? list : `No ${roleFilter}s`;
+// };
+// console.log(getByRole("super admin"));
+
+// const mergeUsers = (maxIteration) =>
+//   users.slice(0, maxIteration).reduce(
+//     (merged, user) =>
+//       Object.keys(users[0]).reduce(
+//         (collection, key) => ({
+//           ...collection,
+//           [key]: [...(collection[key] || []), user[key]],
+//         }),
+//         merged,
+//       ),
+//     {},
+//   );
+// console.log(mergeUsers());
+
+// const uniqueCategories = () => {
+//   const unique = [...new Set(products.map(({ category }) => category))];
+//   return unique;
+// };
+// console.log(uniqueCategories());
+
+// const lookupIds = () =>
+//   users.reduce(
+//     (lookupIndex, { id, name }) => ({ ...lookupIndex, [id]: name }),
+//     {},
+//   );
+// console.log(lookupIds());
+
+const filterRole =
+  (roleFilter) =>
+  ({ role }) =>
+    role === roleFilter;
+const salaryIncrease = (rate, bonus) => (user) => ({
+  ...user,
+  salary: user.salary * (1 + rate),
+  bonus: bonus,
+});
+const sortingOption = (sortOrder) =>
+  sortOrder === "asc"
+    ? (a, b) => a.salary - b.salary
+    : (a, b) => b.salary - a.salary;
+
+const minimumSalary =
+  (minSalary) =>
+  ({ salary }) =>
+    salary > minSalary;
+
+const boss =
+  (roleFilter) =>
+  (salaryIncreaseRate, bonusValue) =>
+  (minSalary) =>
+  (sortOrder, topCount) =>
+    users
+      .filter(filterRole(roleFilter))
+      .map(salaryIncrease(salaryIncreaseRate, bonusValue))
+      .filter(minimumSalary(minSalary))
+      .sort(sortingOption(sortOrder))
+      .slice(0, topCount);
+console.log(boss("admin")(0.1, 5000)(50000)("asc", 2));

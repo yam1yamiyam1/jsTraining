@@ -21,6 +21,13 @@
     ],
     "description": "Basic event listener (No 'e' parameter)",
   },
+  "Insert Template Variable": {
+    "prefix": "ee", 
+    "body": [
+      "\\${$1}"
+    ],
+    "description": "Insert a ${} template literal"
+  },
   "Add Event Listener Input (with event object)": {
     "prefix": "ewq",
     "body": [
@@ -31,3 +38,4 @@
     "description": "Event listener specifically for inputs/tracking e.target",
   },
 }
+

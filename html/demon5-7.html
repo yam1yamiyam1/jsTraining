@@ -5,30 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Exercise 2: Shopping Cart Sync</title>
     <style>
+      /* --- GLOBAL RESET --- */
       * {
         margin: 0;
         padding: 0;
-        box-sizing: border-box;
+        box-sizing: border-box; /* Makes padding behave predictably */
       }
 
       body {
-        font-family:
-          "Inter",
-          -apple-system,
-          BlinkMacSystemFont,
-          sans-serif;
-        background: #f8fafc;
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        background: #f8fafc; /* Light grey background */
         padding: 20px;
       }
 
+      /* --- MAIN LAYOUT --- */
       .container {
         max-width: 1000px;
-        margin: 0 auto;
+        margin: 0 auto; /* Centers the app on the screen */
+        
+        /* Grid creates our side-by-side layout. 
+           2fr 1fr means the left column (Products) gets 2 fractions of space, 
+           and the right column (Cart) gets 1 fraction. */
         display: grid;
         grid-template-columns: 2fr 1fr;
         gap: 20px;
       }
 
+      /* White card styling for both the left and right columns */
       .products-section,
       .cart-section {
         background: white;
@@ -43,8 +46,10 @@
         color: #0f172a;
       }
 
+      /* --- PRODUCT LIST (LEFT SIDE) --- */
+      /* This is the container for a single product (e.g., Headphones) */
       .product-item {
-        display: flex;
+        display: flex; /* Aligns the name/price to the left, and buttons to the right */
         justify-content: space-between;
         align-items: center;
         padding: 16px;
@@ -54,13 +59,14 @@
         transition: all 200ms ease;
       }
 
+      /* Makes the border turn blue when you hover over a product */
       .product-item:hover {
         border-color: #3b82f6;
         box-shadow: 0 4px 6px rgba(59, 130, 246, 0.1);
       }
 
       .product-info {
-        flex: 1;
+        flex: 1; /* Pushes the buttons to the far right */
       }
 
       .product-name {
@@ -74,18 +80,20 @@
         font-size: 14px;
       }
 
+      /* The container for the [ - ] 0 [ + ] buttons */
       .product-quantity {
         display: flex;
         align-items: center;
         gap: 12px;
       }
 
+      /* The actual + and - buttons */
       .qty-btn {
         width: 32px;
         height: 32px;
         border: none;
         border-radius: 6px;
-        background: #3b82f6;
+        background: #3b82f6; /* Blue */
         color: white;
         font-size: 18px;
         cursor: pointer;
@@ -96,7 +104,7 @@
       }
 
       .qty-btn:hover {
-        background: #2563eb;
+        background: #2563eb; /* Darker blue */
         transform: scale(1.1);
       }
 
@@ -104,12 +112,14 @@
         transform: scale(0.95);
       }
 
+      /* What the button looks like when disabled (e.g., quantity is 0) */
       .qty-btn:disabled {
-        background: #cbd5e1;
+        background: #cbd5e1; /* Grey */
         cursor: not-allowed;
         transform: none;
       }
 
+      /* The number between the + and - buttons */
       .qty-display {
         font-weight: 600;
         min-width: 30px;
@@ -117,6 +127,8 @@
         font-size: 16px;
       }
 
+      /* --- CART SECTION (RIGHT SIDE) --- */
+      /* The grey box that holds the math (Subtotal, Total) */
       .cart-summary {
         background: #f1f5f9;
         padding: 20px;
@@ -124,6 +136,7 @@
         margin-bottom: 16px;
       }
 
+      /* A single row of text inside the math box */
       .cart-row {
         display: flex;
         justify-content: space-between;
@@ -131,6 +144,7 @@
         color: #475569;
       }
 
+      /* The grand total row (made bolder with a line above it) */
       .cart-row.total {
         border-top: 2px solid #cbd5e1;
         padding-top: 12px;
@@ -140,12 +154,14 @@
         color: #0f172a;
       }
 
+      /* The scrollable area where added items will appear */
       .cart-items-list {
         max-height: 200px;
         overflow-y: auto;
         margin-bottom: 16px;
       }
 
+      /* A single item inside the cart list */
       .cart-item {
         padding: 10px;
         background: white;
@@ -156,6 +172,7 @@
         font-size: 14px;
       }
 
+      /* The text that shows up when the cart is completely empty */
       .empty-cart {
         text-align: center;
         color: #94a3b8;
@@ -163,6 +180,7 @@
         font-style: italic;
       }
 
+      /* The big red button to empty everything */
       .clear-btn {
         width: 100%;
         padding: 14px;
@@ -187,6 +205,8 @@
         transform: none;
       }
 
+      /* --- ANIMATIONS --- */
+      /* Makes numbers bounce slightly when they update */
       @keyframes countUp {
         from {
           opacity: 0;
@@ -205,13 +225,13 @@
   </head>
   <body>
     <div class="container">
-      <!-- Products Section -->
+      
       <div class="products-section">
         <h2>🛍️ Products</h2>
+        
         <div id="productsList"></div>
       </div>
 
-      <!-- Cart Section -->
       <div class="cart-section">
         <h2>🛒 Cart</h2>
 
@@ -248,22 +268,19 @@
 
       // STATE OBJECT
       let state = {
-        cart: {}, // Format: { productId: quantity }
-        // Example: { 1: 2, 3: 1 } means 2x product 1, 1x product 3
+        cart: {}, // Think of this like a dictionary. Product ID is the word, Quantity is the definition. { "1": 2 }
       };
 
       // UTILITY: Load from localStorage
       const loadState = () => {
-        // TODO 1: Get 'cartState' from localStorage
-        // Parse JSON, handle errors with try-catch
-        // If exists, set state.cart to loaded data
-        // If not, keep empty cart
+        // TODO 1: Pull saved cart data from localStorage so the user's cart doesn't disappear when they refresh. 
+        // Use JSON.parse(). If nothing is saved, just leave state.cart empty.
       };
 
       // UTILITY: Save to localStorage
       const saveState = () => {
-        // TODO 2: Save state.cart to localStorage as JSON
-        // Use localStorage.setItem('cartState', JSON.stringify(state.cart))
+        // TODO 2: Convert state.cart into a string using JSON.stringify() and save it to localStorage 
+        // so we remember their items for their next visit.
       };
 
       // UTILITY: Calculate cart totals
@@ -271,59 +288,59 @@
         let itemCount = 0;
         let subtotal = 0;
 
-        // TODO 3: Loop through state.cart
-        // For each productId and quantity:
-        //   - Find product in PRODUCTS array
-        //   - Add quantity to itemCount
-        //   - Add (price * quantity) to subtotal
-        // Return { itemCount, subtotal }
+        // TODO 3: Loop through the state.cart object (e.g., using Object.entries()). 
+        // Multiply each item's price by its quantity so you can return the exact subtotal and total item count.
 
-        return { itemCount: 0, subtotal: 0 };
+        return { itemCount: 0, subtotal: 0 }; // Change this to return your real math!
       };
 
       // RENDER FUNCTION
       const render = (state) => {
-        // TODO 4: Render Products List
-        // Map PRODUCTS array to HTML
-        // For each product:
-        //   - Show name and price
-        //   - Show current quantity from state.cart[product.id] || 0
-        //   - Add + and - buttons with data-id attribute
-        //   - Disable - button if quantity is 0
+        // TODO 4: Draw the products on the screen. 
+        // Add + and - buttons here, and give them data-id="[id]" so the click listener knows WHICH product was clicked. 
+        // Also, read state.cart to show the current quantity so the UI matches the data!
+
         const productsList = document.getElementById("productsList");
-        // productsList.innerHTML = PRODUCTS.map(...).join('');
+        productsList.innerHTML = PRODUCTS.map(({name, price}) => 
+        `<div class="product-item">
+          <div class="product-info">
+            <div class="product-name">${name}</div>
+            <div class="product-price">${price}</div>
+          </div>
+          <div class="product-quantity">
+            <button class="qty-btn">-</button>
+            <span class="qty-display">5</span>
+            <button class="qty-btn">+</button>
+          </div>
+        </div>
+        `
+      ).join('');
 
-        // TODO 5: Render Cart Summary
+        // TODO 5: Update the numbers in the summary box (Items, Subtotal, Total). 
+        // Use the getCartTotals() function above so you don't have to do the math twice.
         const { itemCount, subtotal } = getCartTotals();
-        // Update cartCount, cartSubtotal, cartTotal
-        // Format prices with toFixed(2)
-        // Add 'animate-count' class for animation (remove after 400ms)
+        
 
-        // TODO 6: Render Cart Items List
+        // TODO 6: Draw the actual items inside the cart. 
+        // Filter state.cart to only show items with a quantity > 0. If it's empty, show a "Cart is empty" message.
         const cartItemsList = document.getElementById("cartItemsList");
-        // Get array of items in cart (filter state.cart for qty > 0)
-        // If empty: show empty message
-        // If not: map to cart items showing "Product x Qty = $Total"
+        
 
-        // TODO 7: Enable/disable clear button
-        // Disable if itemCount === 0
+        // TODO 7: Check the itemCount. If it's 0, disable the "Clear Cart" button 
+        // so they can't click it when the cart is already empty.
       };
 
       // EVENT HANDLERS
 
-      // TODO 8: Product quantity buttons (use event delegation)
-      // Listen on productsList for clicks
-      // If target has class 'qty-btn':
-      //   - Get data-id and data-action attributes
-      //   - If action is 'increase': increment state.cart[id]
-      //   - If action is 'decrease': decrement (don't go below 0)
-      //   - If quantity becomes 0, delete from cart
-      //   - saveState() and render()
+      // TODO 8: Listen for clicks on the whole product list. 
+      // If they clicked a + or - button, look at the button's data-id, update the state.cart dictionary, 
+      // save to localStorage, and re-render everything so the screen updates.
       document
         .getElementById("productsList")
         .addEventListener("click", (e) => {});
 
-      // TODO 9: Clear cart button
+      // TODO 9: When clicked, wipe the state.cart clean (set it back to {}), 
+      // save to localStorage, and render the empty cart.
       document.getElementById("clearBtn").addEventListener("click", () => {});
 
       // Initial setup

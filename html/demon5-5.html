@@ -47,7 +47,32 @@
       #addBtn:hover {
         background: #45a049;
       }
+      #clrBtn {
+        padding: 12px 24px;
+        background: #727272;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      #clrBtn:hover {
+        background: #a4a4a4;
+      }
+      #markBtn {
+        padding: 12px 24px;
+        background: #727272;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+        width: 100%;
+      }
 
+      #markBtn:hover {
+        background: #a4a4a4;
+      }
       .filters {
         display: flex;
         gap: 10px;
@@ -74,6 +99,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        justify-content: space-between;
       }
       .todo-item.completed {
         opacity: 0.6;
@@ -86,7 +112,20 @@
         flex: 1;
         font-size: 16px;
       }
+      .item-btn {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+      }
       .complete-btn {
+        padding: 6px 12px;
+        background: #2196f3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .edit-btn {
         padding: 6px 12px;
         background: #2196f3;
         color: white;
@@ -108,6 +147,9 @@
         background: #e3f2fd;
         border-radius: 4px;
         text-align: center;
+        justify-content: space-evenly;
+        display: flex;
+        flex-direction: row;
       }
     </style>
   </head>
@@ -122,6 +164,7 @@
           placeholder="What needs to be done?"
         />
         <button id="addBtn">Add</button>
+        <button id="clrBtn">Clear</button>
       </div>
 
       <div class="filters">
@@ -131,6 +174,7 @@
       </div>
 
       <div id="todoList"></div>
+      <button id="markBtn">Mark All as Completed</button>
 
       <div class="stats" id="stats"></div>
     </div>
@@ -140,56 +184,187 @@
 
       // 1. Initialize state
       let state = {
-        todos: [],
+        todos: [{ id: 0, text: "test", completed: false, isAction: false }],
         filter: "all", // 'all' | 'active' | 'completed'
         nextId: 1,
+        inputText: "",
+        stats: { total: 0, active: 0, completed: 0 },
       };
-      let todo = {
-        id: null,
-        text: "",
-        completed: false,
-      };
+
       // 2. Render function (the brain of the app)
-      const render = ({ todos }) => {
+      const render = ({ todos, filter }) => {
         const todoList = document.querySelector("#todoList");
-        todoList.innerHTML = todos.map((a) => `<div>${a.text}</div>`).join("");
-        console.log(todos);
-        // Filter todos based on current filter
-        // Map filtered todos to HTML
-        // Update todoList innerHTML
-        // Update stats (total, active, completed counts)
-        // Update active filter button styling
+
+        const filteredTodos = todos.filter((t) =>
+          filter === "completed"
+            ? t.completed === true
+            : filter === "active"
+              ? t.completed === false
+              : t,
+        );
+        filteredTodos.length === 0
+          ? (todoList.innerHTML = `<div class="todo-item">
+          Nothing to list! 
+        </div>`)
+          : (todoList.innerHTML = filteredTodos
+              .map(
+                (a) =>
+                  `<div class="todo-item ${a.completed ? "completed" : ""}" id="item-${a.id}">
+                <div class="todo-text">${a.text}</div>
+                <div class="item-btn">
+                  <div class="edit-btn" ${a.isAction ? "hidden" : ""} onclick="toggleEdit(${a.id})">Actions</div>
+                  <div class="complete-btn" ${!a.isAction ? "hidden" : ""} onclick="toggleComplete(${a.id})">${a.completed ? "Unmark" : "Mark"}</div>
+                  <div class="delete-btn" ${!a.isAction ? "hidden" : ""} onclick="deleteTodo(${a.id})">🗙</div>
+                </div>
+              </div>`,
+              )
+              .join(""));
+
+        const all = document.querySelector('[data-filter="all"]');
+        const active = document.querySelector('[data-filter="active"]');
+        const completed = document.querySelector('[data-filter="completed"]');
+
+        all.classList.remove("active");
+        active.classList.remove("active");
+        completed.classList.remove("active");
+
+        const addActiveFilter = (filter) => filter.classList.add("active");
+        filter === "all"
+          ? addActiveFilter(all)
+          : filter === "active"
+            ? addActiveFilter(active)
+            : addActiveFilter(completed);
+
+        const stats = document.querySelector("#stats");
+        const totalTodos = todos.length;
+        const activeTodos = todos.filter(({ completed }) => !completed).length;
+        const completedTodos = todos.filter(
+          ({ completed }) => completed,
+        ).length;
+        stats.innerHTML = `<div>Total:${totalTodos}</div> <div>Active:${activeTodos}</div> <div>Completed:${completedTodos}</div>`;
       };
 
       // 3. Add todo handler
       // Get input value, create new todo object: { id, text, completed: false }
       const todoInput = document.querySelector("#todoInput");
       todoInput.addEventListener("input", (e) => {
-        todo = { ...todo, text: e.target.value };
-        console.log(todo);
+        state = { ...state, inputText: e.target.value };
       });
       // Update state IMMUTABLY with new todos array
       // Clear input, call render()        const addBtn = document.querySelector("#addBtn");
       const addBtn = document.querySelector("#addBtn");
       addBtn.addEventListener("click", () => {
-        state = { ...state, todos: [...state.todos, todo] };
+        if (state.inputText.trim() === "") {
+          alert("You must type a task first!");
+          return;
+        }
+        const newTodo = {
+          id: state.nextId,
+          text: state.inputText,
+          completed: false,
+          isAction: false,
+        };
+
+        state = {
+          ...state,
+          todos: [...state.todos, newTodo],
+          nextId: state.nextId + 1,
+          inputText: "",
+        };
+        todoInput.value = "";
         render(state);
       });
+
       // 4. Toggle complete handler
+      window.toggleComplete = (todoId) => {
+        state = {
+          ...state,
+          todos: state.todos.map((t) =>
+            t.id === todoId
+              ? { ...t, completed: !t.completed, isAction: false }
+              : t,
+          ),
+        };
+        render(state);
+      };
       // Map over todos, if id matches, toggle completed
       // Update state, call render()
 
       // 5. Delete handler
+      window.deleteTodo = (todoId) => {
+        const isSure = confirm("Are you sure to delete this task?");
+        if (isSure === false) {
+          return;
+        }
+        state = {
+          ...state,
+          todos: state.todos.filter(({ id }) => id !== todoId),
+        };
+        render(state);
+      };
       // Filter out the todo with matching id
       // Update state, call render()
 
       // 6. Filter buttons handler
+      const filterSelector = (button, filterSelected) => {
+        button.addEventListener("click", () => {
+          state = { ...state, filter: `${filterSelected}` };
+          render(state);
+        });
+      };
+      const all = document.querySelector('[data-filter="all"]');
+      const active = document.querySelector('[data-filter="active"]');
+      const completed = document.querySelector('[data-filter="completed"]');
+      filterSelector(all, "all");
+      filterSelector(active, "active");
+      filterSelector(completed, "completed");
+
+      const clrBtn = document.querySelector("#clrBtn");
+      clrBtn.addEventListener("click", () => {
+        const completedCount = state.todos.filter(
+          ({ completed }) => completed,
+        ).length;
+        if (completedCount === 0) {
+          alert("There is nothing to clear!");
+          return;
+        }
+        const isSure = confirm("Are you sure to mark all as completed?");
+        if (isSure === false) {
+          return;
+        }
+        const clearedTodos = state.todos.filter(({ completed }) => !completed);
+        state = { ...state, todos: clearedTodos };
+        render(state);
+      });
       // Update state.filter
       // Update button styling
       // Call render()
 
       // 7. Initial render
       render(state);
+      const markBtn = document.querySelector("#markBtn");
+      markBtn.addEventListener("click", () => {
+        const activeCount = state.todos.filter(
+          ({ completed }) => !completed,
+        ).length;
+        if (activeCount === 0) {
+          alert("There is no task to mark as completed");
+          return;
+        }
+        const markedTodos = state.todos.map((t) => ({ ...t, completed: true }));
+        state = { ...state, todos: markedTodos };
+        render(state);
+      });
+
+      window.toggleEdit = (todoId) => {
+        state = {
+          ...state,
+          todos: state.todos.map((t) =>
+            t.id === todoId ? { ...t, isAction: !t.isAction } : t,
+          ),
+        };
+        render(state);
+      };
 
       // REQUIREMENTS:
       // ✅ State drives everything

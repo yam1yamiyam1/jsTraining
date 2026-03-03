@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exercise 3: Theme Customizer</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+      }
+
+      .panel {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+
+      h1 {
+        font-size: 28px;
+        margin-bottom: 24px;
+        color: #1a202c;
+      }
+
+      .control-group {
+        margin-bottom: 24px;
+      }
+
+      .control-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #2d3748;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .color-input-wrapper {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+
+      input[type="color"] {
+        width: 60px;
+        height: 60px;
+        border: 3px solid #e2e8f0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 200ms ease;
+      }
+
+      input[type="color"]:hover {
+        border-color: #667eea;
+        transform: scale(1.05);
+      }
+
+      .color-value {
+        font-family: "Courier New", monospace;
+        font-weight: 600;
+        color: #4a5568;
+        padding: 8px 12px;
+        background: #f7fafc;
+        border-radius: 6px;
+        flex: 1;
+      }
+
+      .preview-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .preview-card {
+        border-radius: 12px;
+        padding: 24px;
+        transition: all 300ms ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .preview-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .preview-subtitle {
+        font-size: 16px;
+        opacity: 0.8;
+        margin-bottom: 16px;
+      }
+
+      .preview-content {
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .button-group {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      button {
+        flex: 1;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 200ms ease;
+        font-size: 14px;
+      }
+
+      .btn-primary {
+        background: #667eea;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #5a67d8;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-secondary {
+        background: #48bb78;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: #38a169;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+      }
+
+      .btn-danger {
+        background: #f56565;
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: #e53e3e;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(245, 101, 101, 0.4);
+      }
+
+      textarea {
+        width: 100%;
+        min-height: 100px;
+        padding: 12px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        font-family: "Courier New", monospace;
+        font-size: 12px;
+        resize: vertical;
+      }
+
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #2d3748;
+        color: white;
+        padding: 16px 24px;
+        border-radius: 8px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        transform: translateY(100px);
+        opacity: 0;
+        transition: all 300ms ease;
+      }
+
+      .toast.show {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Controls Panel -->
+      <div class="panel">
+        <h1>🎨 Theme Customizer</h1>
+
+        <div class="control-group">
+          <label class="control-label">Background Color</label>
+          <div class="color-input-wrapper">
+            <input type="color" id="bgColorInput" value="#667eea" />
+            <span class="color-value" id="bgColorValue">#667eea</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">Text Color</label>
+          <div class="color-input-wrapper">
+            <input type="color" id="textColorInput" value="#ffffff" />
+            <span class="color-value" id="textColorValue">#ffffff</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">Accent Color</label>
+          <div class="color-input-wrapper">
+            <input type="color" id="accentColorInput" value="#48bb78" />
+            <span class="color-value" id="accentColorValue">#48bb78</span>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-secondary" id="randomBtn">🎲 Random</button>
+          <button class="btn-primary" id="exportBtn">📋 Export</button>
+          <button class="btn-danger" id="resetBtn">↺ Reset</button>
+        </div>
+
+        <div class="control-group" style="margin-top: 24px">
+          <label class="control-label">Import Theme JSON</label>
+          <textarea
+            id="importInput"
+            placeholder='{"bgColor":"#667eea","textColor":"#ffffff","accentColor":"#48bb78"}'
+          ></textarea>
+          <button
+            class="btn-primary"
+            id="importBtn"
+            style="width: 100%; margin-top: 12px"
+          >
+            Import Theme
+          </button>
+        </div>
+      </div>
+
+      <!-- Preview Panel -->
+      <div class="panel preview-panel">
+        <h1>👁️ Live Preview</h1>
+
+        <div class="preview-card" id="previewCard">
+          <div class="preview-title">Beautiful Card Design</div>
+          <div class="preview-subtitle">Customized with your theme</div>
+          <div class="preview-content">
+            This card updates in real-time as you adjust the colors. The
+            background, text, and accent colors are all synchronized with your
+            theme settings. Try changing the colors to see the magic happen!
+          </div>
+        </div>
+
+        <div style="padding: 20px; background: #f7fafc; border-radius: 8px">
+          <h3 style="margin-bottom: 12px; color: #2d3748">Current Theme</h3>
+          <pre
+            id="themeJSON"
+            style="font-size: 12px; color: #4a5568; line-height: 1.6"
+          ></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast">Theme copied to clipboard!</div>
+
+    <script>
+      // DEFAULT THEME
+      const DEFAULT_THEME = {
+        bgColor: "#667eea",
+        textColor: "#ffffff",
+        accentColor: "#48bb78",
+      };
+
+      // STATE OBJECT
+      let state = {
+        theme: { ...DEFAULT_THEME },
+      };
+
+      // UTILITY: Generate random hex color
+      const randomColor = () => {
+        return (
+          "#" +
+          Math.floor(Math.random() * 16777215)
+            .toString(16)
+            .padStart(6, "0")
+        );
+      };
+
+      // UTILITY: Show toast notification
+      const showToast = (message) => {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 2000);
+      };
+
+      // RENDER FUNCTION
+      const render = (state) => {
+        const { bgColor, textColor, accentColor } = state.theme;
+
+        // TODO 1: Update all color input values
+
+        // TODO 2: Update all color value displays (hex codes)
+
+        // TODO 3: Update preview card styles
+        // Set background to bgColor
+        // Set color to textColor
+        // Set border-left: 4px solid accentColor
+        const previewCard = document.getElementById("previewCard");
+
+        // TODO 4: Update theme JSON display
+        // Show formatted JSON of state.theme
+        // Use JSON.stringify(state.theme, null, 2) for pretty print
+      };
+
+      // EVENT HANDLERS
+
+      // TODO 5: Color input changes
+      // Listen to all three color inputs
+      // Update state.theme with new color
+      // Call render
+      document
+        .getElementById("bgColorInput")
+        .addEventListener("input", (e) => {});
+
+      document
+        .getElementById("textColorInput")
+        .addEventListener("input", (e) => {});
+
+      document
+        .getElementById("accentColorInput")
+        .addEventListener("input", (e) => {});
+
+      // TODO 6: Random theme button
+      // Generate random colors for all three
+      // Update state
+      // Render
+      document.getElementById("randomBtn").addEventListener("click", () => {});
+
+      // TODO 7: Export button
+      // Convert state.theme to JSON string
+      // Copy to clipboard using navigator.clipboard.writeText()
+      // Show toast notification
+      document
+        .getElementById("exportBtn")
+        .addEventListener("click", async () => {});
+
+      // TODO 8: Reset button
+      // Reset state.theme to DEFAULT_THEME
+      // Render
+      document.getElementById("resetBtn").addEventListener("click", () => {});
+
+      // TODO 9: Import button
+      // Get value from importInput textarea
+      // Parse JSON (use try-catch for errors)
+      // Validate it has bgColor, textColor, accentColor
+      // Update state.theme
+      // Render
+      // Show toast
+      document.getElementById("importBtn").addEventListener("click", () => {});
+
+      // Initial render
+      render(state);
+    </script>
+  </body>
+</html>

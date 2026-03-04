@@ -13,31 +13,50 @@
       }
 
       body {
-        font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family:
+          'Inter',
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
         background: #f8fafc; /* Light grey background */
         padding: 20px;
+        height: 100vh;
+      }
+      .hidden {
+        display: none !important;
       }
 
       /* --- MAIN LAYOUT --- */
       .container {
-        max-width: 1000px;
+        max-width: 100%;
+        height: 100%;
         margin: 0 auto; /* Centers the app on the screen */
-        
-        /* Grid creates our side-by-side layout. 
-           2fr 1fr means the left column (Products) gets 2 fractions of space, 
+
+        /* Grid creates our side-by-side layout.
+           2fr 1fr means the left column (Products) gets 2 fractions of space,
            and the right column (Cart) gets 1 fraction. */
         display: grid;
         grid-template-columns: 2fr 1fr;
         gap: 20px;
+        align-items: start;
       }
 
       /* White card styling for both the left and right columns */
       .products-section,
       .cart-section {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
         background: white;
         border-radius: 12px;
         padding: 24px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      .products-section {
+        height: fit-content;
+      }
+      .cart-section {
+        height: 100%;
       }
 
       h2 {
@@ -156,7 +175,7 @@
 
       /* The scrollable area where added items will appear */
       .cart-items-list {
-        max-height: 200px;
+        flex-grow: 1;
         overflow-y: auto;
         margin-bottom: 16px;
       }
@@ -225,10 +244,9 @@
   </head>
   <body>
     <div class="container">
-      
       <div class="products-section">
         <h2>🛍️ Products</h2>
-        
+
         <div id="productsList"></div>
       </div>
 
@@ -244,6 +262,14 @@
             <span>Subtotal</span>
             <span id="cartSubtotal">$0.00</span>
           </div>
+          <div class="cart-row">
+            <span>VAT Taxable Amount</span>
+            <span id="cartVATable">$0.00</span>
+          </div>
+          <div class="cart-row">
+            <span>VAT Amount</span>
+            <span id="cartVATAmount">$0.00</span>
+          </div>
           <div class="cart-row total">
             <span>Total</span>
             <span id="cartTotal">$0.00</span>
@@ -258,90 +284,149 @@
 
     <script>
       // PRODUCTS DATA
+      const VAT_RATE = 0.12;
       const PRODUCTS = [
-        { id: 1, name: "Wireless Headphones", price: 79.99 },
-        { id: 2, name: "Smart Watch", price: 199.99 },
-        { id: 3, name: "Laptop Stand", price: 49.99 },
-        { id: 4, name: "USB-C Cable", price: 12.99 },
-        { id: 5, name: "Keyboard", price: 89.99 },
+        { id: 1, name: 'Wireless Headphones', price: 79.99 },
+        { id: 2, name: 'Smart Watch', price: 199.99 },
+        { id: 3, name: 'Laptop Stand', price: 49.99 },
+        { id: 4, name: 'USB-C Cable', price: 12.99 },
+        { id: 5, name: 'Keyboard', price: 89.99 },
       ];
-
+      const PRODUCT_MAP = Object.fromEntries(
+        PRODUCTS.map((p) => [String(p.id), p])
+      );
       // STATE OBJECT
       let state = {
         cart: {}, // Think of this like a dictionary. Product ID is the word, Quantity is the definition. { "1": 2 }
       };
-
       // UTILITY: Load from localStorage
       const loadState = () => {
-        // TODO 1: Pull saved cart data from localStorage so the user's cart doesn't disappear when they refresh. 
+        // TODO 1: Pull saved cart data from localStorage so the user's cart doesn't disappear when they refresh.
         // Use JSON.parse(). If nothing is saved, just leave state.cart empty.
+        const savedCart = localStorage.getItem('shopping-cart');
+        if (savedCart) {
+          state.cart = JSON.parse(savedCart);
+        }
       };
 
       // UTILITY: Save to localStorage
       const saveState = () => {
-        // TODO 2: Convert state.cart into a string using JSON.stringify() and save it to localStorage 
+        // TODO 2: Convert state.cart into a string using JSON.stringify() and save it to localStorage
         // so we remember their items for their next visit.
+        localStorage.setItem('shopping-cart', JSON.stringify(state.cart));
       };
 
       // UTILITY: Calculate cart totals
+
       const getCartTotals = () => {
-        let itemCount = 0;
-        let subtotal = 0;
-
-        // TODO 3: Loop through the state.cart object (e.g., using Object.entries()). 
-        // Multiply each item's price by its quantity so you can return the exact subtotal and total item count.
-
-        return { itemCount: 0, subtotal: 0 }; // Change this to return your real math!
+        return Object.entries(state.cart).reduce(
+          (acc, [id, qty]) => {
+            const product = PRODUCT_MAP[id];
+            const itemTotal = product.price * qty;
+            acc.itemCount += qty;
+            acc.subtotal += itemTotal;
+            acc.vatTaxable += itemTotal;
+            return acc;
+          },
+          { itemCount: 0, subtotal: 0, vatTaxable: 0 }
+        );
       };
-
+      const formatNumber = (number) => number.toFixed(2);
+      const setCartSummary = (divId, value) => {
+        document.querySelector(`#${divId}`).textContent = value;
+      };
       // RENDER FUNCTION
       const render = (state) => {
-        // TODO 4: Draw the products on the screen. 
-        // Add + and - buttons here, and give them data-id="[id]" so the click listener knows WHICH product was clicked. 
+        // TODO 4: Draw the products on the screen.
+        // Add + and - buttons here, and give them data-id="[id]" so the click listener knows WHICH product was clicked.
         // Also, read state.cart to show the current quantity so the UI matches the data!
 
-        const productsList = document.getElementById("productsList");
-        productsList.innerHTML = PRODUCTS.map(({name, price}) => 
-        `<div class="product-item">
-          <div class="product-info">
-            <div class="product-name">${name}</div>
-            <div class="product-price">${price}</div>
-          </div>
-          <div class="product-quantity">
-            <button class="qty-btn">-</button>
-            <span class="qty-display">5</span>
-            <button class="qty-btn">+</button>
-          </div>
+        const productsList = document.getElementById('productsList');
+        productsList.innerHTML = PRODUCTS.map(({ id, name, price }) => {
+          const currentQty = state.cart[String(id)] || 0;
+          return `<div class="product-item">
+            <div class="product-info">
+              <div class="product-name">${name}</div>
+              <div class="product-price">${price}</div>
+            </div>
+            <div class="product-quantity">
+              <button class="qty-btn" data-id="${id}" data-action="decrease">-</button>
+              <span class="qty-display">${currentQty}</span>
+              <button class="qty-btn" data-id="${id}" data-action="increase">+</button>
+            </div>
         </div>
-        `
-      ).join('');
+        `;
+        }).join('');
 
-        // TODO 5: Update the numbers in the summary box (Items, Subtotal, Total). 
+        // TODO 5: Update the numbers in the summary box (Items, Subtotal, Total).
         // Use the getCartTotals() function above so you don't have to do the math twice.
-        const { itemCount, subtotal } = getCartTotals();
-        
+        const { itemCount, subtotal, vatTaxable } = getCartTotals();
+        let vatAmount = vatTaxable * VAT_RATE;
+        let grandTotal = subtotal + vatAmount;
 
-        // TODO 6: Draw the actual items inside the cart. 
+        setCartSummary('cartCount', itemCount);
+        setCartSummary('cartSubtotal', formatNumber(subtotal));
+        setCartSummary('cartVATable', formatNumber(vatTaxable));
+        setCartSummary('cartVATAmount', formatNumber(vatAmount));
+        setCartSummary('cartTotal', formatNumber(grandTotal));
+
+        // TODO 6: Draw the actual items inside the cart.
         // Filter state.cart to only show items with a quantity > 0. If it's empty, show a "Cart is empty" message.
-        const cartItemsList = document.getElementById("cartItemsList");
-        
+        const cartItemsList = document.getElementById('cartItemsList');
+        const cartData = Object.entries(state.cart).filter(
+          ([, qty]) => qty > 0
+        );
+        if (cartData.length === 0) {
+          cartItemsList.innerHTML = `<div class="empty-cart">Empty</div>`;
+        } else {
+          cartItemsList.innerHTML = cartData
+            .map(([id, qty]) => {
+              const product = PRODUCT_MAP[id];
+              return `
+            <div class="cart-item">
+              <span>${product.name} x ${qty}</span>
+              <span>${formatNumber(product.price * qty)}</span>
+            </div>`;
+            })
+            .join('');
+        }
 
-        // TODO 7: Check the itemCount. If it's 0, disable the "Clear Cart" button 
+        // TODO 7: Check the itemCount. If it's 0, disable the "Clear Cart" button
         // so they can't click it when the cart is already empty.
+        document.getElementById('clearBtn').disabled = itemCount === 0;
+        saveState();
       };
 
       // EVENT HANDLERS
 
-      // TODO 8: Listen for clicks on the whole product list. 
-      // If they clicked a + or - button, look at the button's data-id, update the state.cart dictionary, 
+      // TODO 8: Listen for clicks on the whole product list.
+      // If they clicked a + or - button, look at the button's data-id, update the state.cart dictionary,
       // save to localStorage, and re-render everything so the screen updates.
-      document
-        .getElementById("productsList")
-        .addEventListener("click", (e) => {});
+      document.getElementById('productsList').addEventListener('click', (e) => {
+        if (e.target.classList.contains('qty-btn')) {
+          const id = e.target.dataset.id;
+          const qtyAction = e.target.dataset.action;
+          let currentQty = state.cart[id] || 0;
+          if (qtyAction === 'increase') {
+            currentQty++;
+          } else {
+            currentQty--;
+          }
+          if (currentQty <= 0) {
+            delete state.cart[id];
+          } else {
+            state.cart[id] = currentQty;
+          }
+          render(state);
+        }
+      });
 
-      // TODO 9: When clicked, wipe the state.cart clean (set it back to {}), 
+      // TODO 9: When clicked, wipe the state.cart clean (set it back to {}),
       // save to localStorage, and render the empty cart.
-      document.getElementById("clearBtn").addEventListener("click", () => {});
+      document.getElementById('clearBtn').addEventListener('click', () => {
+        state.cart = {};
+        render(state);
+      });
 
       // Initial setup
       loadState();

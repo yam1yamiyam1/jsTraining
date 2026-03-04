@@ -1,13 +1,13 @@
 {
   "Query Selector ID": {
     "prefix": "qw",
-    "body": ["const ${1} = document.querySelector('#${1}');"],
+    "body": ["const ${1} = document.getElementById('${1}');"],
     "description": "document.querySelector for an ID",
   },
   "Query Selector Pair": {
     "prefix": "qwe",
     "body": [
-      "const ${1} = document.querySelector('#${1}');",
+      "const ${1} = document.getElementById('${1}');",
       "const output${2} = document.querySelector('#output${2}');",
     ],
     "description": "Selects both the trigger element and the output div",
@@ -22,11 +22,9 @@
     "description": "Basic event listener (No 'e' parameter)",
   },
   "Insert Template Variable": {
-    "prefix": "ee", 
-    "body": [
-      "\\${$1}"
-    ],
-    "description": "Insert a ${} template literal"
+    "prefix": "ee",
+    "body": ["\\${$1}"],
+    "description": "Insert a ${} template literal",
   },
   "Add Event Listener Input (with event object)": {
     "prefix": "ewq",
@@ -38,4 +36,3 @@
     "description": "Event listener specifically for inputs/tracking e.target",
   },
 }
-

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Exercise 3: Theme Customizer</title>
     <style>
+      /* --- GLOBAL RESET --- */
       * {
         margin: 0;
         padding: 0;
@@ -12,7 +13,7 @@
       }
 
       body {
-        font-family: "Inter", system-ui, sans-serif;
+        font-family: 'Inter', system-ui, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         min-height: 100vh;
         padding: 40px 20px;
@@ -59,7 +60,7 @@
         align-items: center;
       }
 
-      input[type="color"] {
+      input[type='color'] {
         width: 60px;
         height: 60px;
         border: 3px solid #e2e8f0;
@@ -68,13 +69,13 @@
         transition: all 200ms ease;
       }
 
-      input[type="color"]:hover {
+      input[type='color']:hover {
         border-color: #667eea;
         transform: scale(1.05);
       }
 
       .color-value {
-        font-family: "Courier New", monospace;
+        font-family: 'Courier New', monospace;
         font-weight: 600;
         color: #4a5568;
         padding: 8px 12px;
@@ -169,7 +170,7 @@
         padding: 12px;
         border: 2px solid #e2e8f0;
         border-radius: 8px;
-        font-family: "Courier New", monospace;
+        font-family: 'Courier New', monospace;
         font-size: 12px;
         resize: vertical;
       }
@@ -196,7 +197,6 @@
   </head>
   <body>
     <div class="container">
-      <!-- Controls Panel -->
       <div class="panel">
         <h1>🎨 Theme Customizer</h1>
 
@@ -246,7 +246,6 @@
         </div>
       </div>
 
-      <!-- Preview Panel -->
       <div class="panel preview-panel">
         <h1>👁️ Live Preview</h1>
 
@@ -275,9 +274,9 @@
     <script>
       // DEFAULT THEME
       const DEFAULT_THEME = {
-        bgColor: "#667eea",
-        textColor: "#ffffff",
-        accentColor: "#48bb78",
+        bgColor: '#667eea',
+        textColor: '#ffffff',
+        accentColor: '#48bb78',
       };
 
       // STATE OBJECT
@@ -288,85 +287,135 @@
       // UTILITY: Generate random hex color
       const randomColor = () => {
         return (
-          "#" +
+          '#' +
           Math.floor(Math.random() * 16777215)
             .toString(16)
-            .padStart(6, "0")
+            .padStart(6, '0')
         );
       };
 
       // UTILITY: Show toast notification
       const showToast = (message) => {
-        const toast = document.getElementById("toast");
+        const toast = document.getElementById('toast');
         toast.textContent = message;
-        toast.classList.add("show");
-        setTimeout(() => toast.classList.remove("show"), 2000);
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
       };
-
+      const updateElementById = (element, value) =>
+        (document.getElementById(`${String(element)}`).textContent = value);
+      const themes = Object.keys(state.theme);
       // RENDER FUNCTION
       const render = (state) => {
         const { bgColor, textColor, accentColor } = state.theme;
-
+        themes.forEach((t) => {
+          const hexColor = state.theme[t];
+          document.getElementById(`${t}Input`).value = hexColor;
+          document.getElementById(`${t}Value`).textContent = hexColor;
+        });
         // TODO 1: Update all color input values
+        // Set the `.value` property of these elements to match the state:
+        // - document.getElementById('bgColorInput')
+        // - document.getElementById('textColorInput')
+        // - document.getElementById('accentColorInput')
 
-        // TODO 2: Update all color value displays (hex codes)
+        // TODO 2: Update all color value displays (the hex text next to the inputs)
+        // Set the `.textContent` property of these spans to match the state:
+        // - document.getElementById('bgColorValue')
+        // - document.getElementById('textColorValue')
+        // - document.getElementById('accentColorValue')
 
-        // TODO 3: Update preview card styles
-        // Set background to bgColor
-        // Set color to textColor
-        // Set border-left: 4px solid accentColor
-        const previewCard = document.getElementById("previewCard");
+        // TODO 3: Update preview card inline styles
+        const previewCard = document.getElementById('previewCard');
+        // Apply the following inline styles to previewCard.style:
+        // - backgroundColor = bgColor
+        // - color = textColor
+        // - borderLeft = `4px solid ${accentColor}`
+        previewCard.style.backgroundColor = bgColor;
+        previewCard.style.color = textColor;
+        previewCard.style.borderLeft = `4px solid ${accentColor}`;
 
-        // TODO 4: Update theme JSON display
-        // Show formatted JSON of state.theme
-        // Use JSON.stringify(state.theme, null, 2) for pretty print
+        // TODO 4: Update theme JSON display box
+        // Target: document.getElementById('themeJSON')
+        // Set its `.textContent` to the formatted string of state.theme
+        // Hint: Use JSON.stringify(state.theme, null, 2) for the pretty spacing
+        document.getElementById('themeJSON').textContent = JSON.stringify(
+          state.theme,
+          null,
+          2
+        );
       };
 
       // EVENT HANDLERS
 
       // TODO 5: Color input changes
-      // Listen to all three color inputs
-      // Update state.theme with new color
-      // Call render
-      document
-        .getElementById("bgColorInput")
-        .addEventListener("input", (e) => {});
-
-      document
-        .getElementById("textColorInput")
-        .addEventListener("input", (e) => {});
-
-      document
-        .getElementById("accentColorInput")
-        .addEventListener("input", (e) => {});
-
+      // When these fire, update the specific property in state.theme based on e.target.value
+      // Example: state.theme.bgColor = e.target.value;
+      // Then call render(state);
+      themes.forEach((t) => {
+        const hexColor = state.theme[t];
+        document.getElementById(`${t}Input`).addEventListener('input', (e) => {
+          state.theme[t] = e.target.value;
+          render(state);
+        });
+      });
       // TODO 6: Random theme button
-      // Generate random colors for all three
-      // Update state
-      // Render
-      document.getElementById("randomBtn").addEventListener("click", () => {});
+      document.getElementById('randomBtn').addEventListener('click', () => {
+        // 1. Update state.theme.bgColor using randomColor()
+        // 2. Update state.theme.textColor using randomColor()
+        // 3. Update state.theme.accentColor using randomColor()
+        // 4. Call render(state)
+        themes.forEach((t) => {
+          const hexColor = state.theme[t];
+          state.theme[t] = randomColor();
+        });
+        render(state);
+      });
 
       // TODO 7: Export button
-      // Convert state.theme to JSON string
-      // Copy to clipboard using navigator.clipboard.writeText()
-      // Show toast notification
       document
-        .getElementById("exportBtn")
-        .addEventListener("click", async () => {});
+        .getElementById('exportBtn')
+        .addEventListener('click', async () => {
+          // 1. Convert state.theme to a string: JSON.stringify(state.theme)
+          // 2. Copy it to the user's clipboard: await navigator.clipboard.writeText(...)
+          // 3. Trigger the toast popup: showToast('Theme copied to clipboard!')
+          await navigator.clipboard.writeText(JSON.stringify(state.theme));
+          showToast('Theme copied to clipboard!');
+        });
 
       // TODO 8: Reset button
-      // Reset state.theme to DEFAULT_THEME
-      // Render
-      document.getElementById("resetBtn").addEventListener("click", () => {});
+      document.getElementById('resetBtn').addEventListener('click', () => {
+        // 1. Reset state.theme back to defaults: state.theme = { ...DEFAULT_THEME }
+        // 2. Call render(state)
+        // 3. Optional: showToast('Theme reset to default!')
+        state.theme = { ...DEFAULT_THEME };
+        render(state);
+      });
 
       // TODO 9: Import button
-      // Get value from importInput textarea
-      // Parse JSON (use try-catch for errors)
-      // Validate it has bgColor, textColor, accentColor
-      // Update state.theme
-      // Render
-      // Show toast
-      document.getElementById("importBtn").addEventListener("click", () => {});
+      document.getElementById('importBtn').addEventListener('click', () => {
+        // 1. Get the raw text from the textarea: document.getElementById('importInput').value
+        // 2. Wrap the next step in a try...catch block because parsing JSON can fail!
+        // 3. Inside try:
+        //    - const parsedTheme = JSON.parse(rawText)
+        //    - Check if parsedTheme has bgColor, textColor, and accentColor
+        //    - If valid, update state.theme = parsedTheme
+        //    - Call render(state)
+        //    - showToast('Theme imported successfully!')
+        // 4. Inside catch (error):
+        //    - showToast('Invalid JSON format!')
+        const inputJSON = document.getElementById('importInput').value;
+        try {
+          const parsedTheme = JSON.parse(inputJSON);
+          const themes = ['bgColor', 'textColor', 'accentColor'];
+          if (themes.every((t) => t in parsedTheme)) {
+            state.theme = parsedTheme;
+            render(state);
+            showToast('Theme imported successfully!');
+          }
+        } catch (error) {
+          showToast('Invalid JSON format!');
+        }
+      });
 
       // Initial render
       render(state);

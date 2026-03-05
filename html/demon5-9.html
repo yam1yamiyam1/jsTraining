@@ -38,6 +38,9 @@
         top: 0;
         height: 100vh;
         overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
       }
 
       .logo {
@@ -46,12 +49,10 @@
         background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 32px;
         letter-spacing: -0.5px;
       }
 
       .filter-section {
-        margin-bottom: 32px;
       }
 
       .filter-label {
@@ -497,30 +498,13 @@
         font-size: 18px;
         font-weight: 600;
       }
-
-      @keyframes slideIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      .employee-card {
-        animation: slideIn 300ms ease;
-      }
     </style>
   </head>
   <body>
     <div class="app-container">
-      <!-- SIDEBAR -->
       <aside class="sidebar">
         <div class="logo">WORKFORCE</div>
 
-        <!-- Search -->
         <div class="filter-section">
           <label class="filter-label">Search</label>
           <input
@@ -531,13 +515,11 @@
           />
         </div>
 
-        <!-- Departments -->
         <div class="filter-section">
           <label class="filter-label">Departments</label>
           <div class="checkbox-group" id="departmentFilters"></div>
         </div>
 
-        <!-- Salary Range (MIN/MAX INPUTS) -->
         <div class="filter-section">
           <label class="filter-label">Salary Range</label>
           <div class="range-inputs">
@@ -561,7 +543,6 @@
           </div>
         </div>
 
-        <!-- Sort Options -->
         <div class="filter-section">
           <label class="filter-label">Sort By</label>
           <div class="sort-buttons">
@@ -587,14 +568,12 @@
         <button class="reset-btn" id="resetBtn">Reset All</button>
       </aside>
 
-      <!-- MAIN CONTENT -->
       <main class="main-content">
         <header class="header">
           <h1>Analytics Dashboard</h1>
           <p>Comprehensive workforce insights and filtering</p>
         </header>
 
-        <!-- Metrics -->
         <div class="metrics-grid">
           <div class="metric-card">
             <div class="metric-label">Showing</div>
@@ -618,7 +597,6 @@
           </div>
         </div>
 
-        <!-- Selection Banner -->
         <div class="selection-banner" id="selectionBanner">
           <div class="selection-info">
             <span class="selection-count" id="bannerCount">0</span> selected
@@ -633,7 +611,6 @@
           </div>
         </div>
 
-        <!-- Employee Grid -->
         <div class="employee-grid" id="employeeGrid"></div>
       </main>
     </div>
@@ -804,171 +781,279 @@
 
       const DEPARTMENTS = [...new Set(EMPLOYEES.map((e) => e.department))];
 
-      let state = {
+      const INITIAL_STATE = {
         employees: EMPLOYEES,
         searchQuery: '',
         departmentFilters: [],
         salaryMin: null,
         salaryMax: null,
         sortBy: null,
-        selectedIds: [],
       };
-      console.log(DEPARTMENTS);
-      const render = (state) => {
-        document.getElementById('employeeGrid').innerHTML = state.employees
-          .map((e) => {
-            return `
-              <div class="employee-card" data-id="${e.id}">
-                <div class="employee-header">
-                  <div>
-                    <div class="employee-name">${e.name}</div>
-                    <div class="employee-title">${e.title}</div>
-                  </div>
-                  <div class="employee-badge badge-${e.department.toLowerCase()}">${e.department}</div>
-                </div>
-                <div class="employee-details">
-                  <div class="detail-item">
-                    <div class="detail-label">Salary</div>
-                    <div class="detail-value">$${e.salary}</div>
-                  </div>
-                  <div class="detail-item">
-                    <div class="detail-label">Experience</div>
-                    <div class="detail-value">${e.years} years</div>
-                  </div>
-                </div>
-              </div>
-            `;
-          })
-          .join('');
-        document.getElementById('departmentFilters').innerHTML =
-          DEPARTMENTS.map((d) => {
-            return `
-              <div class="checkbox-item">${d}</div>
-            `;
-          }).join('');
-      };
-      const salaryFilter = ()
-      document.getElementById('salaryMin').addEventListener('input', (e) => {
-        state.salaryMin = e.target.value
-      });
-      document.getElementById('salaryMax');
+
+      let state = { ...INITIAL_STATE, selectedIds: [] };
+
       // TODO 1: Filter Pipeline
-      // Target IDs: N/A (pure data transformation)
-      // Goal: Create a function that returns filtered and sorted employees based on all state criteria
-      // Behavior: Must handle search (case-insensitive name/title match), department filters (if array not empty, only show matching departments), salary range (if salaryMin is set, filter employees where salary >= salaryMin; if salaryMax is set, filter where salary <= salaryMax; both can be active simultaneously), and sorting (nameAsc, nameDesc, salaryAsc, salaryDesc). Return original array if no filters active.
+      const getFilteredEmployees = ({
+        searchQuery,
+        departmentFilters,
+        salaryMin,
+        salaryMax,
+        sortBy,
+      }) => {
+        let filteredEmployees = [...state.employees];
+        if (searchQuery.toLowerCase() !== '') {
+          const query = searchQuery.toLowerCase();
+          filteredEmployees = filteredEmployees.filter(({ name, title }) => {
+            return (
+              name.toLowerCase().startsWith(query) ||
+              title.toLowerCase().includes(query)
+            );
+          });
+        }
 
+        if (departmentFilters.length > 0) {
+          filteredEmployees = filteredEmployees.filter(({ department }) => {
+            return departmentFilters.includes(department);
+          });
+        }
+
+        if (salaryMin !== null) {
+          filteredEmployees = filteredEmployees.filter(({ salary }) => {
+            return salary > salaryMin;
+          });
+        }
+        if (salaryMax !== null) {
+          filteredEmployees = filteredEmployees.filter(({ salary }) => {
+            return salary < salaryMax;
+          });
+        }
+
+        if (sortBy !== null) {
+          filteredEmployees = filteredEmployees.sort((a, b) => {
+            switch (sortBy) {
+              case 'nameAsc':
+                return a.name.localeCompare(b.name); // A to Z
+              case 'nameDesc':
+                return b.name.localeCompare(a.name); // Z to A
+              case 'salaryAsc':
+                return a.salary - b.salary; // Low to High
+              case 'salaryDesc':
+                return b.salary - a.salary; // High to Low
+              default:
+                return 0; // Don't change order
+            }
+          });
+        }
+        return filteredEmployees;
+      };
+      const updateMetric = (id, value) =>
+        (document.getElementById(id).textContent = `${value}`);
       // TODO 2: Metrics Calculation
-      // Target IDs: N/A (pure calculation)
-      // Goal: Calculate all dashboard metrics from filtered employees and selected IDs
-      // Behavior: Return object with totalShowing (count of filtered), avgSalary (average or 0 if none), selectedCount (length of selectedIds), totalCompensation (sum of salaries for selected employees only). Use original EMPLOYEES array to lookup selected employee data.
+      const getAvgSalary = (employees) => {
+        if (employees.length === 0) return 0;
+        const total = employees.reduce((sum, { salary }) => sum + salary, 0);
+        const ave = total / employees.length;
+        return ave.toFixed(2);
+      };
 
-      // TODO 3: Department Checkboxes Generation
-      // Target IDs: `departmentFilters`
-      // Goal: Dynamically generate checkbox HTML for each department
-      // Behavior: Loop through DEPARTMENTS array. Each checkbox must have unique id, data-department attribute with department name, and checked state based on whether department exists in state.departmentFilters array.
-
-      // TODO 4: Salary Range Inputs Sync
-      // Target IDs: `salaryMin`, `salaryMax`
-      // Goal: Synchronize input values with state
-      // Behavior: Set value property of salaryMin input to state.salaryMin (or empty string if null). Set value property of salaryMax input to state.salaryMax (or empty string if null).
-
-      // TODO 5: Sort Buttons Active State
-      // Target IDs: `sortNameAsc`, `sortNameDesc`, `sortSalaryAsc`, `sortSalaryDesc`
-      // Goal: Apply active class to currently selected sort button
-      // Behavior: Remove 'active' class from all four sort buttons. If state.sortBy matches button's sort value (nameAsc, nameDesc, salaryAsc, salaryDesc), add 'active' class to that specific button.
-
-      // TODO 6: Employee Cards Rendering
-      // Target IDs: `employeeGrid`
-      // Goal: Render filtered employee cards with selection state and proper formatting
-      // Behavior: If filtered array is empty, show empty state message. Otherwise, map each employee to card HTML. Add 'selected' class if employee.id is in state.selectedIds. Format salary with thousands separator. Map department to correct badge class (badge-engineering, badge-design, badge-sales, badge-marketing). Include data-id attribute with employee id.
-      //
-      // HTML STRUCTURE REQUIRED:
-      // <div class="employee-card [selected]" data-id="ID">
-      //   <div class="employee-header">
-      //     <div>
-      //       <div class="employee-name">NAME</div>
-      //       <div class="employee-title">TITLE</div>
-      //     </div>
-      //     <div class="employee-badge badge-DEPARTMENT">DEPARTMENT</div>
-      //   </div>
-      //   <div class="employee-details">
-      //     <div class="detail-item">
-      //       <div class="detail-label">Salary</div>
-      //       <div class="detail-value">$XXX,XXX</div>
-      //     </div>
-      //     <div class="detail-item">
-      //       <div class="detail-label">Experience</div>
-      //       <div class="detail-value">X years</div>
-      //     </div>
-      //   </div>
-      // </div>
-      //
-      // EMPTY STATE STRUCTURE:
-      // <div class="empty-state">
-      //   <div class="empty-state-icon">🔍</div>
-      //   <div class="empty-state-text">No employees match your filters</div>
-      // </div>
-
-      // TODO 7: Metrics Display Update
-      // Target IDs: `metricShowing`, `metricAvgSalary`, `metricSelected`, `metricTotalComp`
-      // Goal: Update all four metric displays with calculated values
-      // Behavior: Set textContent of each metric element. Format avgSalary and totalComp as currency with dollar sign and thousands separator. Show whole numbers only.
-
-      // TODO 8: Selection Banner Visibility
-      // Target IDs: `selectionBanner`, `bannerCount`
-      // Goal: Show/hide selection banner and update count
-      // Behavior: Add 'visible' class to banner if selectedCount > 0, remove if 0. Update bannerCount textContent with selectedCount value.
-
-      // TODO 9: Search Input Value Sync
-      // Target IDs: `searchInput`
-      // Goal: Ensure search input displays current state value
-      // Behavior: Set input.value to state.searchQuery. Prevents input desync after state updates.
-
-      // TODO 10: Search Input Handler
-      // Target IDs: `searchInput`
-      // Goal: Update search query state on every input change
-      // Behavior: Listen for 'input' event. Update state.searchQuery immutably with input value. Trigger render.
-
-      // TODO 11: Department Filter Handler
-      // Target IDs: `departmentFilters` (event delegation)
-      // Goal: Toggle department filters when checkboxes clicked
-      // Behavior: Use event delegation on parent. When checkbox with data-department clicked, get department value. If checked, add to state.departmentFilters array. If unchecked, remove from array. Maintain immutability. Trigger render.
-
-      // TODO 12: Salary Range Input Handlers
-      // Target IDs: `salaryMin`, `salaryMax`
-      // Goal: Update salary filter bounds when user types in min/max fields
-      // Behavior: Listen to 'input' event on both fields. Parse input value as number using parseInt or parseFloat. If input is empty string, set to null. If parsed value is NaN, ignore the input. Update state.salaryMin or state.salaryMax accordingly. Trigger render.
-
-      // TODO 13: Sort Button Handlers
-      // Target IDs: `sortNameAsc`, `sortNameDesc`, `sortSalaryAsc`, `sortSalaryDesc`
-      // Goal: Update sort state when sort buttons clicked
-      // Behavior: Add click listener to each button. Set state.sortBy to corresponding value (nameAsc, nameDesc, salaryAsc, salaryDesc). If same button clicked twice, set to null (toggle off). Trigger render.
-
-      // TODO 14: Employee Card Selection Handler
-      // Target IDs: `employeeGrid` (event delegation)
-      // Goal: Toggle employee selection on card click
-      // Behavior: Use event delegation. When card clicked, get employee id from data-id attribute. Convert to number. If id exists in state.selectedIds, remove it. If not, add it. Maintain immutability. Trigger render.
-
-      // TODO 15: Clear Selection Handler
-      // Target IDs: `clearSelectionBtn`
-      // Goal: Clear all selected employees
-      // Behavior: Set state.selectedIds to empty array. Trigger render.
-
-      // TODO 16: Export JSON Handler
-      // Target IDs: `exportBtn`
-      // Goal: Export selected employee data as formatted JSON
-      // Behavior: Filter EMPLOYEES array to only include ids in state.selectedIds. Convert to JSON string with 2-space indentation. Copy to clipboard using navigator.clipboard API. Show console log confirmation or alert.
-
-      // TODO 17: Reset All Filters Handler
-      // Target IDs: `resetBtn`
-      // Goal: Clear all filters and sorting, keep selections
-      // Behavior: Reset state.searchQuery to empty string, state.departmentFilters to empty array, state.salaryMin to null, state.salaryMax to null, state.sortBy to null. Do NOT clear state.selectedIds. Trigger render.
+      const EMPLOYEES_MAP = Object.fromEntries(
+        EMPLOYEES.map((e) => [String(e.id), e])
+      );
 
       // TODO 18: Render Function Orchestration
-      // Target IDs: All (calls all TODO functions above)
-      // Goal: Single render function that updates entire UI based on current state
-      // Behavior: Must call all rendering TODOs in correct order. Must be pure (no side effects except DOM updates). Must handle edge cases (empty arrays, null values).
+      const render = (state) => {
+        // TODO 8: Selection Banner Visibility
+        const banner = document.getElementById('selectionBanner');
+        const bannerCount = document.getElementById('bannerCount');
+        if (state.selectedIds.length > 0) {
+          banner.classList.add('visible');
+          bannerCount.textContent = state.selectedIds.length;
+        } else {
+          banner.classList.remove('visible');
+        }
 
+        filteredEmployees = getFilteredEmployees(state);
+
+        // TODO 7: Metrics Display Update
+        let totalComp = 0;
+        state.selectedIds.forEach(
+          (id) => (totalComp = totalComp + EMPLOYEES_MAP[id].salary)
+        );
+
+        updateMetric('metricShowing', filteredEmployees.length);
+        updateMetric('metricAvgSalary', `$${getAvgSalary(filteredEmployees)}`);
+        updateMetric('metricSelected', state.selectedIds.length);
+        updateMetric('metricTotalComp', totalComp.toFixed(2));
+
+        // TODO 6: Employee Cards Rendering
+        if (filteredEmployees.length !== 0) {
+          document.getElementById('employeeGrid').innerHTML = filteredEmployees
+            .map((e) => {
+              return `
+                <div class="employee-card ${state.selectedIds.includes(e.id) ? 'selected' : ''}" data-id="${e.id}">
+                  <div class="employee-header">
+                    <div>
+                      <div class="employee-name">${e.name}</div>
+                      <div class="employee-title">${e.title}</div>
+                    </div>
+                    <div class="employee-badge badge-${e.department.toLowerCase()}">${e.department}</div>
+                  </div>
+                  <div class="employee-details">
+                    <div class="detail-item">
+                      <div class="detail-label">Salary</div>
+                      <div class="detail-value">$${e.salary}</div>
+                    </div>
+                    <div class="detail-item">
+                      <div class="detail-label">Experience</div>
+                      <div class="detail-value">${e.years} years</div>
+                    </div>
+                  </div>
+                </div>
+              `;
+            })
+            .join('');
+        } else {
+          document.getElementById('employeeGrid').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">🔍</div>
+            <div class="empty-state-text">No employees match your filters</div>
+          </div>
+        `;
+        }
+
+        // TODO 9: Search Input Value Sync TODO 4: Salary Range Inputs Sync
+        const tfInputValues = ['searchInput', 'salaryMin', 'salaryMax'];
+        tfInputValues.forEach((t) => {
+          const stateKey = t === 'searchInput' ? 'searchQuery' : t;
+          document.getElementById(t).value = state[stateKey] ?? '';
+        });
+
+        // TODO 3: Department Checkboxes Generation
+        document.getElementById('departmentFilters').innerHTML =
+          DEPARTMENTS.map((d) => {
+            const isChecked = state.departmentFilters.includes(d)
+              ? 'checked'
+              : '';
+            return `
+            <div class="checkbox-item">
+              <input type="checkbox" id="dept-${d.toLowerCase()}" data-department="${d}" ${isChecked}>
+              <label for="dept-${d.toLowerCase()}">${d}</label>
+            </div>`;
+          }).join('');
+
+        // TODO 5: Sort Buttons Active State
+        sortOptions.forEach((s) => {
+          document
+            .getElementById(`sort${capitalizeStr(s)}`)
+            .classList.remove('active');
+          if (String(s) === `${state.sortBy}`) {
+            document
+              .getElementById(`sort${capitalizeStr(s)}`)
+              .classList.add('active');
+          }
+        });
+      };
+
+      const capitalizeStr = (str) =>
+        String(str[0].toUpperCase() + str.slice(1));
+      const sortOptions = ['nameAsc', 'nameDesc', 'salaryAsc', 'salaryDesc'];
+
+      // TODO 13: Sort Button Handlers
+      sortOptions.forEach((s) => {
+        document
+          .getElementById(`sort${capitalizeStr(s)}`)
+          .addEventListener('click', () => {
+            if (state.sortBy === s) {
+              state.sortBy = null;
+            } else {
+              state.sortBy = s;
+            }
+            render(state);
+          });
+      });
+
+      // TODO 10: Search Input Handler
+      document.getElementById('searchInput').addEventListener('input', (e) => {
+        state.searchQuery = e.target.value;
+        render(state);
+      });
+
+      // TODO 11: Department Filter Handler
+      document
+        .getElementById('departmentFilters')
+        .addEventListener('click', (e) => {
+          if (e.target.type === 'checkbox') {
+            const clickedDept = e.target.dataset.department;
+            const isChecked = e.target.checked;
+            if (isChecked) {
+              state.departmentFilters = [
+                ...state.departmentFilters,
+                clickedDept,
+              ];
+            } else {
+              state.departmentFilters = state.departmentFilters.filter(
+                (d) => d !== clickedDept
+              );
+            }
+          }
+          render(state);
+        });
+
+      // TODO 12: Salary Range Input Handlers
+      const salaryInputs = ['salaryMin', 'salaryMax'];
+      salaryInputs.forEach((i) => {
+        document.getElementById(i).addEventListener('input', (e) => {
+          const inputValue = e.target.value;
+          if (inputValue === '') {
+            state[i] = null;
+          } else {
+            state[i] = Number(inputValue);
+          }
+          render(state);
+        });
+      });
+
+      // TODO 14: Employee Card Selection Handler
+      document.getElementById('employeeGrid').addEventListener('click', (e) => {
+        const card = e.target.closest('.employee-card');
+        if (!card) return;
+        const empId = Number(card.dataset.id);
+        if (state.selectedIds.includes(empId)) {
+          state.selectedIds = state.selectedIds.filter((id) => id !== empId);
+        } else {
+          state.selectedIds = [...state.selectedIds, empId];
+        }
+        render(state);
+      });
+
+      // TODO 15: Clear Selection Handler
+      document
+        .getElementById('clearSelectionBtn')
+        .addEventListener('click', () => {
+          state.selectedIds = [];
+          render(state);
+        });
+
+      // TODO 17: Reset All Filters Handler
+      document.getElementById('resetBtn').addEventListener('click', () => {
+        state = { ...INITIAL_STATE, selectedIds: state.selectedIds };
+        render(state);
+      });
+
+      // TODO 16: Export JSON Handler
+      // Goal: Export selected employee data as formatted JSON
+      // Behavior: Filter EMPLOYEES array to only include ids in state.selectedIds. Convert to JSON string with 2-space indentation. Copy to clipboard using navigator.clipboard API. Show console log confirmation or alert.
+      document
+        .getElementById('exportBtn')
+        .addEventListener('click', async () => {
+          await navigator.clipboard.writeText(
+            JSON.stringify(
+              state.selectedIds.map((id) => EMPLOYEES_MAP[id]),
+              null,
+              2
+            )
+          );
+        });
       // Initial render
       render(state);
     </script>

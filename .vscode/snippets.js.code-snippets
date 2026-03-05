@@ -1,7 +1,7 @@
 {
   "Query Selector ID": {
     "prefix": "qw",
-    "body": ["const ${1} = document.getElementById('${1}');"],
+    "body": ["document.getElementById('${1}');"],
     "description": "document.querySelector for an ID",
   },
   "Query Selector Pair": {

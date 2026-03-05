@@ -487,12 +487,40 @@
           'Technology has fundamentally transformed how we communicate, collaborate, and create in the modern digital landscape. Innovation drives progress across industries.',
         hard: 'Implementing sophisticated algorithms requires meticulous attention to computational complexity, architectural patterns, and performance optimization strategies while maintaining backward compatibility.',
       };
-
+      const INITIAL_METRICS = {
+        userInput: '',
+        currentIndex: 0,
+        correctCount: 0,
+        incorrectCount: 0,
+        totalTyped: 0,
+        wpm: 0,
+        accuracy: 0,
+      };
+      const preset = {
+        easy: {
+          difficulty: 'easy',
+          targetText: TEXTS.easy,
+          timeLimit: 30,
+          timeRemaining: 30,
+        },
+        medium: {
+          difficulty: 'medium',
+          targetText: TEXTS.medium,
+          timeLimit: 60,
+          timeRemaining: 60,
+        },
+        hard: {
+          difficulty: 'hard',
+          targetText: TEXTS.hard,
+          timeLimit: 90,
+          timeRemaining: 90,
+        },
+      };
       let state = {
         difficulty: 'easy',
         targetText: TEXTS.easy,
         timeLimit: 30,
-        status: 'idle',
+        status: 'idle', // 'idle', 'active', or 'completed'
         timeRemaining: 30,
         timerId: null,
         userInput: '',
@@ -504,95 +532,158 @@
         accuracy: 100,
       };
 
-      // TODO 1: WPM Calculation
-      // Target IDs: N/A (pure calculation)
-      // Goal: Calculate words per minute from correct characters and time elapsed
-      // Behavior: Formula is (correctCount / 5) / (timeElapsed / 60). Assume standard word length of 5 characters. Return 0 if timeElapsed is 0 to avoid division by zero. Round to nearest integer.
+      /* =========================================================================
+         PHASE 1: EVENT LISTENERS (Make it interactive!)
+         ========================================================================= */
 
-      // TODO 2: Accuracy Calculation
-      // Target IDs: N/A (pure calculation)
-      // Goal: Calculate accuracy percentage from correct vs total characters
-      // Behavior: Formula is (correctCount / totalTyped) * 100. Return 100 if no characters typed yet. Round to one decimal place.
-
-      // TODO 3: Performance Message Generation
-      // Target IDs: N/A (pure logic)
-      // Goal: Generate contextual feedback message based on WPM and accuracy
-      // Behavior: Return different messages for performance tiers. WPM >= 70 && accuracy >= 95: exceptional. WPM >= 50 && accuracy >= 90: excellent. WPM >= 35 && accuracy >= 85: good. WPM >= 20: decent. Otherwise: needs improvement.
-
-      // TODO 4: Text Display Formatter
-      // Target IDs: N/A (pure string generation)
-      // Goal: Generate HTML with character-by-character styling based on typing progress
-      // Behavior: Wrap each character in span with class 'char'. If character index < userInput length, compare characters - add 'correct' class if match, 'incorrect' if mismatch. If character index === currentIndex AND status is 'active', add 'current' class for cursor. Handle spaces by rendering as &nbsp; for visibility.
-
-      // TODO 5: Difficulty Button Active States
-      // Target IDs: `diffEasy`, `diffMedium`, `diffHard`
-      // Goal: Apply active class to selected difficulty button
-      // Behavior: Remove 'active' class from all difficulty buttons. Add 'active' class to button whose data-difficulty matches state.difficulty.
-
-      // TODO 6: Stats Bar Updates
-      // Target IDs: `statTime`, `statWPM`, `statAccuracy`, `statProgress`
-      // Goal: Update all live statistics during test
-      // Behavior: Set timeRemaining, calculated WPM, calculated accuracy with % symbol, and progress as "currentIndex/targetText.length" format.
-
-      // TODO 7: Text Display Rendering
-      // Target IDs: `textWrapper`, `textDisplay`
-      // Goal: Render formatted text and update wrapper state classes
-      // Behavior: Update innerHTML with formatted character spans. Apply wrapper classes based on status: 'idle' for idle, 'active' for active, 'completed' for completed. Remove all state classes before applying new one.
-
-      // TODO 8: Input Field State Management
-      // Target IDs: `typingInput`
-      // Goal: Sync input value and disabled state with test status
-      // Behavior: Set value to state.userInput. Disable if status is not 'active'. Enable and focus if status is 'active'.
-
-      // TODO 9: Button State Management
-      // Target IDs: `startBtn`, `resetBtn`
-      // Goal: Enable/disable buttons based on test status
-      // Behavior: Disable start button if status is 'active'. Enable reset button if status is 'active' or 'completed'. Disable reset if 'idle'.
-
-      // TODO 10: Prompt Message Visibility
-      // Target IDs: `promptMessage`
-      // Goal: Show/hide instructional text
-      // Behavior: Display block if status is 'idle'. Display none if status is 'active' or 'completed'.
-
-      // TODO 11: Results Panel Display
-      // Target IDs: `resultsPanel`, `resultWPM`, `resultAccuracy`, `resultChars`, `resultErrors`, `resultsMessage`
-      // Goal: Show results panel with final statistics when test completes
-      // Behavior: Add 'visible' class if status is 'completed', remove if not. Populate all result stats with final values. Generate and display performance message.
-
-      // TODO 12: Countdown Timer Implementation
-      // Target IDs: N/A (state management)
-      // Goal: Decrement time every second and end test at zero
-      // Behavior: Use setInterval with 1000ms delay. Each tick, decrease timeRemaining by 1. If reaches 0, set status to 'completed', clear interval using clearInterval with state.timerId, set timerId to null. Store interval ID in state.timerId. Call render after each update.
-
-      // TODO 13: Difficulty Selection Handler
-      // Target IDs: All elements with `data-difficulty` attribute
+      // TODO 1: Difficulty Selection Handler
+      // Target IDs: `diffEasy`, `diffMedium`, `diffHard` (or use event delegation on `.difficulty-selector`)
       // Goal: Change test difficulty and reset test parameters
-      // Behavior: Only allow changes when status is 'idle'. Get difficulty and time values from button's data attributes. Update state.difficulty, state.targetText (from TEXTS object), state.timeLimit, and state.timeRemaining. Trigger render.
-
-      // TODO 14: Start Button Handler
-      // Target IDs: `startBtn`
+      // Behavior: Only allow changes when status is 'idle'. Get difficulty and time values from the clicked button's data attributes (`data-difficulty`, `data-time`). Update state.difficulty, state.targetText (from TEXTS object), state.timeLimit, and state.timeRemaining. Trigger render.
+      const difficultyOptions = ['Easy', 'Medium', 'Hard'];
+      difficultyOptions.forEach((d) =>
+        document.getElementById(`diff${d}`).addEventListener('click', () => {
+          state = { ...state, ...preset[d.toLowerCase()] };
+          render(state);
+          console.log(state);
+        })
+      );
+      // TODO 2: Start Button Handler
+      // Target ID: `startBtn`
       // Goal: Initialize test and start countdown timer
-      // Behavior: Reset all typing metrics (userInput: '', currentIndex: 0, correctCount: 0, incorrectCount: 0, totalTyped: 0). Set status to 'active'. Call timer start function. Trigger render.
-
-      // TODO 15: Typing Input Handler (CRITICAL LOGIC)
-      // Target IDs: `typingInput`
-      // Goal: Process every character typed and update accuracy in real-time
-      // Behavior: Listen for 'input' event. Get current input value. Update state.userInput. Compare EACH character in userInput against targetText at same index. Count correct matches and incorrect mismatches. Update correctCount and incorrectCount. Set totalTyped to userInput length. Update currentIndex to length of userInput. If currentIndex equals targetText length (test completed), set status to 'completed', stop timer with clearInterval, set timerId to null. Trigger render.
-
-      // TODO 16: Reset Button Handler
-      // Target IDs: `resetBtn`
+      // Behavior: Reset all typing metrics (userInput: '', currentIndex: 0, correctCount: 0, incorrectCount: 0, totalTyped: 0). Set status to 'active'. Call your timer start function (TODO 6). Trigger render.
+      document.getElementById('startBtn').addEventListener('click', () => {
+        state = { ...state, ...INITIAL_METRICS, status: 'active' };
+        render(state);
+      });
+      // TODO 3: Reset Button Handler
+      // Target ID: `resetBtn`
       // Goal: Abort test and return to idle state
-      // Behavior: If timerId exists, call clearInterval to stop timer. Reset status to 'idle'. Reset timeRemaining to timeLimit. Reset all typing metrics to 0 or empty string. Set timerId to null. Clear textarea value. Trigger render.
-
-      // TODO 17: Paste Prevention (BONUS)
-      // Target IDs: `typingInput`
+      // Behavior: If timerId exists, call clearInterval to stop timer. Reset status to 'idle'. Reset timeRemaining to timeLimit. Reset all typing metrics to 0 or empty string. Set timerId to null. Trigger render.
+      document.getElementById('resetBtn').addEventListener('click', () => {
+        state = { ...state, ...INITIAL_METRICS, status: 'idle' };
+        render(state);
+      });
+      // TODO 4: Paste Prevention (BONUS)
+      // Target ID: `typingInput`
       // Goal: Prevent users from pasting text into input
-      // Behavior: Listen for 'paste' event. Call preventDefault to block paste action. Ensures legitimate typing test.
+      // Behavior: Listen for the 'paste' event. Call `e.preventDefault()` to block the paste action.
+      document.getElementById('typingInput').addEventListener('paste', (e) => {
+        e.preventDefault();
+      });
+      // TODO 5: Typing Input Handler (CRITICAL LOGIC)
+      // Target ID: `typingInput`
+      // Goal: Process every character typed and update accuracy in real-time
+      // Behavior: Listen for 'input' event. Update state.userInput with the current input value. Compare EACH character in userInput against targetText at the exact same index. Count correct matches and incorrect mismatches. Update correctCount and incorrectCount. Set totalTyped to userInput length. Update currentIndex to length of userInput. If currentIndex equals targetText length (test completed early), set status to 'completed', stop timer with clearInterval, set timerId to null. Trigger render.
+      document.getElementById('typingInput').addEventListener('input', (e) => {
+        state = { ...state, userInput: e.target.value };
+        render(state);
+        console.log(state.userInput);
+      });
+      /* =========================================================================
+         PHASE 2: LOGIC & MATH (Data transformations)
+         ========================================================================= */
 
-      // TODO 18: Render Function Orchestration
-      // Target IDs: All (calls all rendering TODOs)
-      // Goal: Single function that rebuilds entire UI from current state
-      // Behavior: Calculate derived values (WPM, accuracy, formatted text). Call all DOM update functions in correct dependency order. Must be called after every state change. Must handle all edge cases (null timerId, empty strings, zero values).
+      // TODO 6: Countdown Timer Implementation
+      // Target IDs: N/A (Pure state management)
+      // Goal: Decrement time every second and end test at zero
+      // Behavior: Create a function that uses setInterval with 1000ms delay. Each tick, decrease timeRemaining by 1. If timeRemaining reaches 0, set status to 'completed', clear the interval, and set timerId to null. Store the interval ID in state.timerId. Call render() after each tick.
+      const timer = () = {
+        state.timeRemaining--
+        state.timeRemaining < 0
+        state.status = 'completed'
+      }
+      // TODO 7: WPM Calculation
+      // Target IDs: N/A (Pure calculation)
+      // Goal: Calculate words per minute from correct characters and time elapsed
+      // Behavior: Formula is `(correctCount / 5) / (timeElapsedInMinutes)`. Assume a standard word length of 5 characters. Return 0 if timeElapsed is 0 to avoid Infinity. Round to nearest integer.
+
+      // TODO 8: Accuracy Calculation
+      // Target IDs: N/A (Pure calculation)
+      // Goal: Calculate accuracy percentage from correct vs total characters
+      // Behavior: Formula is `(correctCount / totalTyped) * 100`. Return 100 if no characters typed yet. Round to one decimal place.
+
+      // TODO 9: Performance Message Generation
+      // Target IDs: N/A (Pure logic)
+      // Goal: Generate contextual feedback message based on WPM and accuracy
+      // Behavior: Return different string messages for performance tiers. Example: WPM >= 70 && accuracy >= 95 is exceptional. WPM >= 50 && accuracy >= 90 is excellent. WPM >= 35 && accuracy >= 85 is good. WPM >= 20 is decent. Otherwise: needs improvement.
+
+      // TODO 10: Text Display Formatter
+      // Target IDs: N/A (Pure string HTML generation)
+      // Goal: Generate HTML string with character-by-character styling based on typing progress
+      // Behavior: Loop through state.targetText. Wrap each character in a `<span class="char">`. If the character's index < userInput length, compare characters: add 'correct' class if match, 'incorrect' if mismatch. If character index === currentIndex AND status is 'active', add 'current' class to show the blinking cursor.
+
+      /* =========================================================================
+         PHASE 3: RENDERING (Updating the DOM)
+         ========================================================================= */
+
+      const render = (state) => {
+        difficultyOptions.forEach((d) => {
+          const dBtn = document.getElementById(`diff${d}`);
+          if (state.status === 'active') {
+            dBtn.disabled = true;
+          } else {
+            dBtn.disabled = false;
+          }
+          dBtn.classList.remove('active');
+          if (state.difficulty === d.toLowerCase()) {
+            dBtn.classList.add('active');
+          }
+        });
+        document.getElementById('textDisplay').textContent =
+          'Click START to load test text...';
+        document.getElementById('typingInput').value = state.userInput;
+        switch (state.status) {
+          case 'idle':
+            document.getElementById('resetBtn').disabled = true;
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('typingInput').disabled = true;
+            break;
+          case 'active':
+            document.getElementById('resetBtn').disabled = false;
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('typingInput').disabled = false;
+            document.getElementById('textDisplay').textContent =
+              state.targetText;
+            break;
+          case 'completed':
+            document.getElementById('resetBtn').disabled = false;
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('typingInput').disabled = true;
+            document.getElementById('textDisplay').textContent =
+              state.targetText;
+            break;
+        }
+        document.getElementById('statTime').textContent = state.timeLimit;
+        // TODO 11: Difficulty Button Active States
+        // Target IDs: `diffEasy`, `diffMedium`, `diffHard`
+        // Goal: Apply 'active' class to selected difficulty button, remove from others based on state.difficulty.
+
+        // TODO 12: Prompt Message Visibility
+        // Target ID: `promptMessage`
+        // Goal: Show/hide instructional text based on status.
+        // Behavior: Display 'block' if status is 'idle'. Display 'none' if status is 'active' or 'completed'.
+        // TODO 13: Button State Management
+        // Target IDs: `startBtn`, `resetBtn`
+        // Goal: Enable/disable buttons based on test status.
+        // Behavior: Disable start button if status is 'active'. Enable reset button if status is 'active' or 'completed'. Disable reset if 'idle'.
+        // TODO 14: Input Field State Management
+        // Target ID: `typingInput`
+        // Goal: Sync textarea value and disabled state with test status.
+        // Behavior: Set input value to state.userInput. Disable if status is NOT 'active'. Enable and focus() if status IS 'active'.
+        // TODO 15: Stats Bar Updates
+        // Target IDs: `statTime`, `statWPM`, `statAccuracy`, `statProgress`
+        // Goal: Update live statistics during test.
+        // Behavior: Set textContent for timeRemaining, calculated WPM, calculated accuracy (with % symbol), and progress (format: "currentIndex / targetText.length").
+        // TODO 16: Text Display Rendering
+        // Target IDs: `textWrapper`, `textDisplay`
+        // Goal: Render formatted text and update wrapper state classes.
+        // Behavior: Update innerHTML of textDisplay with the HTML string from TODO 10. Apply classes to textWrapper based on status: 'idle', 'active', or 'completed' (make sure to remove old classes).
+        // TODO 17: Results Panel Display
+        // Target IDs: `resultsPanel`, `resultWPM`, `resultAccuracy`, `resultChars`, `resultErrors`, `resultsMessage`
+        // Goal: Show results panel with final statistics when test completes.
+        // Behavior: Add 'visible' class to panel if status is 'completed', remove if not. Populate all result stat IDs with final values. Call TODO 9 to display the performance message.
+      };
 
       // Initial render
       render(state);

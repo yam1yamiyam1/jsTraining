@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Demon 6.2: Default Prevention</title>
+    <style>
+      /* Same CSS as Level 1 */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Monaco', monospace;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+      h1 {
+        font-size: 36px;
+        color: #1a202c;
+        margin-bottom: 12px;
+      }
+      .danger-box {
+        background: #fee;
+        border-left: 4px solid #ef4444;
+        padding: 16px;
+        margin: 20px 0;
+        border-radius: 4px;
+      }
+      .exercise {
+        background: #f9fafb;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 16px 0;
+      }
+      .output {
+        background: #1f2937;
+        color: #10b981;
+        padding: 12px;
+        border-radius: 6px;
+        font-family: monospace;
+        margin-top: 12px;
+        min-height: 40px;
+      }
+      button,
+      input[type='submit'] {
+        background: #8b5cf6;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 8px;
+      }
+      .drop-zone {
+        border: 2px dashed #8b5cf6;
+        padding: 20px;
+        text-align: center;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🛡️ Level 2: Default Prevention</h1>
+      <div class="danger-box">
+        <strong>⚠️ THE DANGER:</strong> Forgetting e.preventDefault() on
+        forms/links causes the browser to reload the page, instantly wiping out
+        your SPA state.
+      </div>
+
+      <div class="exercise">
+        <h3>Ex 1: Form Submission</h3>
+        <form id="form1" onsubmit="ex1(event)">
+          <input type="text" value="Test Data" required />
+          <button type="submit">Submit (Should not reload)</button>
+        </form>
+        <div class="output" id="out1"></div>
+      </div>
+
+      <div class="exercise">
+        <h3>Ex 2: Link Click</h3>
+        <a href="https://google.com" id="link2" onclick="ex2(event)"
+          >Click me (Should not redirect)</a
+        >
+        <div class="output" id="out2"></div>
+      </div>
+
+      <div class="exercise">
+        <h3>Ex 3: Context Menu (Right Click)</h3>
+        <div style="height: 50px; background: #ddd" oncontextmenu="ex3(event)">
+          Right click here
+        </div>
+        <div class="output" id="out3"></div>
+      </div>
+
+      <div class="exercise">
+        <h3>Ex 4: Drag Over</h3>
+        <div class="drop-zone" ondragover="ex4(event)">
+          Drag an image over me
+        </div>
+        <div class="output" id="out4"></div>
+      </div>
+
+      <div class="exercise">
+        <h3>Ex 5: Drop Event</h3>
+        <div
+          class="drop-zone"
+          ondrop="ex5(event)"
+          ondragover="event.preventDefault()"
+        >
+          Drop file here
+        </div>
+        <div class="output" id="out5"></div>
+      </div>
+
+      <div class="exercise">
+        <h3>Ex 6: Keyboard Shortcut (Ctrl+S)</h3>
+        <input
+          type="text"
+          placeholder="Press Ctrl+S inside me"
+          onkeydown="ex6(event)"
+        />
+        <div class="output" id="out6"></div>
+      </div>
+
+      <div class="exercise">
+        <h3>Ex 7: Spacebar Scroll Prevention</h3>
+        <input type="checkbox" id="chk7" onkeydown="ex7(event)" /> Press Space
+        (Should not scroll page)
+        <div class="output" id="out7"></div>
+      </div>
+
+      <div class="exercise">
+        <h3>Ex 8: Form Reset</h3>
+        <form onreset="ex8(event)">
+          <input type="text" value="Don't clear me" />
+          <button type="reset">Reset Form</button>
+        </form>
+        <div class="output" id="out8"></div>
+      </div>
+
+      <div class="exercise">
+        <h3>Ex 9: Copy Event</h3>
+        <p oncopy="ex9(event)">Try to copy this text (Ctrl+C)</p>
+        <div class="output" id="out9"></div>
+      </div>
+
+      <div class="exercise">
+        <h3>Ex 10: Paste Event</h3>
+        <input
+          type="text"
+          placeholder="Try pasting here"
+          onpaste="ex10(event)"
+        />
+        <div class="output" id="out10"></div>
+      </div>
+    </div>
+
+    <script>
+      const log = (id, msg) => (document.getElementById(id).textContent = msg);
+
+      function ex1(e) {
+        e.preventDefault();
+        log('out1', 'Form prevented!');
+      }
+
+      function ex2(e) {
+        e.preventDefault();
+        log('out2', 'Link navigation prevented!');
+      }
+
+      function ex3(e) {
+        e.preventDefault();
+        log('out3', 'Custom context menu could go here!');
+      }
+
+      function ex4(e) {
+        e.preventDefault();
+        log('out4', 'Drag over allowed!');
+      }
+
+      function ex5(e) {
+        e.preventDefault();
+        log('out5', 'File drop captured!');
+      }
+
+      function ex6(e) {
+        if (e.ctrlKey && e.key === 's') {
+          e.preventDefault();
+          log('out6', 'Custom save triggered!');
+        }
+      }
+
+      function ex7(e) {
+        if (e.code === 'Space') {
+          e.preventDefault();
+          log('out7', 'Spacebar ignored!');
+        }
+      }
+
+      function ex8(e) {
+        e.preventDefault();
+        log('out8', 'Reset ignored!');
+      }
+
+      function ex9(e) {
+        e.preventDefault();
+        log('out9', 'Copy ignored!');
+      }
+
+      function ex10(e) {
+        e.preventDefault();
+        log('out10', 'Paste ignored!');
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Demon 6.3: Delegation & Cleanup</title>
+    <style>
+      /* Use the same CSS block from Level 1 here */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: 'Monaco', monospace;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 20px;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+      h1 {
+        font-size: 36px;
+        color: #1a202c;
+        margin-bottom: 12px;
+      }
+      .danger-box {
+        background: #fee;
+        border-left: 4px solid #ef4444;
+        padding: 16px;
+        margin: 20px 0;
+        border-radius: 4px;
+      }
+      .exercise {
+        background: #f9fafb;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 16px 0;
+      }
+      .output {
+        background: #1f2937;
+        color: #10b981;
+        padding: 12px;
+        border-radius: 6px;
+        font-family: monospace;
+        margin-top: 12px;
+        min-height: 40px;
+      }
+      button {
+        background: #8b5cf6;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      ul {
+        margin: 10px 0;
+        padding-left: 20px;
+      }
+      li {
+        cursor: pointer;
+        padding: 4px;
+        background: #e5e7eb;
+        margin: 2px;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🛡️ Level 3: Delegation & Cleanup</h1>
+      <div class="danger-box">
+        <strong>⚠️ THE DANGER:</strong> Adding a listener inside a component
+        without cleaning it up causes memory leaks. Adding 1000 listeners to
+        1000 list items destroys performance.
+      </div>
+
+      <div class="exercise">
+        <h3>Ex 1: Basic Delegation</h3>
+        <ul id="list1">
+          <li>Item 1</li>
+          <li>Item 2</li>
+          <li>Item 3</li>
+        </ul>
+        <div class="output" id="out1"></div>
+      </div>
+
+      <div class="exercise">
+        <h3>Ex 2: Data Attribute Delegation</h3>
+        <ul id="list2">
+          <li data-id="101">Product A</li>
+          <li data-id="102">Product B</li>
+        </ul>
+        <div class="output" id="out2"></div>
+      </div>
+
+      <div class="exercise">
+        <h3>Ex 3: The Closest() Match</h3>
+        <ul id="list3">
+          <li class="card">
+            <div><span>Click inside me</span></div>
+          </li>
+        </ul>
+        <div class="output" id="out3"></div>
+      </div>
+
+      <div class="exercise">
+        <h3>Ex 4: Interval Cleanup</h3>
+        <button onclick="startEx4()">Start Interval</button>
+        <button onclick="stopEx4()">Run Cleanup</button>
+        <div class="output" id="out4">0</div>
+      </div>
+
+      <div class="exercise">
+        <h3>Ex 5: Window Listener Cleanup</h3>
+        <button onclick="startEx5()">Add a Listener</button>
+        <button onclick="stopEx5()">Remove Listener</button>
+        <div class="output" id="out5"></div>
+      </div>
+    </div>
+
+    <script>
+      const log = (id, msg) => (document.getElementById(id).textContent = msg);
+
+      // EX 1: Attach ONE listener to #list1. Use e.target.matches('li')
+      document.getElementById('list1').addEventListener('click', (e) => {
+        if (e.target.matches('li')) {
+          log('out1', `You clicked: ${e.target.textContent}`);
+        }
+      });
+
+      // EX 2: Extract data-id when an li is clicked
+      document.getElementById('list2').addEventListener('click', (e) => {
+        // YOUR CODE HERE (Hint: e.target.dataset.id)
+        if (e.target.matches('li')) {
+          log('out2', `You clicked: ${e.target.dataset.id}`);
+        }
+      });
+
+      // EX 3: Use e.target.closest('.card') to handle clicks anywhere inside the card
+      document.getElementById('list3').addEventListener('click', (e) => {
+        if (e.target.closest('.card')) {
+          log('out3', 'You clicked me');
+        }
+      });
+
+      // EX 4: Setup an interval, and clear it
+      let intervalId;
+      function startEx4() {
+        let timerCount = 0;
+        intervalId = setInterval(() => {
+          log('out4', `${timerCount++}`);
+        }, 500);
+      }
+      function stopEx4() {
+        clearInterval(intervalId);
+        log('out4', null);
+      }
+
+      // EX 5: Add and remove a named window event listener
+      function handleResize() {
+        log('out5', 'Resized: ' + Math.random());
+      }
+      function startEx5() {
+        // YOUR CODE: Add event listener to window for 'resize'
+        window.addEventListener('resize', handleResize);
+      }
+      function stopEx5() {
+        // YOUR CODE: Remove the event listener from window
+        window.removeEventListener('resize', handleResize);
+      }
+    </script>
+  </body>
+</html>

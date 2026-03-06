@@ -1,229 +1,634 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Demon 6.2: Default Prevention</title>
-    <style>
-      /* Same CSS as Level 1 */
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: 'Monaco', monospace;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        padding: 40px 20px;
-      }
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        background: white;
-        border-radius: 16px;
-        padding: 40px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      }
-      h1 {
-        font-size: 36px;
-        color: #1a202c;
-        margin-bottom: 12px;
-      }
-      .danger-box {
-        background: #fee;
-        border-left: 4px solid #ef4444;
-        padding: 16px;
-        margin: 20px 0;
-        border-radius: 4px;
-      }
-      .exercise {
-        background: #f9fafb;
-        border: 2px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 20px;
-        margin: 16px 0;
-      }
-      .output {
-        background: #1f2937;
-        color: #10b981;
-        padding: 12px;
-        border-radius: 6px;
-        font-family: monospace;
-        margin-top: 12px;
-        min-height: 40px;
-      }
-      button,
-      input[type='submit'] {
-        background: #8b5cf6;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 6px;
-        cursor: pointer;
-        margin-top: 8px;
-      }
-      .drop-zone {
-        border: 2px dashed #8b5cf6;
-        padding: 20px;
-        text-align: center;
-        margin-top: 10px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>🛡️ Level 2: Default Prevention</h1>
-      <div class="danger-box">
-        <strong>⚠️ THE DANGER:</strong> Forgetting e.preventDefault() on
-        forms/links causes the browser to reload the page, instantly wiping out
-        your SPA state.
-      </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demon 6.2: Default Prevention</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Monaco', monospace;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    h1 {
+      font-size: 36px;
+      color: #1a202c;
+      margin-bottom: 12px;
+    }
+    .progress {
+      background: #e5e7eb;
+      height: 8px;
+      border-radius: 4px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+    .progress-bar {
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      height: 100%;
+      width: 0%;
+      transition: width 300ms ease;
+    }
+    .stats {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .stat {
+      background: #f3f4f6;
+      padding: 12px 20px;
+      border-radius: 8px;
+      flex: 1;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: #8b5cf6;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: #6b7280;
+      text-transform: uppercase;
+    }
+    .danger-box {
+      background: #fee;
+      border-left: 4px solid #ef4444;
+      padding: 16px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    .syntax-box {
+      background: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 16px;
+      margin: 20px 0;
+      border-radius: 4px;
+      font-family: 'Monaco', monospace;
+      font-size: 14px;
+    }
+    .trap-box {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 16px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    .exercise {
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 16px 0;
+    }
+    .exercise.completed {
+      border-color: #10b981;
+      background: #f0fdf4;
+    }
+    .exercise.trap {
+      border-color: #f59e0b;
+    }
+    .exercise h3 {
+      color: #374151;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .badge {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .badge-trap {
+      background: #fef3c7;
+      color: #f59e0b;
+    }
+    .badge-advanced {
+      background: #ddd6fe;
+      color: #7c3aed;
+    }
+    .output {
+      background: #1f2937;
+      color: #10b981;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: monospace;
+      margin-top: 12px;
+      min-height: 40px;
+    }
+    button,
+    input[type='submit'] {
+      background: #8b5cf6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: all 200ms ease;
+    }
+    button:hover {
+      background: #7c3aed;
+    }
+    .drop-zone {
+      border: 2px dashed #8b5cf6;
+      padding: 20px;
+      text-align: center;
+      margin-top: 10px;
+      border-radius: 6px;
+    }
+    input[type='text'],
+    input[type='email'],
+    textarea {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      margin: 4px 0;
+      font-family: inherit;
+    }
+    .nav {
+      background: #1f2937;
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 12px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .nav a {
+      color: #60a5fa;
+      text-decoration: none;
+      padding: 8px 12px;
+      background: #374151;
+      border-radius: 4px;
+    }
+    .nav a:hover {
+      background: #4b5563;
+    }
+    code {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: #ef4444;
+    }
+    .checkmark {
+      color: #10b981;
+      font-size: 20px;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🛡️ Level 2: Default Prevention</h1>
+    <p style="color: #6b7280; margin-bottom: 20px;">Stop page reloads and unwanted browser behaviors - 20 Exercises</p>
 
-      <div class="exercise">
-        <h3>Ex 1: Form Submission</h3>
-        <form id="form1" onsubmit="ex1(event)">
-          <input type="text" value="Test Data" required />
-          <button type="submit">Submit (Should not reload)</button>
-        </form>
-        <div class="output" id="out1"></div>
-      </div>
+    <div class="progress">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
 
-      <div class="exercise">
-        <h3>Ex 2: Link Click</h3>
-        <a href="https://google.com" id="link2" onclick="ex2(event)"
-          >Click me (Should not redirect)</a
-        >
-        <div class="output" id="out2"></div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value" id="completed">0</div>
+        <div class="stat-label">Completed</div>
       </div>
-
-      <div class="exercise">
-        <h3>Ex 3: Context Menu (Right Click)</h3>
-        <div style="height: 50px; background: #ddd" oncontextmenu="ex3(event)">
-          Right click here
-        </div>
-        <div class="output" id="out3"></div>
+      <div class="stat">
+        <div class="stat-value" id="correct">0</div>
+        <div class="stat-label">Correct</div>
       </div>
-
-      <div class="exercise">
-        <h3>Ex 4: Drag Over</h3>
-        <div class="drop-zone" ondragover="ex4(event)">
-          Drag an image over me
-        </div>
-        <div class="output" id="out4"></div>
-      </div>
-
-      <div class="exercise">
-        <h3>Ex 5: Drop Event</h3>
-        <div
-          class="drop-zone"
-          ondrop="ex5(event)"
-          ondragover="event.preventDefault()"
-        >
-          Drop file here
-        </div>
-        <div class="output" id="out5"></div>
-      </div>
-
-      <div class="exercise">
-        <h3>Ex 6: Keyboard Shortcut (Ctrl+S)</h3>
-        <input
-          type="text"
-          placeholder="Press Ctrl+S inside me"
-          onkeydown="ex6(event)"
-        />
-        <div class="output" id="out6"></div>
-      </div>
-
-      <div class="exercise">
-        <h3>Ex 7: Spacebar Scroll Prevention</h3>
-        <input type="checkbox" id="chk7" onkeydown="ex7(event)" /> Press Space
-        (Should not scroll page)
-        <div class="output" id="out7"></div>
-      </div>
-
-      <div class="exercise">
-        <h3>Ex 8: Form Reset</h3>
-        <form onreset="ex8(event)">
-          <input type="text" value="Don't clear me" />
-          <button type="reset">Reset Form</button>
-        </form>
-        <div class="output" id="out8"></div>
-      </div>
-
-      <div class="exercise">
-        <h3>Ex 9: Copy Event</h3>
-        <p oncopy="ex9(event)">Try to copy this text (Ctrl+C)</p>
-        <div class="output" id="out9"></div>
-      </div>
-
-      <div class="exercise">
-        <h3>Ex 10: Paste Event</h3>
-        <input
-          type="text"
-          placeholder="Try pasting here"
-          onpaste="ex10(event)"
-        />
-        <div class="output" id="out10"></div>
+      <div class="stat">
+        <div class="stat-value" id="percentage">0%</div>
+        <div class="stat-label">Success Rate</div>
       </div>
     </div>
 
-    <script>
-      const log = (id, msg) => (document.getElementById(id).textContent = msg);
+    <div class="danger-box">
+      <strong>⚠️ THE DANGER:</strong> Forgetting <code>e.preventDefault()</code> on forms/links causes instant page reloads, destroying your SPA state. One missing preventDefault = angry users losing their work.
+    </div>
 
-      function ex1(e) {
-        e.preventDefault();
-        log('out1', 'Form prevented!');
-      }
+    <div class="syntax-box">
+      <strong>✅ THE FIX:</strong><br>
+      <code>e.preventDefault()</code> - Stops default browser behavior<br>
+      <code>e.stopPropagation()</code> - Stops event bubbling (different!)<br>
+      <strong>Rule:</strong> ALWAYS call preventDefault() FIRST in event handler<br>
+      <strong>Forms:</strong> Listen to 'submit' event, not 'click' on button<br>
+      <strong>Links:</strong> Intercept 'click' event on &lt;a&gt; tags
+    </div>
 
-      function ex2(e) {
-        e.preventDefault();
-        log('out2', 'Link navigation prevented!');
-      }
+    <!-- BASIC EXERCISES (1-5) -->
+    <div class="exercise" data-ex="1">
+      <h3>Exercise 1: Basic Form Submission</h3>
+      <p>Prevent page reload when form is submitted.</p>
+      <form id="form1" onsubmit="ex1(event)">
+        <input type="text" value="Test Data" required />
+        <button type="submit">Submit (Should NOT reload)</button>
+      </form>
+      <div class="output" id="out1"></div>
+    </div>
 
-      function ex3(e) {
-        e.preventDefault();
-        log('out3', 'Custom context menu could go here!');
-      }
+    <div class="exercise" data-ex="2">
+      <h3>Exercise 2: Link Click Prevention</h3>
+      <p>Stop link from navigating away from page.</p>
+      <a href="https://google.com" onclick="ex2(event)">Click me (Should NOT redirect)</a>
+      <div class="output" id="out2"></div>
+    </div>
 
-      function ex4(e) {
-        e.preventDefault();
-        log('out4', 'Drag over allowed!');
-      }
+    <div class="exercise" data-ex="3">
+      <h3>Exercise 3: Multiple Submit Buttons</h3>
+      <p>Determine which button was clicked and prevent default.</p>
+      <form onsubmit="ex3(event)">
+        <input type="text" placeholder="Enter text" />
+        <button type="submit" name="action" value="save">Save</button>
+        <button type="submit" name="action" value="delete">Delete</button>
+      </form>
+      <div class="output" id="out3"></div>
+    </div>
 
-      function ex5(e) {
-        e.preventDefault();
-        log('out5', 'File drop captured!');
-      }
+    <div class="exercise" data-ex="4">
+      <h3>Exercise 4: Conditional Prevention</h3>
+      <p>Prevent submission ONLY if checkbox is unchecked.</p>
+      <form onsubmit="ex4(event)">
+        <label><input type="checkbox" id="agree4"> I agree to terms</label>
+        <button type="submit">Submit</button>
+      </form>
+      <div class="output" id="out4"></div>
+    </div>
 
-      function ex6(e) {
-        if (e.ctrlKey && e.key === 's') {
-          e.preventDefault();
-          log('out6', 'Custom save triggered!');
-        }
-      }
+    <div class="exercise" data-ex="5">
+      <h3>Exercise 5: Form Validation + Prevention</h3>
+      <p>Validate email format. Prevent submission if invalid.</p>
+      <form onsubmit="ex5(event)">
+        <input type="text" id="email5" placeholder="Enter email" required />
+        <button type="submit">Submit</button>
+      </form>
+      <div class="output" id="out5"></div>
+    </div>
 
-      function ex7(e) {
-        if (e.code === 'Space') {
-          e.preventDefault();
-          log('out7', 'Spacebar ignored!');
-        }
-      }
+    <!-- INTERMEDIATE EXERCISES (6-10) -->
+    <div class="exercise" data-ex="6">
+      <h3>Exercise 6: Nested Forms <span class="badge badge-advanced">Advanced</span></h3>
+      <p>Stop inner form from triggering outer form submission.</p>
+      <form onsubmit="ex6outer(event)">
+        <input type="text" placeholder="Outer form" />
+        <form onsubmit="ex6inner(event)">
+          <input type="text" placeholder="Inner form" />
+          <button type="submit">Submit Inner</button>
+        </form>
+        <button type="submit">Submit Outer</button>
+      </form>
+      <div class="output" id="out6"></div>
+    </div>
 
-      function ex8(e) {
-        e.preventDefault();
-        log('out8', 'Reset ignored!');
-      }
+    <div class="exercise" data-ex="7">
+      <h3>Exercise 7: SPA Link Interception <span class="badge badge-advanced">Advanced</span></h3>
+      <p>Intercept ALL links and update URL without reload (SPA routing).</p>
+      <div class="nav" id="nav7">
+        <a href="/home">Home</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+      </div>
+      <div class="output" id="out7">Current page: /</div>
+    </div>
 
-      function ex9(e) {
-        e.preventDefault();
-        log('out9', 'Copy ignored!');
-      }
+    <div class="exercise" data-ex="8">
+      <h3>Exercise 8: Keyboard Shortcuts <span class="badge badge-advanced">Advanced</span></h3>
+      <p>Prevent Ctrl+S (browser save dialog). Trigger custom save instead.</p>
+      <textarea id="editor8" placeholder="Type here, then press Ctrl+S..." style="height: 80px;"></textarea>
+      <div class="output" id="out8">Press Ctrl+S to trigger custom save</div>
+    </div>
 
-      function ex10(e) {
-        e.preventDefault();
-        log('out10', 'Paste ignored!');
-      }
-    </script>
-  </body>
+    <div class="exercise" data-ex="9">
+      <h3>Exercise 9: Context Menu (Right Click) <span class="badge badge-advanced">Advanced</span></h3>
+      <p>Show custom menu instead of browser context menu.</p>
+      <div style="height: 60px; background: #e5e7eb; display: flex; align-items: center; justify-content: center; border-radius: 6px; cursor: pointer;" oncontextmenu="ex9(event)">
+        Right click here
+      </div>
+      <div class="output" id="out9"></div>
+    </div>
+
+    <div class="exercise" data-ex="10">
+      <h3>Exercise 10: Drag and Drop <span class="badge badge-advanced">Advanced</span></h3>
+      <p>Enable file drop by preventing default dragover and drop events.</p>
+      <div class="drop-zone" id="dropzone10">
+        Drag a file here
+      </div>
+      <div class="output" id="out10"></div>
+    </div>
+
+    <!-- ADVANCED EXERCISES (11-15) -->
+    <div class="exercise" data-ex="11">
+      <h3>Exercise 11: e.target vs e.currentTarget <span class="badge badge-advanced">Advanced</span></h3>
+      <p>Understand the difference when clicking nested elements.</p>
+      <div style="padding: 20px; background: #ddd; border-radius: 6px;" onclick="ex11(event)">
+        Parent Div
+        <button style="margin: 10px;">Click Me</button>
+        <span style="display: block; margin-top: 10px;">Or click this text</span>
+      </div>
+      <div class="output" id="out11"></div>
+    </div>
+
+    <div class="exercise" data-ex="12">
+      <h3>Exercise 12: Dynamic Form Fields <span class="badge badge-advanced">Advanced</span></h3>
+      <p>Add/remove input fields dynamically without page reload.</p>
+      <form id="form12" onsubmit="ex12submit(event)">
+        <div id="fields12"></div>
+        <button type="button" onclick="ex12add()">Add Field</button>
+        <button type="submit">Submit All</button>
+      </form>
+      <div class="output" id="out12"></div>
+    </div>
+
+    <div class="exercise" data-ex="13">
+      <h3>Exercise 13: Spacebar Scroll Prevention <span class="badge badge-advanced">Advanced</span></h3>
+      <p>Stop spacebar from scrolling page when focused on custom element.</p>
+      <div tabindex="0" id="game13" style="border: 2px solid #8b5cf6; padding: 20px; border-radius: 6px; outline: none;" onkeydown="ex13(event)">
+        Click here, then press Spacebar (should not scroll page)
+      </div>
+      <div class="output" id="out13"></div>
+    </div>
+
+    <div class="exercise" data-ex="14">
+      <h3>Exercise 14: Copy/Paste Prevention <span class="badge badge-advanced">Advanced</span></h3>
+      <p>Block copy and paste in a sensitive input field.</p>
+      <input type="text" id="secure14" placeholder="Password (no copy/paste)" oncopy="ex14copy(event)" onpaste="ex14paste(event)" />
+      <div class="output" id="out14"></div>
+    </div>
+
+    <div class="exercise" data-ex="15">
+      <h3>Exercise 15: Form Reset Prevention <span class="badge badge-advanced">Advanced</span></h3>
+      <p>Ask for confirmation before clearing form data.</p>
+      <form onreset="ex15(event)">
+        <input type="text" value="Important data" />
+        <button type="reset">Reset Form</button>
+      </form>
+      <div class="output" id="out15"></div>
+    </div>
+
+    <!-- TRAP EXERCISES (16-20) -->
+    <div class="trap-box">
+      <strong>⚠️ TRAP ZONE:</strong> These exercises reveal common preventDefault mistakes that break production apps!
+    </div>
+
+    <div class="exercise trap" data-ex="16">
+      <h3>Exercise 16: The "Too Late" Trap 🪤 <span class="badge badge-trap">Trap</span></h3>
+      <p><strong>Trap:</strong> Calling preventDefault() AFTER async validation doesn't work!</p>
+      <form onsubmit="ex16(event)">
+        <input type="text" id="input16" placeholder="Enter 'valid'" required />
+        <button type="submit">Submit</button>
+      </form>
+      <div class="output" id="out16">Rule: Always preventDefault() FIRST!</div>
+    </div>
+
+    <div class="exercise trap" data-ex="17">
+      <h3>Exercise 17: The "Wrong Event" Trap 🪤 <span class="badge badge-trap">Trap</span></h3>
+      <p><strong>Trap:</strong> Listening to button 'click' instead of form 'submit'!</p>
+      <form id="form17">
+        <input type="text" placeholder="Press Enter to submit" />
+        <button type="submit" onclick="ex17wrong(event)">Wrong Handler</button>
+      </form>
+      <div class="output" id="out17">Use onsubmit on form, not onclick on button!</div>
+    </div>
+
+    <div class="exercise trap" data-ex="18">
+      <h3>Exercise 18: The "Bubbling" Trap 🪤 <span class="badge badge-trap">Trap</span></h3>
+      <p><strong>Trap:</strong> Child button click bubbles to parent div handler!</p>
+      <div style="padding: 20px; background: #ddd; border-radius: 6px;" onclick="ex18parent()">
+        Parent Div (click anywhere)
+        <button onclick="ex18child(event)">Child Button</button>
+      </div>
+      <div class="output" id="out18">Use stopPropagation() to prevent bubbling!</div>
+    </div>
+
+    <div class="exercise trap" data-ex="19">
+      <h3>Exercise 19: The "External Link" Trap 🪤 <span class="badge badge-trap">Trap</span></h3>
+      <p><strong>Trap:</strong> Preventing ALL links breaks external navigation!</p>
+      <div class="nav">
+        <a href="/internal" onclick="ex19(event)">Internal Link</a>
+        <a href="https://google.com" onclick="ex19(event)">External Link</a>
+      </div>
+      <div class="output" id="out19">Only prevent internal links (starting with /)</div>
+    </div>
+
+    <div class="exercise trap" data-ex="20">
+      <h3>Exercise 20: The "Return False" Trap 🪤 <span class="badge badge-trap">Trap</span></h3>
+      <p><strong>Trap:</strong> Using <code>return false</code> in inline handlers is unreliable!</p>
+      <form onsubmit="return ex20(event)">
+        <input type="text" placeholder="Test form" />
+        <button type="submit">Submit</button>
+      </form>
+      <div class="output" id="out20">Never use "return false" - always call preventDefault()!</div>
+    </div>
+
+    <div style="margin-top: 40px; padding: 20px; background: #f0fdf4; border-radius: 8px; border: 2px solid #10b981;">
+      <h3 style="color: #059669; margin-bottom: 12px;">🎓 Level 2 Complete!</h3>
+      <p style="color: #047857;">Move to demon6-3.html for Level 3!</p>
+    </div>
+  </div>
+
+  <script>
+    let stats = { completed: 0, correct: 0 };
+    
+    function updateStats(exNum) {
+      stats.completed++;
+      stats.correct++;
+      
+      document.getElementById('completed').textContent = stats.completed;
+      document.getElementById('correct').textContent = stats.correct;
+      document.getElementById('percentage').textContent = 
+        Math.round((stats.correct / stats.completed) * 100) + '%';
+      
+      const progress = (stats.completed / 20) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+      
+      const exercise = document.querySelector(`[data-ex="${exNum}"]`);
+      if (exercise) exercise.classList.add('completed');
+    }
+
+    function log(id, msg) {
+      document.getElementById(id).innerHTML = msg + ' <span class="checkmark">✓</span>';
+    }
+
+    // YOUR CODE BELOW - Complete all 20 exercises!
+
+    function ex1(e) {
+      // TODO: Prevent page reload
+      
+      log('out1', 'Form prevented!');
+      updateStats(1);
+    }
+
+    function ex2(e) {
+      // TODO: Prevent link navigation
+      
+      log('out2', 'Link prevented!');
+      updateStats(2);
+    }
+
+    function ex3(e) {
+      // TODO: Prevent default and determine which button was clicked
+      
+      const button = null; // Get submitter
+      const action = button ? button.value : 'unknown';
+      log('out3', `Button: ${action}`);
+      updateStats(3);
+    }
+
+    function ex4(e) {
+      // TODO: Prevent first! Then check checkbox
+      
+      const agreed = document.getElementById('agree4').checked;
+      log('out4', agreed ? '✅ Agreed!' : '❌ Must agree!');
+      updateStats(4);
+    }
+
+    function ex5(e) {
+      // TODO: Prevent first! Then validate email
+      
+      const email = document.getElementById('email5').value;
+      const isValid = false; // Check if valid email
+      log('out5', isValid ? `✅ Valid: ${email}` : '❌ Invalid email!');
+      updateStats(5);
+    }
+
+    function ex6outer(e) {
+      // TODO: Prevent outer form
+      
+      log('out6', 'Outer form');
+      updateStats(6);
+    }
+
+    function ex6inner(e) {
+      // TODO: Prevent inner AND stop bubbling to outer!
+      
+      log('out6', 'Inner form (prevented outer)');
+    }
+
+    // Ex 7: Setup SPA routing
+    // TODO: Add click listener to #nav7, prevent default, update URL
+    document.getElementById('nav7').addEventListener('click', (e) => {
+      // YOUR CODE HERE
+    });
+
+    // Ex 8: Keyboard shortcuts
+    document.getElementById('editor8').addEventListener('keydown', (e) => {
+      // TODO: If Ctrl+S, prevent default and show custom save
+    });
+
+    function ex9(e) {
+      // TODO: Prevent context menu
+      
+      log('out9', 'Custom menu!');
+      updateStats(9);
+    }
+
+    // Ex 10: Drag and drop
+    const dropzone = document.getElementById('dropzone10');
+    // TODO: Add dragover listener with preventDefault
+    // TODO: Add drop listener with preventDefault
+
+    function ex11(e) {
+      // TODO: Show difference between target and currentTarget
+      
+      log('out11', `Clicked: ${e.target.tagName}`);
+      updateStats(11);
+    }
+
+    let fieldCount = 0;
+    function ex12add() {
+      // TODO: Add input field dynamically
+      fieldCount++;
+    }
+    
+    function ex12submit(e) {
+      // TODO: Prevent and collect all field values
+      
+      log('out12', `Submitted ${fieldCount} fields`);
+      updateStats(12);
+    }
+
+    function ex13(e) {
+      // TODO: Prevent spacebar scroll
+      
+      log('out13', 'Spacebar prevented!');
+      updateStats(13);
+    }
+
+    function ex14copy(e) {
+      // TODO: Prevent copy
+      
+      log('out14', '❌ Copy prevented!');
+      updateStats(14);
+    }
+    
+    function ex14paste(e) {
+      // TODO: Prevent paste
+      
+      log('out14', '❌ Paste prevented!');
+    }
+
+    function ex15(e) {
+      // TODO: Prevent, then ask confirmation
+      
+      log('out15', 'Reset prevented');
+      updateStats(15);
+    }
+
+    // TRAP EXERCISES
+
+    function ex16(e) {
+      // TODO: Prevent FIRST, then validate
+      
+      const value = document.getElementById('input16').value;
+      log('out16', value === 'valid' ? '✅ Valid!' : '❌ Invalid!');
+      updateStats(16);
+    }
+
+    // Ex 17: Setup correct form listener
+    // TODO: Add submit listener to form17, NOT click listener
+
+    function ex17wrong(e) {
+      log('out17', '❌ Wrong: onclick misses Enter key!');
+    }
+
+    function ex18parent() {
+      log('out18', '❌ Parent clicked (bubbling occurred)');
+    }
+
+    function ex18child(e) {
+      // TODO: Stop propagation!
+      
+      log('out18', '✅ Child clicked (prevented bubbling)');
+      updateStats(18);
+    }
+
+    function ex19(e) {
+      // TODO: Only prevent if internal link (starts with /)
+      
+      const href = e.target.getAttribute('href');
+      log('out19', `Link: ${href}`);
+      updateStats(19);
+    }
+
+    function ex20(e) {
+      // TODO: Use preventDefault(), don't rely on return false
+      
+      log('out20', '✅ Correct: Using preventDefault()');
+      updateStats(20);
+      return false; // Don't rely on this!
+    }
+  </script>
+</body>
 </html>

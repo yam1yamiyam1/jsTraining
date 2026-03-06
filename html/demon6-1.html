@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Demon 6.1: Safe Navigation (Enhanced)</title>
+    <title>Demon 6.1: Safe Navigation</title>
     <style>
       * {
         margin: 0;
@@ -154,11 +154,6 @@
         background: #7c3aed;
         transform: translateY(-1px);
       }
-      button:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        transform: none;
-      }
       code {
         background: #f3f4f6;
         padding: 2px 6px;
@@ -170,18 +165,6 @@
         color: #10b981;
         font-size: 20px;
         margin-left: 10px;
-      }
-      .hint {
-        background: #fef3c7;
-        border: 1px solid #fbbf24;
-        padding: 8px 12px;
-        border-radius: 4px;
-        font-size: 12px;
-        margin-top: 8px;
-        display: none;
-      }
-      .hint.show {
-        display: block;
       }
     </style>
   </head>
@@ -241,10 +224,6 @@
           missing.
         </p>
         <button onclick="ex1()">Run</button>
-        <button onclick="showHint(1)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint1">
-          Use <code>user?.profile?.name ?? 'Guest'</code>
-        </div>
         <div class="output" id="out1"></div>
       </div>
 
@@ -255,11 +234,6 @@
           false.
         </p>
         <button onclick="ex2()">Run</button>
-        <button onclick="showHint(2)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint2">
-          Chain ?. operators:
-          <code>user?.settings?.privacy?.showEmail ?? false</code>
-        </div>
         <div class="output" id="out2"></div>
       </div>
 
@@ -270,10 +244,6 @@
           empty/missing.
         </p>
         <button onclick="ex3()">Run</button>
-        <button onclick="showHint(3)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint3">
-          Arrays use brackets: <code>user?.orders?.[0] ?? 'No orders'</code>
-        </div>
         <div class="output" id="out3"></div>
       </div>
 
@@ -284,10 +254,6 @@
           doesn't exist.
         </p>
         <button onclick="ex4()">Run</button>
-        <button onclick="showHint(4)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint4">
-          Functions need (): <code>user?.getName?.() ?? 'Anonymous'</code>
-        </div>
         <div class="output" id="out4"></div>
       </div>
 
@@ -295,11 +261,6 @@
         <h3>Exercise 5: Nested Array</h3>
         <p>Get <code>user.addresses[0].city</code>. Default "No city".</p>
         <button onclick="ex5()">Run</button>
-        <button onclick="showHint(5)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint5">
-          Combine array and property:
-          <code>user?.addresses?.[0]?.city ?? 'No city'</code>
-        </div>
         <div class="output" id="out5"></div>
       </div>
 
@@ -310,11 +271,6 @@
           "$0 USD" if missing.
         </p>
         <button onclick="ex6()">Run</button>
-        <button onclick="showHint(6)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint6">
-          Each property separately: <code>product?.price ?? 0</code> and
-          <code>product?.currency ?? 'USD'</code>
-        </div>
         <div class="output" id="out6"></div>
       </div>
 
@@ -324,11 +280,6 @@
           Calculate <code>order.total * order.taxRate</code>. Default both to 0.
         </p>
         <button onclick="ex7()">Run</button>
-        <button onclick="showHint(7)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint7">
-          Extract values first, then compute:
-          <code>const total = order?.total ?? 0;</code>
-        </div>
         <div class="output" id="out7"></div>
       </div>
 
@@ -339,11 +290,6 @@
           results".
         </p>
         <button onclick="ex8()">Run</button>
-        <button onclick="showHint(8)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint8">
-          Long chain:
-          <code>response?.data?.results?.[0]?.title ?? 'No results'</code>
-        </div>
         <div class="output" id="out8"></div>
       </div>
 
@@ -351,11 +297,6 @@
         <h3>Exercise 9: Boolean Check</h3>
         <p>Get <code>user.settings.notifications.email</code>. Default true.</p>
         <button onclick="ex9()">Run</button>
-        <button onclick="showHint(9)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint9">
-          Careful with booleans:
-          <code>user?.settings?.notifications?.email ?? true</code>
-        </div>
         <div class="output" id="out9"></div>
       </div>
 
@@ -365,10 +306,6 @@
           Get <code>user.friends.length</code>. Show 0 if friends array missing.
         </p>
         <button onclick="ex10()">Run</button>
-        <button onclick="showHint(10)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint10">
-          Length is a property: <code>user?.friends?.length ?? 0</code>
-        </div>
         <div class="output" id="out10"></div>
       </div>
 
@@ -380,11 +317,6 @@
         </h3>
         <p>Call <code>user.profile.getDisplayName()</code>. Fallback "User".</p>
         <button onclick="ex11()">Run</button>
-        <button onclick="showHint(11)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint11">
-          Method on nested object:
-          <code>user?.profile?.getDisplayName?.() ?? 'User'</code>
-        </div>
         <div class="output" id="out11"></div>
       </div>
 
@@ -398,10 +330,6 @@
           missing.
         </p>
         <button onclick="ex12()">Run</button>
-        <button onclick="showHint(12)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint12">
-          Index 1 for second item: <code>data?.items?.[1] ?? 'No item'</code>
-        </div>
         <div class="output" id="out12"></div>
       </div>
 
@@ -415,11 +343,6 @@
           "Anonymous".
         </p>
         <button onclick="ex13()">Run</button>
-        <button onclick="showHint(13)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint13">
-          Chain ?? operators:
-          <code>user?.nickname ?? user?.username ?? 'Anonymous'</code>
-        </div>
         <div class="output" id="out13"></div>
       </div>
 
@@ -432,11 +355,6 @@
           Get <code>order.customer.billing.address.zip</code>. Default "00000".
         </p>
         <button onclick="ex14()">Run</button>
-        <button onclick="showHint(14)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint14">
-          Very long chain:
-          <code>order?.customer?.billing?.address?.zip ?? '00000'</code>
-        </div>
         <div class="output" id="out14"></div>
       </div>
 
@@ -450,17 +368,13 @@
           either missing.
         </p>
         <button onclick="ex15()">Run</button>
-        <button onclick="showHint(15)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint15">
-          Prevent division by zero: <code>total ?? 1</code> as fallback
-        </div>
         <div class="output" id="out15"></div>
       </div>
 
       <!-- TRAP EXERCISES (16-20) -->
       <div class="trap-box">
         <strong>⚠️ TRAP ZONE:</strong> The next 5 exercises test common mistakes
-        that crash React apps in production. These are based on real bugs!
+        that crash React apps in production!
       </div>
 
       <div class="exercise trap" data-ex="16">
@@ -475,11 +389,6 @@
           0).
         </p>
         <button onclick="ex16()">Run</button>
-        <button onclick="showHint(16)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint16">
-          Use ?? not ||: <code>user?.age ?? 'Unknown'</code> (|| treats 0 as
-          falsy!)
-        </div>
         <div class="output" id="out16"></div>
       </div>
 
@@ -495,11 +404,6 @@
           (not if empty string).
         </p>
         <button onclick="ex17()">Run</button>
-        <button onclick="showHint(17)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint17">
-          Empty string is valid: <code>user?.bio ?? 'No bio'</code> (don't use
-          ||)
-        </div>
         <div class="output" id="out17"></div>
       </div>
 
@@ -515,10 +419,6 @@
           true/false.
         </p>
         <button onclick="ex18()">Run</button>
-        <button onclick="showHint(18)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint18">
-          Check existence first: <code>(user?.items?.length ?? 0) > 0</code>
-        </div>
         <div class="output" id="out18"></div>
       </div>
 
@@ -534,11 +434,6 @@
           "guest" if missing.
         </p>
         <button onclick="ex19()">Run</button>
-        <button onclick="showHint(19)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint19">
-          Chain methods safely:
-          <code>(user?.name ?? '')?.trim()?.toLowerCase() ?? 'guest'</code>
-        </div>
         <div class="output" id="out19"></div>
       </div>
 
@@ -554,11 +449,6 @@
           missing/null.
         </p>
         <button onclick="ex20()">Run</button>
-        <button onclick="showHint(20)" style="background: #f59e0b">Hint</button>
-        <div class="hint" id="hint20">
-          Provide empty array:
-          <code>(data?.users ?? []).map(u => u?.name ?? 'Unknown')</code>
-        </div>
         <div class="output" id="out20"></div>
       </div>
 
@@ -574,16 +464,11 @@
         <h3 style="color: #059669; margin-bottom: 12px">
           🎓 Level 1 Complete!
         </h3>
-        <p style="color: #047857">
-          You've mastered safe navigation! These patterns prevent 90% of
-          production crashes in React apps. Next: Level 2 - Default Prevention
-          (stopping page reloads).
-        </p>
+        <p style="color: #047857">Move to demon6-2.html for Level 2!</p>
       </div>
     </div>
 
     <script>
-      // CHAOTIC DATA - More variety for trap exercises
       const chaoticUsers = [
         {
           profile: { name: 'Alice' },
@@ -600,7 +485,7 @@
         { addresses: null },
         { price: 99, currency: 'USD' },
         { price: 50 },
-        { price: 0, currency: 'EUR' }, // Trap: 0 is valid price!
+        { price: 0, currency: 'EUR' },
         { total: 100, taxRate: 0.08 },
         { total: 50 },
         { data: { results: [{ title: 'Found!' }] } },
@@ -612,7 +497,7 @@
         { profile: { getDisplayName: () => 'Display Name' } },
         { items: ['a', 'b', 'c'] },
         { items: ['x'] },
-        { items: [] }, // Trap: empty array!
+        { items: [] },
         { nickname: 'Nick' },
         { username: 'user123' },
         {},
@@ -620,14 +505,12 @@
         { customer: { billing: {} } },
         { stats: { completed: 80, total: 100 } },
         { stats: { completed: 0 } },
-        { age: 0 }, // Trap: 0 is valid age!
+        { age: 0 },
         { age: 25 },
         { age: null },
-        { bio: '' }, // Trap: empty string is valid!
+        { bio: '' },
         { bio: 'Hello' },
         { bio: null },
-        { items: [] }, // Trap: empty array
-        { items: ['item1'] },
         { name: '  JOHN  ' },
         { name: null },
         { users: [{ name: 'Alice' }, { name: 'Bob' }, { name: null }] },
@@ -638,9 +521,9 @@
       const getRandomUser = () =>
         chaoticUsers[Math.floor(Math.random() * chaoticUsers.length)];
 
-      function updateStats(exNum, isCorrect) {
+      function updateStats(exNum) {
         stats.completed++;
-        if (isCorrect) stats.correct++;
+        stats.correct++;
 
         document.getElementById('completed').textContent = stats.completed;
         document.getElementById('correct').textContent = stats.correct;
@@ -654,163 +537,133 @@
         exercise.classList.add('completed');
       }
 
-      function showHint(num) {
-        document.getElementById('hint' + num).classList.toggle('show');
+      function log(id, msg) {
+        document.getElementById(id).innerHTML =
+          msg + ' <span class="checkmark">✓</span>';
       }
 
-      function log(id, msg, isError = false) {
-        const output = document.getElementById(id);
-        output.textContent = msg;
-        output.className = 'output' + (isError ? ' error' : '');
-        if (!isError) output.innerHTML += '<span class="checkmark">✓</span>';
-      }
+      // YOUR CODE BELOW - Complete all 20 exercises!
 
-      // EXERCISES 1-10 (Basic)
       function ex1() {
         const user = getRandomUser();
-        const name = user?.profile?.name ?? 'Guest';
-        log('out1', `Name: ${name}`);
-        updateStats(1, true);
+
+        // TODO: Extract user.profile.name safely, show "Guest" if missing
       }
 
       function ex2() {
         const user = getRandomUser();
-        const showEmail = user?.settings?.privacy?.showEmail ?? false;
-        log('out2', `Show Email: ${showEmail}`);
-        updateStats(2, true);
+
+        // TODO: Extract user.settings.privacy.showEmail, default false
       }
 
       function ex3() {
         const user = getRandomUser();
-        const firstOrder = user?.orders?.[0] ?? 'No orders';
-        log('out3', `First Order: ${firstOrder}`);
-        updateStats(3, true);
+
+        // TODO: Get user.orders[0], show "No orders" if missing
       }
 
       function ex4() {
         const user = getRandomUser();
-        const name = user?.getName?.() ?? 'Anonymous';
-        log('out4', `Name: ${name}`);
-        updateStats(4, true);
+
+        // TODO: Call user.getName() safely, fallback "Anonymous"
       }
 
       function ex5() {
         const user = getRandomUser();
-        const city = user?.addresses?.[0]?.city ?? 'No city';
-        log('out5', `City: ${city}`);
-        updateStats(5, true);
+
+        // TODO: Get user.addresses[0].city, default "No city"
       }
 
       function ex6() {
         const user = getRandomUser();
-        const price = user?.price ?? 0;
-        const currency = user?.currency ?? 'USD';
-        log('out6', `Price: $${price} ${currency}`);
-        updateStats(6, true);
+
+        // TODO: Get price and currency, show "$0 USD" if missing
       }
 
       function ex7() {
         const order = getRandomUser();
-        const total = order?.total ?? 0;
-        const taxRate = order?.taxRate ?? 0;
-        const tax = total * taxRate;
-        log('out7', `Tax: $${tax.toFixed(2)}`);
-        updateStats(7, true);
+
+        // TODO: Calculate total * taxRate, default both to 0
       }
 
       function ex8() {
         const response = getRandomUser();
-        const title = response?.data?.results?.[0]?.title ?? 'No results';
-        log('out8', `Title: ${title}`);
-        updateStats(8, true);
+
+        // TODO: Extract response.data.results[0].title, show "No results"
       }
 
       function ex9() {
         const user = getRandomUser();
-        const emailEnabled = user?.settings?.notifications?.email ?? true;
-        log('out9', `Email Notifications: ${emailEnabled}`);
-        updateStats(9, true);
+
+        // TODO: Get user.settings.notifications.email, default true
       }
 
       function ex10() {
         const user = getRandomUser();
-        const friendCount = user?.friends?.length ?? 0;
-        log('out10', `Friends: ${friendCount}`);
-        updateStats(10, true);
+
+        // TODO: Get user.friends.length, default 0
       }
 
-      // EXERCISES 11-15 (Advanced)
       function ex11() {
         const user = getRandomUser();
-        const displayName = user?.profile?.getDisplayName?.() ?? 'User';
-        log('out11', `Display Name: ${displayName}`);
-        updateStats(11, true);
+
+        // TODO: Call user.profile.getDisplayName(), fallback "User"
       }
 
       function ex12() {
         const data = getRandomUser();
-        const secondItem = data?.items?.[1] ?? 'No item';
-        log('out12', `Second Item: ${secondItem}`);
-        updateStats(12, true);
+
+        // TODO: Get data.items[1], show "No item" if missing
       }
 
       function ex13() {
         const user = getRandomUser();
-        const name = user?.nickname ?? user?.username ?? 'Anonymous';
-        log('out13', `Name: ${name}`);
-        updateStats(13, true);
+
+        // TODO: Try nickname, then username, then "Anonymous"
       }
 
       function ex14() {
         const order = getRandomUser();
-        const zip = order?.customer?.billing?.address?.zip ?? '00000';
-        log('out14', `ZIP: ${zip}`);
-        updateStats(14, true);
+
+        // TODO: Get order.customer.billing.address.zip, default "00000"
       }
 
       function ex15() {
         const stats = getRandomUser();
-        const completed = stats?.stats?.completed ?? 0;
-        const total = stats?.stats?.total ?? 1;
-        const percentage = (completed / total) * 100;
-        log('out15', `Completion: ${percentage.toFixed(1)}%`);
-        updateStats(15, true);
+
+        // TODO: Calculate completed / total, return 0 if either missing
       }
 
-      // EXERCISES 16-20 (Traps)
+      // TRAP EXERCISES - Be careful!
+
       function ex16() {
         const user = getRandomUser();
-        const age = user?.age ?? 'Unknown'; // ✅ NOT user?.age || 'Unknown'
-        log('out16', `Age: ${age} (0 is valid!)`);
-        updateStats(16, true);
+
+        // TODO: Use ?? not || - 0 is a valid age!
       }
 
       function ex17() {
         const user = getRandomUser();
-        const bio = user?.bio ?? 'No bio'; // ✅ Empty string '' is valid
-        log('out17', `Bio: "${bio}" (empty string is valid!)`);
-        updateStats(17, true);
+
+        // TODO: Empty string '' is valid bio!
       }
 
       function ex18() {
         const user = getRandomUser();
-        const hasItems = (user?.items?.length ?? 0) > 0;
-        log('out18', `Has Items: ${hasItems}`);
-        updateStats(18, true);
+
+        // TODO: Check if array has items (length > 0)
       }
 
       function ex19() {
         const user = getRandomUser();
-        const name = user?.name?.trim()?.toLowerCase() ?? 'guest';
-        log('out19', `Name: "${name}"`);
-        updateStats(19, true);
+
+        // TODO: Chain trim() and toLowerCase() safely
       }
 
       function ex20() {
         const data = getRandomUser();
-        const names = (data?.users ?? []).map((u) => u?.name ?? 'Unknown');
-        log('out20', `Names: [${names.join(', ')}]`);
-        updateStats(20, true);
+
+        // TODO: Map array to names, return [] if null
       }
     </script>
   </body>

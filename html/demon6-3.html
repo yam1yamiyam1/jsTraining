@@ -1,181 +1,756 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Demon 6.3: Delegation & Cleanup</title>
-    <style>
-      /* Use the same CSS block from Level 1 here */
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        font-family: 'Monaco', monospace;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        min-height: 100vh;
-        padding: 40px 20px;
-      }
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        background: white;
-        border-radius: 16px;
-        padding: 40px;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      }
-      h1 {
-        font-size: 36px;
-        color: #1a202c;
-        margin-bottom: 12px;
-      }
-      .danger-box {
-        background: #fee;
-        border-left: 4px solid #ef4444;
-        padding: 16px;
-        margin: 20px 0;
-        border-radius: 4px;
-      }
-      .exercise {
-        background: #f9fafb;
-        border: 2px solid #e5e7eb;
-        border-radius: 8px;
-        padding: 20px;
-        margin: 16px 0;
-      }
-      .output {
-        background: #1f2937;
-        color: #10b981;
-        padding: 12px;
-        border-radius: 6px;
-        font-family: monospace;
-        margin-top: 12px;
-        min-height: 40px;
-      }
-      button {
-        background: #8b5cf6;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 6px;
-        cursor: pointer;
-      }
-      ul {
-        margin: 10px 0;
-        padding-left: 20px;
-      }
-      li {
-        cursor: pointer;
-        padding: 4px;
-        background: #e5e7eb;
-        margin: 2px;
-        border-radius: 4px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>🛡️ Level 3: Delegation & Cleanup</h1>
-      <div class="danger-box">
-        <strong>⚠️ THE DANGER:</strong> Adding a listener inside a component
-        without cleaning it up causes memory leaks. Adding 1000 listeners to
-        1000 list items destroys performance.
-      </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demon 6.3: Delegation & Cleanup</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Monaco', monospace;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    h1 {
+      font-size: 36px;
+      color: #1a202c;
+      margin-bottom: 12px;
+    }
+    .progress {
+      background: #e5e7eb;
+      height: 8px;
+      border-radius: 4px;
+      margin: 20px 0;
+      overflow: hidden;
+    }
+    .progress-bar {
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      height: 100%;
+      width: 0%;
+      transition: width 300ms ease;
+    }
+    .stats {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .stat {
+      background: #f3f4f6;
+      padding: 12px 20px;
+      border-radius: 8px;
+      flex: 1;
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: #8b5cf6;
+    }
+    .stat-label {
+      font-size: 12px;
+      color: #6b7280;
+      text-transform: uppercase;
+    }
+    .danger-box {
+      background: #fee;
+      border-left: 4px solid #ef4444;
+      padding: 16px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    .syntax-box {
+      background: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 16px;
+      margin: 20px 0;
+      border-radius: 4px;
+      font-family: 'Monaco', monospace;
+      font-size: 14px;
+    }
+    .trap-box {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 16px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    .exercise {
+      background: #f9fafb;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 16px 0;
+    }
+    .exercise.completed {
+      border-color: #10b981;
+      background: #f0fdf4;
+    }
+    .exercise.trap {
+      border-color: #f59e0b;
+    }
+    .exercise h3 {
+      color: #374151;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .badge {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .badge-trap {
+      background: #fef3c7;
+      color: #f59e0b;
+    }
+    .badge-advanced {
+      background: #ddd6fe;
+      color: #7c3aed;
+    }
+    .badge-critical {
+      background: #fecaca;
+      color: #dc2626;
+    }
+    .output {
+      background: #1f2937;
+      color: #10b981;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: monospace;
+      margin-top: 12px;
+      min-height: 40px;
+    }
+    button {
+      background: #8b5cf6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 4px;
+      transition: all 200ms ease;
+    }
+    button:hover {
+      background: #7c3aed;
+    }
+    button.danger {
+      background: #ef4444;
+    }
+    button.success {
+      background: #10b981;
+    }
+    ul {
+      margin: 10px 0;
+      padding: 0;
+      list-style: none;
+    }
+    li {
+      cursor: pointer;
+      padding: 12px;
+      background: #e5e7eb;
+      margin: 4px 0;
+      border-radius: 6px;
+      transition: all 150ms ease;
+    }
+    li:hover {
+      background: #d1d5db;
+    }
+    .card {
+      background: #e5e7eb;
+      padding: 16px;
+      margin: 8px 0;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 150ms ease;
+    }
+    .card:hover {
+      border-color: #8b5cf6;
+    }
+    .card-header {
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .card-body {
+      font-size: 14px;
+      color: #6b7280;
+    }
+    code {
+      background: #f3f4f6;
+      padding: 2px 6px;
+      border-radius: 3px;
+      color: #ef4444;
+    }
+    .leak-indicator {
+      background: #fee;
+      border: 2px solid #ef4444;
+      padding: 12px;
+      border-radius: 6px;
+      margin-top: 12px;
+      font-weight: 700;
+      color: #dc2626;
+      display: none;
+    }
+    .leak-indicator.show {
+      display: block;
+    }
+    .checkmark {
+      color: #10b981;
+      font-size: 20px;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🛡️ Level 3: Delegation & Cleanup</h1>
+    <p style="color: #6b7280; margin-bottom: 20px;">Master memory leak prevention - THE MOST CRITICAL for React - 20 Exercises</p>
 
-      <div class="exercise">
-        <h3>Ex 1: Basic Delegation</h3>
-        <ul id="list1">
-          <li>Item 1</li>
-          <li>Item 2</li>
-          <li>Item 3</li>
-        </ul>
-        <div class="output" id="out1"></div>
-      </div>
+    <div class="progress">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
 
-      <div class="exercise">
-        <h3>Ex 2: Data Attribute Delegation</h3>
-        <ul id="list2">
-          <li data-id="101">Product A</li>
-          <li data-id="102">Product B</li>
-        </ul>
-        <div class="output" id="out2"></div>
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-value" id="completed">0</div>
+        <div class="stat-label">Completed</div>
       </div>
-
-      <div class="exercise">
-        <h3>Ex 3: The Closest() Match</h3>
-        <ul id="list3">
-          <li class="card">
-            <div><span>Click inside me</span></div>
-          </li>
-        </ul>
-        <div class="output" id="out3"></div>
+      <div class="stat">
+        <div class="stat-value" id="correct">0</div>
+        <div class="stat-label">Correct</div>
       </div>
-
-      <div class="exercise">
-        <h3>Ex 4: Interval Cleanup</h3>
-        <button onclick="startEx4()">Start Interval</button>
-        <button onclick="stopEx4()">Run Cleanup</button>
-        <div class="output" id="out4">0</div>
-      </div>
-
-      <div class="exercise">
-        <h3>Ex 5: Window Listener Cleanup</h3>
-        <button onclick="startEx5()">Add a Listener</button>
-        <button onclick="stopEx5()">Remove Listener</button>
-        <div class="output" id="out5"></div>
+      <div class="stat">
+        <div class="stat-value" id="leakCount">0</div>
+        <div class="stat-label">Active Leaks</div>
       </div>
     </div>
 
-    <script>
-      const log = (id, msg) => (document.getElementById(id).textContent = msg);
+    <div class="danger-box">
+      <strong>⚠️ THE DANGER:</strong> Every event listener without cleanup is a memory leak. Adding listeners inside components without removing them causes your app to slow down, consume gigabytes of RAM, and eventually crash. <strong>This is React useEffect's #1 purpose: cleanup!</strong>
+    </div>
 
-      // EX 1: Attach ONE listener to #list1. Use e.target.matches('li')
-      document.getElementById('list1').addEventListener('click', (e) => {
-        if (e.target.matches('li')) {
-          log('out1', `You clicked: ${e.target.textContent}`);
-        }
-      });
+    <div class="syntax-box">
+      <strong>✅ THE FIX:</strong><br>
+      <strong>Delegation:</strong> Attach ONE listener to parent, check <code>e.target</code><br>
+      <strong>Cleanup:</strong> <code>element.removeEventListener(event, handler)</code><br>
+      <strong>Critical:</strong> Can't remove anonymous functions! Use named functions.<br>
+      <strong>React Pattern:</strong> useEffect() return function = cleanup<br>
+      <code>e.target.matches('selector')</code> - Check if clicked element matches<br>
+      <code>e.target.closest('selector')</code> - Find parent matching selector
+    </div>
 
-      // EX 2: Extract data-id when an li is clicked
-      document.getElementById('list2').addEventListener('click', (e) => {
-        // YOUR CODE HERE (Hint: e.target.dataset.id)
-        if (e.target.matches('li')) {
-          log('out2', `You clicked: ${e.target.dataset.id}`);
-        }
-      });
+    <!-- BASIC DELEGATION (1-5) -->
+    <div class="exercise" data-ex="1">
+      <h3>Exercise 1: Basic Delegation</h3>
+      <p>Attach ONE listener to parent. Handle clicks on any list item.</p>
+      <ul id="list1">
+        <li>Item 1</li>
+        <li>Item 2</li>
+        <li>Item 3</li>
+      </ul>
+      <button onclick="addItem1()">Add Item</button>
+      <div class="output" id="out1"></div>
+    </div>
 
-      // EX 3: Use e.target.closest('.card') to handle clicks anywhere inside the card
-      document.getElementById('list3').addEventListener('click', (e) => {
-        if (e.target.closest('.card')) {
-          log('out3', 'You clicked me');
-        }
-      });
+    <div class="exercise" data-ex="2">
+      <h3>Exercise 2: Data Attribute Extraction</h3>
+      <p>Use data-id to identify which item was clicked.</p>
+      <ul id="list2">
+        <li data-id="101">Product A</li>
+        <li data-id="102">Product B</li>
+        <li data-id="103">Product C</li>
+      </ul>
+      <div class="output" id="out2"></div>
+    </div>
 
-      // EX 4: Setup an interval, and clear it
-      let intervalId;
-      function startEx4() {
-        let timerCount = 0;
-        intervalId = setInterval(() => {
-          log('out4', `${timerCount++}`);
-        }, 500);
-      }
-      function stopEx4() {
-        clearInterval(intervalId);
-        log('out4', null);
-      }
+    <div class="exercise" data-ex="3">
+      <h3>Exercise 3: The .closest() Pattern</h3>
+      <p>Click anywhere inside card (including nested elements).</p>
+      <div id="cards3">
+        <div class="card" data-id="1">
+          <div class="card-header">Card Title</div>
+          <div class="card-body">Click anywhere inside this card</div>
+        </div>
+        <div class="card" data-id="2">
+          <div class="card-header">Another Card</div>
+          <div class="card-body">Or inside this one</div>
+        </div>
+      </div>
+      <div class="output" id="out3"></div>
+    </div>
 
-      // EX 5: Add and remove a named window event listener
-      function handleResize() {
-        log('out5', 'Resized: ' + Math.random());
-      }
-      function startEx5() {
-        // YOUR CODE: Add event listener to window for 'resize'
-        window.addEventListener('resize', handleResize);
-      }
-      function stopEx5() {
-        // YOUR CODE: Remove the event listener from window
-        window.removeEventListener('resize', handleResize);
-      }
-    </script>
-  </body>
+    <div class="exercise" data-ex="4">
+      <h3>Exercise 4: Dynamic List with Delegation <span class="badge badge-advanced">Advanced</span></h3>
+      <p>Add/remove items. Delegation works on dynamically added elements!</p>
+      <ul id="list4"></ul>
+      <button onclick="addTodo4()">Add Todo</button>
+      <div class="output" id="out4"></div>
+    </div>
+
+    <div class="exercise" data-ex="5">
+      <h3>Exercise 5: Multiple Event Types <span class="badge badge-advanced">Advanced</span></h3>
+      <p>Handle both click and dblclick on same parent.</p>
+      <ul id="list5">
+        <li>Single click or double click me</li>
+        <li>Click me too!</li>
+      </ul>
+      <div class="output" id="out5"></div>
+    </div>
+
+    <!-- CLEANUP BASICS (6-10) -->
+    <div class="exercise" data-ex="6">
+      <h3>Exercise 6: Basic Cleanup <span class="badge badge-critical">Critical</span></h3>
+      <p>Remove event listener when "component unmounts".</p>
+      <button onclick="mount6()">Mount Component</button>
+      <button onclick="unmount6()" class="danger">Unmount (Cleanup!)</button>
+      <div id="component6" style="display: none; padding: 12px; background: #e5e7eb; margin: 8px 0; border-radius: 6px;">
+        Component mounted - click me
+      </div>
+      <div class="output" id="out6"></div>
+      <div class="leak-indicator" id="leak6">⚠️ Memory Leak: Listener not removed!</div>
+    </div>
+
+    <div class="exercise" data-ex="7">
+      <h3>Exercise 7: Interval Cleanup <span class="badge badge-critical">Critical</span></h3>
+      <p>Clear interval when stopping timer.</p>
+      <button onclick="startInterval7()">Start Timer</button>
+      <button onclick="stopInterval7()" class="danger">Stop (Cleanup!)</button>
+      <div class="output" id="out7">0</div>
+      <div class="leak-indicator" id="leak7">⚠️ Memory Leak: Interval still running!</div>
+    </div>
+
+    <div class="exercise" data-ex="8">
+      <h3>Exercise 8: Timeout Cleanup <span class="badge badge-critical">Critical</span></h3>
+      <p>Clear timeout if component unmounts before delay.</p>
+      <button onclick="startTimeout8()">Start 3s Timer</button>
+      <button onclick="cancelTimeout8()" class="danger">Cancel (Cleanup!)</button>
+      <div class="output" id="out8">Waiting...</div>
+    </div>
+
+    <div class="exercise" data-ex="9">
+      <h3>Exercise 9: Window Resize Cleanup <span class="badge badge-critical">Critical</span></h3>
+      <p>Add window resize listener. Clean up on unmount.</p>
+      <button onclick="mountResize9()">Add Resize Listener</button>
+      <button onclick="unmountResize9()" class="danger">Remove (Cleanup!)</button>
+      <div class="output" id="out9">No listener</div>
+      <div class="leak-indicator" id="leak9">⚠️ Memory Leak: Resize listener still active!</div>
+    </div>
+
+    <div class="exercise" data-ex="10">
+      <h3>Exercise 10: Multiple Listeners Cleanup <span class="badge badge-critical">Critical</span></h3>
+      <p>Clean up ALL 3 listeners when unmounting.</p>
+      <button onclick="mountMultiple10()">Mount (3 listeners)</button>
+      <button onclick="unmountMultiple10()" class="danger">Unmount (Cleanup!)</button>
+      <div id="element10" style="display: none; padding: 20px; background: #e5e7eb; margin: 8px 0; border-radius: 6px;">
+        Hover, click, or press key
+      </div>
+      <div class="output" id="out10"></div>
+      <div class="leak-indicator" id="leak10">⚠️ Memory Leak: Some listeners not removed!</div>
+    </div>
+
+    <!-- ADVANCED PATTERNS (11-15) -->
+    <div class="exercise" data-ex="11">
+      <h3>Exercise 11: Named vs Anonymous Functions <span class="badge badge-advanced">Advanced</span></h3>
+      <p>Demonstrate why anonymous functions can't be removed.</p>
+      <button onclick="addAnonymous11()">Add Anonymous (❌ Can't remove!)</button>
+      <button onclick="addNamed11()">Add Named (✅ Can remove)</button>
+      <button onclick="cleanup11()" class="danger">Try Cleanup</button>
+      <div id="element11" style="padding: 12px; background: #e5e7eb; margin: 8px 0; border-radius: 6px;">
+        Click me after adding listeners
+      </div>
+      <div class="output" id="out11"></div>
+    </div>
+
+    <div class="exercise" data-ex="12">
+      <h3>Exercise 12: Stale Closure Trap <span class="badge badge-trap">Trap</span></h3>
+      <p>Listener captures old value! Clicking shows stale count.</p>
+      <button onclick="increment12()">Increment Count</button>
+      <button onclick="addListener12()">Add Listener (captures current count)</button>
+      <button onclick="cleanup12()" class="danger">Cleanup</button>
+      <div id="element12" style="padding: 12px; background: #e5e7eb; margin: 8px 0; border-radius: 6px;">
+        Click to see captured count
+      </div>
+      <div class="output" id="out12">Count: 0</div>
+    </div>
+
+    <div class="exercise" data-ex="13">
+      <h3>Exercise 13: Document Event Cleanup <span class="badge badge-critical">Critical</span></h3>
+      <p>Clean up document-level listeners (clicks outside, escape key).</p>
+      <button onclick="mountModal13()">Open Modal</button>
+      <div id="modal13" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center;">
+        <div style="background: white; padding: 32px; border-radius: 12px; max-width: 400px;">
+          <h3>Modal</h3>
+          <p>Press Escape or click outside to close</p>
+          <button onclick="closeModal13()">Close</button>
+        </div>
+      </div>
+      <div class="output" id="out13"></div>
+      <div class="leak-indicator" id="leak13">⚠️ Memory Leak: Document listeners still active!</div>
+    </div>
+
+    <div class="exercise" data-ex="14">
+      <h3>Exercise 14: Scroll Listener <span class="badge badge-advanced">Advanced</span></h3>
+      <p>Add scroll listener. Clean up properly.</p>
+      <button onclick="mountScroll14()">Add Scroll Listener</button>
+      <button onclick="unmountScroll14()" class="danger">Remove (Cleanup!)</button>
+      <div class="output" id="out14">Scroll page to test</div>
+      <div class="leak-indicator" id="leak14">⚠️ Memory Leak: Scroll listener still active!</div>
+    </div>
+
+    <div class="exercise" data-ex="15">
+      <h3>Exercise 15: Component Lifecycle <span class="badge badge-advanced">Advanced</span></h3>
+      <p>Simulate React component mount/unmount cycle with full cleanup.</p>
+      <button onclick="mountComponent15()">Mount Component</button>
+      <button onclick="unmountComponent15()" class="danger">Unmount</button>
+      <button onclick="remountComponent15()">Remount (test cleanup)</button>
+      <div id="component15" style="display: none; padding: 20px; background: #e5e7eb; margin: 8px 0; border-radius: 6px;">
+        <div id="timer15">00:00</div>
+        <div style="margin-top: 8px; font-size: 12px; color: #6b7280;">Component with interval</div>
+      </div>
+      <div class="output" id="out15"></div>
+    </div>
+
+    <!-- TRAP EXERCISES (16-20) -->
+    <div class="trap-box">
+      <strong>⚠️ TRAP ZONE:</strong> These mistakes cause memory leaks in 90% of React apps!
+    </div>
+
+    <div class="exercise trap" data-ex="16">
+      <h3>Exercise 16: The "Anonymous Function" Trap 🪤 <span class="badge badge-trap">Trap</span></h3>
+      <p><strong>Trap:</strong> Using arrow functions inline prevents cleanup!</p>
+      <button onclick="demonstrateLeak16()">Create Memory Leak</button>
+      <button onclick="demonstrateCorrect16()" class="success">Correct Pattern</button>
+      <div class="output" id="out16">Click buttons to see difference</div>
+    </div>
+
+    <div class="exercise trap" data-ex="17">
+      <h3>Exercise 17: The "Missing Cleanup" Trap 🪤 <span class="badge badge-trap">Trap</span></h3>
+      <p><strong>Trap:</strong> Forgetting cleanup in useEffect!</p>
+      <button onclick="simulateLeak17()">Simulate React Re-renders (10x)</button>
+      <div class="output" id="out17"></div>
+    </div>
+
+    <div class="exercise trap" data-ex="18">
+      <h3>Exercise 18: The "Interval in useEffect" Trap 🪤 <span class="badge badge-trap">Trap</span></h3>
+      <p><strong>Trap:</strong> Not clearing intervals causes multiple timers!</p>
+      <button onclick="badInterval18()">Bad Pattern (leak)</button>
+      <button onclick="goodInterval18()" class="success">Good Pattern</button>
+      <button onclick="reset18()" class="danger">Reset</button>
+      <div class="output" id="out18">Watch the timer</div>
+    </div>
+
+    <div class="exercise trap" data-ex="19">
+      <h3>Exercise 19: The "Closure State" Trap 🪤 <span class="badge badge-trap">Trap</span></h3>
+      <p><strong>Trap:</strong> Event listener references stale state!</p>
+      <button onclick="increment19()">Increment (count: <span id="count19">0</span>)</button>
+      <button onclick="addListenerStale19()">Add Listener (❌ Stale)</button>
+      <button onclick="addListenerFresh19()" class="success">Add Listener (✅ Fresh)</button>
+      <div id="element19" style="padding: 12px; background: #e5e7eb; margin: 8px 0; border-radius: 6px;">
+        Click to see captured count
+      </div>
+      <div class="output" id="out19"></div>
+    </div>
+
+    <div class="exercise trap" data-ex="20">
+      <h3>Exercise 20: The "1000 Listeners" Trap 🪤 <span class="badge badge-trap">Trap</span></h3>
+      <p><strong>Trap:</strong> Adding listener to each item vs ONE on parent!</p>
+      <button onclick="badPattern20()">❌ 1000 listeners (slow!)</button>
+      <button onclick="goodPattern20()" class="success">✅ 1 listener (fast!)</button>
+      <button onclick="cleanup20()" class="danger">Cleanup</button>
+      <div id="list20" style="max-height: 200px; overflow-y: auto; border: 1px solid #d1d5db; border-radius: 6px; margin-top: 8px;"></div>
+      <div class="output" id="out20"></div>
+    </div>
+
+    <div style="margin-top: 40px; padding: 20px; background: #f0fdf4; border-radius: 8px; border: 2px solid #10b981;">
+      <h3 style="color: #059669; margin-bottom: 12px;">🎓 Level 3 Complete!</h3>
+      <p style="color: #047857;">Move to demon6-4.html for the Final Boss!</p>
+    </div>
+  </div>
+
+  <script>
+    let stats = { completed: 0, correct: 0, leaks: 0 };
+    let globalHandlers = {};
+    
+    function updateStats(exNum) {
+      stats.completed++;
+      stats.correct++;
+      
+      document.getElementById('completed').textContent = stats.completed;
+      document.getElementById('correct').textContent = stats.correct;
+      
+      const exercise = document.querySelector(`[data-ex="${exNum}"]`);
+      if (exercise) exercise.classList.add('completed');
+      
+      const progress = (stats.completed / 20) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+    }
+
+    function showLeak(exNum) {
+      stats.leaks++;
+      document.getElementById('leakCount').textContent = stats.leaks;
+      document.getElementById('leak' + exNum).classList.add('show');
+    }
+
+    function hideLeak(exNum) {
+      stats.leaks = Math.max(0, stats.leaks - 1);
+      document.getElementById('leakCount').textContent = stats.leaks;
+      document.getElementById('leak' + exNum).classList.remove('show');
+    }
+
+    function log(id, msg) {
+      document.getElementById(id).innerHTML = msg + ' <span class="checkmark">✓</span>';
+    }
+
+    // YOUR CODE BELOW - Complete all 20 exercises!
+
+    // Ex 1: Basic delegation
+    let itemCount1 = 3;
+    // TODO: Add ONE click listener to #list1 that handles all items
+    
+    function addItem1() {
+      itemCount1++;
+      const li = document.createElement('li');
+      li.textContent = `Item ${itemCount1}`;
+      document.getElementById('list1').appendChild(li);
+    }
+
+    // Ex 2: Data attribute extraction
+    // TODO: Add delegation listener to #list2, extract data-id
+
+    // Ex 3: .closest() pattern
+    // TODO: Add listener to #cards3, use closest() to find card
+
+    // Ex 4: Dynamic list with delegation
+    let todoCount4 = 0;
+    // TODO: Add delegation listener to #list4 for clicking items to remove
+    
+    function addTodo4() {
+      todoCount4++;
+      const li = document.createElement('li');
+      li.textContent = `Todo ${todoCount4} (click to remove)`;
+      document.getElementById('list4').appendChild(li);
+    }
+
+    // Ex 5: Multiple event types
+    // TODO: Add both click and dblclick listeners to #list5
+
+    // Ex 6: Basic cleanup
+    // TODO: Create named handler function for click
+    function mount6() {
+      // TODO: Show element, add listener, show leak
+    }
+    
+    function unmount6() {
+      // TODO: Hide element, REMOVE listener, hide leak
+      updateStats(6);
+    }
+
+    // Ex 7: Interval cleanup
+    let intervalId7 = null;
+    let count7 = 0;
+    
+    function startInterval7() {
+      // TODO: Start interval, show leak
+    }
+    
+    function stopInterval7() {
+      // TODO: Clear interval, hide leak
+      updateStats(7);
+    }
+
+    // Ex 8: Timeout cleanup
+    let timeoutId8 = null;
+    
+    function startTimeout8() {
+      // TODO: Set 3s timeout
+    }
+    
+    function cancelTimeout8() {
+      // TODO: Clear timeout
+      updateStats(8);
+    }
+
+    // Ex 9: Window resize cleanup
+    // TODO: Create named resize handler
+    
+    function mountResize9() {
+      // TODO: Add resize listener, show leak
+    }
+    
+    function unmountResize9() {
+      // TODO: Remove resize listener, hide leak
+      updateStats(9);
+    }
+
+    // Ex 10: Multiple listeners cleanup
+    let handlers10 = {
+      // TODO: Define named handlers for click, mouseover, keydown
+    };
+    
+    function mountMultiple10() {
+      // TODO: Add all 3 listeners, show leak
+    }
+    
+    function unmountMultiple10() {
+      // TODO: Remove all 3 listeners, hide leak
+      updateStats(10);
+    }
+
+    // Ex 11: Named vs anonymous
+    let namedHandler11 = null; // TODO: Create named handler
+    
+    function addAnonymous11() {
+      // TODO: Add anonymous listener (can't remove!)
+    }
+    
+    function addNamed11() {
+      // TODO: Add named listener (can remove!)
+    }
+    
+    function cleanup11() {
+      // TODO: Try to remove named listener only
+      updateStats(11);
+    }
+
+    // Ex 12: Stale closure trap
+    let count12 = 0;
+    let currentHandler12 = null;
+    
+    function increment12() {
+      count12++;
+      document.getElementById('out12').textContent = `Count: ${count12}`;
+    }
+    
+    function addListener12() {
+      // TODO: Remove old, add new listener that captures current count
+      updateStats(12);
+    }
+    
+    function cleanup12() {
+      // TODO: Remove listener
+    }
+
+    // Ex 13: Document event cleanup
+    let docHandlers13 = {
+      // TODO: Define named handlers
+    };
+    
+    function mountModal13() {
+      // TODO: Show modal, add document listeners, show leak
+    }
+    
+    function closeModal13() {
+      // TODO: Hide modal, remove document listeners, hide leak
+      updateStats(13);
+    }
+
+    // Ex 14: Scroll listener
+    let scrollHandler14 = null;
+    
+    function mountScroll14() {
+      // TODO: Add scroll listener, show leak
+    }
+    
+    function unmountScroll14() {
+      // TODO: Remove scroll listener, hide leak
+      updateStats(14);
+    }
+
+    // Ex 15: Component lifecycle
+    let componentState15 = { intervalId: null, seconds: 0 };
+    
+    function mountComponent15() {
+      // TODO: Show component, start interval
+    }
+    
+    function unmountComponent15() {
+      // TODO: Clear interval, hide component
+      updateStats(15);
+    }
+    
+    function remountComponent15() {
+      unmountComponent15();
+      setTimeout(() => mountComponent15(), 100);
+    }
+
+    // TRAP EXERCISES
+
+    // Ex 16: Anonymous function trap
+    function demonstrateLeak16() {
+      // TODO: Add anonymous listener (memory leak!)
+      updateStats(16);
+    }
+    
+    function demonstrateCorrect16() {
+      // TODO: Add named listener, then remove after 2s
+    }
+
+    // Ex 17: Missing cleanup trap
+    function simulateLeak17() {
+      // TODO: Add 10 resize listeners without cleanup
+      updateStats(17);
+    }
+
+    // Ex 18: Interval in useEffect trap
+    let badIntervals18 = [];
+    let goodInterval18Id = null;
+    
+    function badInterval18() {
+      // TODO: Start interval without clearing old one
+    }
+    
+    function goodInterval18() {
+      // TODO: Clear old, start new interval
+      updateStats(18);
+    }
+    
+    function reset18() {
+      // TODO: Clear all intervals
+    }
+
+    // Ex 19: Closure state trap
+    let count19 = 0;
+    let currentHandler19 = null;
+    
+    function increment19() {
+      count19++;
+      document.getElementById('count19').textContent = count19;
+    }
+    
+    function addListenerStale19() {
+      // TODO: Add listener that captures current count (becomes stale)
+    }
+    
+    function addListenerFresh19() {
+      // TODO: Add listener that always reads latest count
+      updateStats(19);
+    }
+
+    // Ex 20: 1000 listeners trap
+    function badPattern20() {
+      // TODO: Create 1000 items with 1000 separate listeners
+    }
+    
+    function goodPattern20() {
+      // TODO: Create 1000 items with ONE delegation listener
+      updateStats(20);
+    }
+    
+    function cleanup20() {
+      document.getElementById('list20').innerHTML = '';
+    }
+  </script>
+</body>
 </html>

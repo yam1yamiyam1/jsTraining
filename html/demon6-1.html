@@ -518,8 +518,12 @@
       ];
 
       let stats = { completed: 0, correct: 0 };
-      const getRandomUser = () =>
-        chaoticUsers[Math.floor(Math.random() * chaoticUsers.length)];
+      const getRandomUser = () => {
+        const toReturn =
+          chaoticUsers[Math.floor(Math.random() * chaoticUsers.length)];
+        console.log(toReturn);
+        return toReturn;
+      };
 
       function updateStats(exNum) {
         stats.completed++;
@@ -546,124 +550,148 @@
 
       function ex1() {
         const user = getRandomUser();
-
+        log('out1', user?.profile?.name ?? 'Guest');
         // TODO: Extract user.profile.name safely, show "Guest" if missing
+        updateStats(1);
       }
-
       function ex2() {
         const user = getRandomUser();
-
         // TODO: Extract user.settings.privacy.showEmail, default false
+        log('out2', user?.settings?.privacy?.showEmail ?? false);
+        updateStats(2);
       }
 
       function ex3() {
         const user = getRandomUser();
-
         // TODO: Get user.orders[0], show "No orders" if missing
+        log('out3', user?.orders?.[0] ?? 'No orders');
+        updateStats(3);
       }
 
       function ex4() {
         const user = getRandomUser();
-
         // TODO: Call user.getName() safely, fallback "Anonymous"
+        log('out4', user?.getName?.() ?? 'Anonymous');
+        updateStats(4);
       }
 
       function ex5() {
         const user = getRandomUser();
-
         // TODO: Get user.addresses[0].city, default "No city"
+        log('out5', user?.addresses?.[0]?.city ?? 'No city');
+        updateStats(5);
       }
 
       function ex6() {
         const user = getRandomUser();
-
         // TODO: Get price and currency, show "$0 USD" if missing
+        const price = user?.price ?? 0;
+        const currency = user?.currency ?? 'USD';
+        log('out6', `$${price} ${currency}`);
+        updateStats(6);
       }
 
       function ex7() {
         const order = getRandomUser();
-
         // TODO: Calculate total * taxRate, default both to 0
+        const total = order?.total ?? 0;
+        const taxRate = order?.taxRate ?? 0;
+        log('out7', total * taxRate);
+        updateStats(7);
       }
 
       function ex8() {
         const response = getRandomUser();
-
         // TODO: Extract response.data.results[0].title, show "No results"
+        log('out8', response?.data?.results?.[0]?.title ?? 'No results');
+        updateStats(8);
       }
 
       function ex9() {
         const user = getRandomUser();
-
         // TODO: Get user.settings.notifications.email, default true
+        log('out9', user?.settings?.notifications?.email ?? true);
+        updateStats(9);
       }
 
       function ex10() {
         const user = getRandomUser();
-
         // TODO: Get user.friends.length, default 0
+        log('out10', user?.friends?.length ?? 0);
+        updateStats(10);
       }
 
       function ex11() {
         const user = getRandomUser();
-
         // TODO: Call user.profile.getDisplayName(), fallback "User"
+        log('out11', user?.profile?.getDisplayName?.() ?? 'User');
+        updateStats(11);
       }
 
       function ex12() {
         const data = getRandomUser();
-
         // TODO: Get data.items[1], show "No item" if missing
+        log('out12', data?.items?.[1] ?? 'No item');
+        updateStats(12);
       }
 
       function ex13() {
         const user = getRandomUser();
-
         // TODO: Try nickname, then username, then "Anonymous"
+        log('out13', user?.nickname ?? user?.username ?? 'Anonymous');
+        updateStats(13);
       }
 
       function ex14() {
         const order = getRandomUser();
-
         // TODO: Get order.customer.billing.address.zip, default "00000"
+        log('out14', order?.customer?.billing?.address?.zip ?? '00000');
+        updateStats(14);
       }
 
       function ex15() {
         const stats = getRandomUser();
-
         // TODO: Calculate completed / total, return 0 if either missing
+        const calculate = stats?.completed ?? 0 / stats?.total ?? 0;
+        log('out15', calculate);
+        updateStats(15);
       }
 
       // TRAP EXERCISES - Be careful!
 
       function ex16() {
         const user = getRandomUser();
-
         // TODO: Use ?? not || - 0 is a valid age!
+        log('out16', user?.age ?? 'Unknown');
+        updateStats(16);
       }
 
       function ex17() {
         const user = getRandomUser();
-
         // TODO: Empty string '' is valid bio!
+        log('out17', user?.bio ?? 'No bio');
+        updateStats(17);
       }
 
       function ex18() {
         const user = getRandomUser();
-
         // TODO: Check if array has items (length > 0)
+        log('out18', (user?.users?.length ?? 0) > 0);
+        updateStats(18);
       }
 
       function ex19() {
         const user = getRandomUser();
-
         // TODO: Chain trim() and toLowerCase() safely
+        log('out19', (user?.name ?? 'guest').trim().toLowerCase());
+        updateStats(19);
       }
 
       function ex20() {
         const data = getRandomUser();
-
         // TODO: Map array to names, return [] if null
+        log('out20', data?.users?.map(({ name }) => name) ?? []);
+        updateStats(20);
       }
     </script>
   </body>

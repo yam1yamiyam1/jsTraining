@@ -10,7 +10,6 @@
         padding: 0;
         box-sizing: border-box;
       }
-
       body {
         font-family:
           'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
@@ -22,7 +21,6 @@
         justify-content: center;
         padding: 40px 20px;
       }
-
       .test-container {
         max-width: 1000px;
         width: 100%;
@@ -38,12 +36,10 @@
           0 0 1px rgba(255, 255, 255, 0.1) inset;
         backdrop-filter: blur(10px);
       }
-
       .header {
         text-align: center;
         margin-bottom: 40px;
       }
-
       .title {
         font-size: 42px;
         font-weight: 900;
@@ -53,22 +49,18 @@
         letter-spacing: -1px;
         margin-bottom: 8px;
       }
-
       .subtitle {
         color: #8b8b9a;
         font-size: 14px;
         letter-spacing: 2px;
         text-transform: uppercase;
       }
-
-      /* Difficulty Selection */
       .difficulty-selector {
         display: flex;
         justify-content: center;
         gap: 12px;
         margin-bottom: 32px;
       }
-
       .difficulty-btn {
         padding: 12px 28px;
         background: rgba(255, 255, 255, 0.03);
@@ -82,30 +74,25 @@
         cursor: pointer;
         transition: all 200ms ease;
       }
-
       .difficulty-btn:hover {
         border-color: rgba(0, 245, 160, 0.5);
         background: rgba(0, 245, 160, 0.05);
       }
-
       .difficulty-btn.active {
         border-color: #00f5a0;
+        color: #00f5a0;
         background: linear-gradient(
           135deg,
           rgba(0, 245, 160, 0.2) 0%,
           rgba(0, 217, 245, 0.2) 100%
         );
-        color: #00f5a0;
       }
-
-      /* Stats Bar */
       .stats-bar {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 16px;
         margin-bottom: 32px;
       }
-
       .stat-box {
         background: rgba(0, 0, 0, 0.3);
         border: 1px solid rgba(255, 255, 255, 0.05);
@@ -114,12 +101,10 @@
         text-align: center;
         transition: all 200ms ease;
       }
-
       .stat-box:hover {
         border-color: rgba(0, 245, 160, 0.3);
         transform: translateY(-2px);
       }
-
       .stat-label {
         font-size: 11px;
         text-transform: uppercase;
@@ -127,7 +112,6 @@
         color: #6b6b7a;
         margin-bottom: 8px;
       }
-
       .stat-value {
         font-size: 32px;
         font-weight: 900;
@@ -135,8 +119,6 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
-
-      /* Text Display */
       .text-display-wrapper {
         background: rgba(0, 0, 0, 0.4);
         border: 2px solid rgba(255, 255, 255, 0.05);
@@ -147,49 +129,41 @@
         position: relative;
         transition: all 300ms ease;
       }
-
       .text-display-wrapper.idle {
         border-color: rgba(139, 139, 154, 0.3);
       }
-
       .text-display-wrapper.active {
         border-color: #00f5a0;
         box-shadow: 0 0 20px rgba(0, 245, 160, 0.2);
       }
-
       .text-display-wrapper.completed {
         border-color: #00d9f5;
         box-shadow: 0 0 20px rgba(0, 217, 245, 0.2);
         background: rgba(0, 217, 245, 0.05);
       }
-
       .text-display {
         font-size: 26px;
         line-height: 1.8;
         letter-spacing: 0.5px;
         color: #5a5a6a;
+        white-space: pre-wrap; /* FIXED SPACES! */
       }
-
       .char {
         position: relative;
         display: inline-block;
       }
-
       .char.correct {
         color: #00f5a0;
       }
-
       .char.incorrect {
         color: #ff4757;
         background: rgba(255, 71, 87, 0.15);
       }
-
       .char.current {
         background: linear-gradient(135deg, #00f5a0 0%, #00d9f5 100%);
         color: #0f0f1e;
         animation: pulse 1.2s ease-in-out infinite;
       }
-
       @keyframes pulse {
         0%,
         100% {
@@ -199,12 +173,9 @@
           opacity: 0.6;
         }
       }
-
-      /* Input Area */
       .input-wrapper {
         margin-bottom: 28px;
       }
-
       .typing-input {
         width: 100%;
         background: rgba(0, 0, 0, 0.4);
@@ -218,30 +189,21 @@
         min-height: 120px;
         transition: all 200ms ease;
       }
-
       .typing-input:focus {
         outline: none;
         border-color: #00f5a0;
         box-shadow: 0 0 20px rgba(0, 245, 160, 0.2);
       }
-
       .typing-input:disabled {
         opacity: 0.4;
         cursor: not-allowed;
       }
-
-      .typing-input::placeholder {
-        color: #3a3a4a;
-      }
-
-      /* Controls */
       .controls {
         display: flex;
         gap: 16px;
         justify-content: center;
         margin-bottom: 32px;
       }
-
       .control-btn {
         padding: 16px 40px;
         border: none;
@@ -254,35 +216,28 @@
         transition: all 200ms ease;
         font-family: 'SF Mono', 'Monaco', monospace;
       }
-
       .btn-start {
         background: linear-gradient(135deg, #00f5a0 0%, #00d9f5 100%);
         color: #0f0f1e;
       }
-
       .btn-start:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: 0 8px 24px rgba(0, 245, 160, 0.4);
       }
-
       .btn-reset {
         background: rgba(255, 255, 255, 0.05);
         border: 2px solid rgba(255, 255, 255, 0.1);
         color: #8b8b9a;
       }
-
       .btn-reset:hover:not(:disabled) {
         border-color: rgba(255, 255, 255, 0.3);
         background: rgba(255, 255, 255, 0.1);
       }
-
       .control-btn:disabled {
         opacity: 0.3;
         cursor: not-allowed;
         transform: none !important;
       }
-
-      /* Results Panel */
       .results-panel {
         background: linear-gradient(
           135deg,
@@ -294,12 +249,10 @@
         padding: 40px;
         display: none;
       }
-
       .results-panel.visible {
         display: block;
         animation: resultSlide 500ms ease;
       }
-
       @keyframes resultSlide {
         from {
           opacity: 0;
@@ -310,31 +263,27 @@
           transform: translateY(0);
         }
       }
-
       .results-title {
         font-size: 28px;
         font-weight: 900;
         text-align: center;
+        margin-bottom: 28px;
         background: linear-gradient(135deg, #00f5a0 0%, #00d9f5 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        margin-bottom: 28px;
       }
-
       .results-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 20px;
         margin-bottom: 24px;
       }
-
       .result-stat {
         background: rgba(0, 0, 0, 0.3);
         border-radius: 12px;
         padding: 24px;
         text-align: center;
       }
-
       .result-stat-label {
         font-size: 12px;
         text-transform: uppercase;
@@ -342,7 +291,6 @@
         color: #6b6b7a;
         margin-bottom: 12px;
       }
-
       .result-stat-value {
         font-size: 40px;
         font-weight: 900;
@@ -350,7 +298,6 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
-
       .results-message {
         text-align: center;
         font-size: 18px;
@@ -360,7 +307,6 @@
         border-radius: 12px;
         line-height: 1.6;
       }
-
       .prompt-message {
         text-align: center;
         color: #5a5a6a;
@@ -377,7 +323,6 @@
         <p class="subtitle">Typing Analyzer</p>
       </header>
 
-      <!-- Difficulty Selector -->
       <div class="difficulty-selector">
         <button
           class="difficulty-btn active"
@@ -405,12 +350,10 @@
         </button>
       </div>
 
-      <!-- Prompt Message -->
       <div class="prompt-message" id="promptMessage">
         Select difficulty and click START to begin the test
       </div>
 
-      <!-- Stats Bar -->
       <div class="stats-bar">
         <div class="stat-box">
           <div class="stat-label">Time Left</div>
@@ -430,14 +373,12 @@
         </div>
       </div>
 
-      <!-- Text Display -->
       <div class="text-display-wrapper idle" id="textWrapper">
         <div class="text-display" id="textDisplay">
           Click START to load test text...
         </div>
       </div>
 
-      <!-- Input Area -->
       <div class="input-wrapper">
         <textarea
           class="typing-input"
@@ -447,7 +388,6 @@
         ></textarea>
       </div>
 
-      <!-- Controls -->
       <div class="controls">
         <button class="control-btn btn-start" id="startBtn">START</button>
         <button class="control-btn btn-reset" id="resetBtn" disabled>
@@ -455,7 +395,6 @@
         </button>
       </div>
 
-      <!-- Results Panel -->
       <div class="results-panel" id="resultsPanel">
         <div class="results-title">TEST COMPLETE</div>
         <div class="results-grid">
@@ -487,6 +426,7 @@
           'Technology has fundamentally transformed how we communicate, collaborate, and create in the modern digital landscape. Innovation drives progress across industries.',
         hard: 'Implementing sophisticated algorithms requires meticulous attention to computational complexity, architectural patterns, and performance optimization strategies while maintaining backward compatibility.',
       };
+
       const INITIAL_METRICS = {
         userInput: '',
         currentIndex: 0,
@@ -496,6 +436,7 @@
         wpm: 0,
         accuracy: 0,
       };
+
       const preset = {
         easy: {
           difficulty: 'easy',
@@ -516,11 +457,18 @@
           timeRemaining: 90,
         },
       };
+
+      const COMPLETED = {
+        timeRemaining: 0,
+        status: 'completed',
+        timerId: null,
+      };
+
       let state = {
         difficulty: 'easy',
         targetText: TEXTS.easy,
         timeLimit: 30,
-        status: 'idle', // 'idle', 'active', or 'completed'
+        status: 'idle',
         timeRemaining: 30,
         timerId: null,
         userInput: '',
@@ -532,160 +480,209 @@
         accuracy: 100,
       };
 
-      /* =========================================================================
-         PHASE 1: EVENT LISTENERS (Make it interactive!)
-         ========================================================================= */
+      /* --- EVENT LISTENERS --- */
 
-      // TODO 1: Difficulty Selection Handler
-      // Target IDs: `diffEasy`, `diffMedium`, `diffHard` (or use event delegation on `.difficulty-selector`)
-      // Goal: Change test difficulty and reset test parameters
-      // Behavior: Only allow changes when status is 'idle'. Get difficulty and time values from the clicked button's data attributes (`data-difficulty`, `data-time`). Update state.difficulty, state.targetText (from TEXTS object), state.timeLimit, and state.timeRemaining. Trigger render.
       const difficultyOptions = ['Easy', 'Medium', 'Hard'];
       difficultyOptions.forEach((d) =>
         document.getElementById(`diff${d}`).addEventListener('click', () => {
-          state = { ...state, ...preset[d.toLowerCase()] };
-          render(state);
-          console.log(state);
+          if (state.status === 'idle') {
+            state = { ...state, ...preset[d.toLowerCase()] };
+            render(state);
+          }
         })
       );
-      // TODO 2: Start Button Handler
-      // Target ID: `startBtn`
-      // Goal: Initialize test and start countdown timer
-      // Behavior: Reset all typing metrics (userInput: '', currentIndex: 0, correctCount: 0, incorrectCount: 0, totalTyped: 0). Set status to 'active'. Call your timer start function (TODO 6). Trigger render.
+
       document.getElementById('startBtn').addEventListener('click', () => {
         state = { ...state, ...INITIAL_METRICS, status: 'active' };
+        startTimer();
         render(state);
       });
-      // TODO 3: Reset Button Handler
-      // Target ID: `resetBtn`
-      // Goal: Abort test and return to idle state
-      // Behavior: If timerId exists, call clearInterval to stop timer. Reset status to 'idle'. Reset timeRemaining to timeLimit. Reset all typing metrics to 0 or empty string. Set timerId to null. Trigger render.
+
       document.getElementById('resetBtn').addEventListener('click', () => {
-        state = { ...state, ...INITIAL_METRICS, status: 'idle' };
+        if (state.timerId) clearInterval(state.timerId);
+        state = {
+          ...state,
+          ...INITIAL_METRICS,
+          status: 'idle',
+          timeRemaining: state.timeLimit,
+          timerId: null,
+        };
         render(state);
       });
-      // TODO 4: Paste Prevention (BONUS)
-      // Target ID: `typingInput`
-      // Goal: Prevent users from pasting text into input
-      // Behavior: Listen for the 'paste' event. Call `e.preventDefault()` to block the paste action.
+
       document.getElementById('typingInput').addEventListener('paste', (e) => {
         e.preventDefault();
       });
-      // TODO 5: Typing Input Handler (CRITICAL LOGIC)
-      // Target ID: `typingInput`
-      // Goal: Process every character typed and update accuracy in real-time
-      // Behavior: Listen for 'input' event. Update state.userInput with the current input value. Compare EACH character in userInput against targetText at the exact same index. Count correct matches and incorrect mismatches. Update correctCount and incorrectCount. Set totalTyped to userInput length. Update currentIndex to length of userInput. If currentIndex equals targetText length (test completed early), set status to 'completed', stop timer with clearInterval, set timerId to null. Trigger render.
+
       document.getElementById('typingInput').addEventListener('input', (e) => {
-        state = { ...state, userInput: e.target.value };
+        const currentText = e.target.value;
+        let correctHit = 0;
+        let incorrectHit = 0;
+
+        for (let i = 0; i < currentText.length; i++) {
+          if (currentText[i] === state.targetText[i]) correctHit++;
+          else incorrectHit++;
+        }
+
+        let nextStatus = state.status;
+        let nextTimerId = state.timerId;
+
+        if (currentText.length === state.targetText.length) {
+          clearInterval(state.timerId);
+          nextStatus = 'completed';
+          nextTimerId = null;
+        }
+
+        state = {
+          ...state,
+          userInput: currentText,
+          currentIndex: currentText.length,
+          totalTyped: currentText.length,
+          correctCount: correctHit,
+          incorrectCount: incorrectHit,
+          status: nextStatus,
+          timerId: nextTimerId,
+        };
         render(state);
-        console.log(state.userInput);
       });
-      /* =========================================================================
-         PHASE 2: LOGIC & MATH (Data transformations)
-         ========================================================================= */
 
-      // TODO 6: Countdown Timer Implementation
-      // Target IDs: N/A (Pure state management)
-      // Goal: Decrement time every second and end test at zero
-      // Behavior: Create a function that uses setInterval with 1000ms delay. Each tick, decrease timeRemaining by 1. If timeRemaining reaches 0, set status to 'completed', clear the interval, and set timerId to null. Store the interval ID in state.timerId. Call render() after each tick.
-      const timer = () = {
-        state.timeRemaining--
-        state.timeRemaining < 0
-        state.status = 'completed'
-      }
-      // TODO 7: WPM Calculation
-      // Target IDs: N/A (Pure calculation)
-      // Goal: Calculate words per minute from correct characters and time elapsed
-      // Behavior: Formula is `(correctCount / 5) / (timeElapsedInMinutes)`. Assume a standard word length of 5 characters. Return 0 if timeElapsed is 0 to avoid Infinity. Round to nearest integer.
+      /* --- TIMER --- */
 
-      // TODO 8: Accuracy Calculation
-      // Target IDs: N/A (Pure calculation)
-      // Goal: Calculate accuracy percentage from correct vs total characters
-      // Behavior: Formula is `(correctCount / totalTyped) * 100`. Return 100 if no characters typed yet. Round to one decimal place.
+      const startTimer = () => {
+        const intervalId = setInterval(() => {
+          const newTime = state.timeRemaining - 1;
+          if (newTime <= 0) {
+            clearInterval(intervalId);
+            state = { ...state, ...COMPLETED };
+          } else {
+            state = { ...state, timeRemaining: newTime };
+          }
+          render(state);
+        }, 1000);
+        state = { ...state, timerId: intervalId };
+      };
 
-      // TODO 9: Performance Message Generation
-      // Target IDs: N/A (Pure logic)
-      // Goal: Generate contextual feedback message based on WPM and accuracy
-      // Behavior: Return different string messages for performance tiers. Example: WPM >= 70 && accuracy >= 95 is exceptional. WPM >= 50 && accuracy >= 90 is excellent. WPM >= 35 && accuracy >= 85 is good. WPM >= 20 is decent. Otherwise: needs improvement.
-
-      // TODO 10: Text Display Formatter
-      // Target IDs: N/A (Pure string HTML generation)
-      // Goal: Generate HTML string with character-by-character styling based on typing progress
-      // Behavior: Loop through state.targetText. Wrap each character in a `<span class="char">`. If the character's index < userInput length, compare characters: add 'correct' class if match, 'incorrect' if mismatch. If character index === currentIndex AND status is 'active', add 'current' class to show the blinking cursor.
-
-      /* =========================================================================
-         PHASE 3: RENDERING (Updating the DOM)
-         ========================================================================= */
+      const getPerformanceMessage = (wpm, accuracy) => {
+        if (wpm >= 70 && accuracy >= 95)
+          return "Exceptional! You're a typing machine.";
+        if (wpm >= 50 && accuracy >= 90) return 'Excellent speed and accuracy!';
+        if (wpm >= 35 && accuracy >= 85)
+          return 'Good job! Keep practicing to boost your speed.';
+        if (wpm >= 20) return 'Decent effort. Focus on your accuracy first!';
+        return 'Keep going! Practice makes perfect.';
+      };
+      /* --- RENDER & MATH --- */
 
       const render = (state) => {
+        // 1. Math Transformers
+        const timeElapsedSeconds = state.timeLimit - state.timeRemaining;
+        const timeElapsedMinutes = timeElapsedSeconds / 60;
+
+        if (timeElapsedMinutes > 0) {
+          state.wpm = Math.round(state.correctCount / 5 / timeElapsedMinutes);
+        } else {
+          state.wpm = 0;
+        }
+
+        if (state.totalTyped > 0) {
+          state.accuracy = Math.round(
+            (state.correctCount / state.totalTyped) * 100
+          );
+        } else {
+          state.accuracy = 100;
+        }
+
+        // 2. Difficulty Buttons
         difficultyOptions.forEach((d) => {
           const dBtn = document.getElementById(`diff${d}`);
-          if (state.status === 'active') {
-            dBtn.disabled = true;
-          } else {
-            dBtn.disabled = false;
-          }
+          dBtn.disabled = state.status === 'active';
           dBtn.classList.remove('active');
-          if (state.difficulty === d.toLowerCase()) {
+          if (state.difficulty === d.toLowerCase())
             dBtn.classList.add('active');
-          }
         });
-        document.getElementById('textDisplay').textContent =
-          'Click START to load test text...';
-        document.getElementById('typingInput').value = state.userInput;
+
+        // 3. Text Formatting (Spans & Cursor)
+        if (state.status === 'idle') {
+          document.getElementById('textDisplay').textContent =
+            'Click START to load test text...';
+        } else {
+          let formattedText = '';
+          for (let i = 0; i < state.targetText.length; i++) {
+            let spanClass = 'char';
+            if (i < state.userInput.length) {
+              if (state.userInput[i] === state.targetText[i])
+                spanClass += ' correct';
+              else spanClass += ' incorrect';
+            }
+            if (i === state.currentIndex && state.status === 'active')
+              spanClass += ' current';
+            formattedText += `<span class="${spanClass}">${state.targetText[i]}</span>`;
+          }
+          document.getElementById('textDisplay').innerHTML = formattedText;
+        }
+
+        // 4. Input & Buttons State
+        const typingInput = document.getElementById('typingInput');
+        typingInput.value = state.userInput;
+
         switch (state.status) {
           case 'idle':
             document.getElementById('resetBtn').disabled = true;
             document.getElementById('startBtn').disabled = false;
-            document.getElementById('typingInput').disabled = true;
+            typingInput.disabled = true;
             break;
           case 'active':
             document.getElementById('resetBtn').disabled = false;
             document.getElementById('startBtn').disabled = true;
-            document.getElementById('typingInput').disabled = false;
-            document.getElementById('textDisplay').textContent =
-              state.targetText;
+            typingInput.disabled = false;
+            typingInput.focus();
             break;
           case 'completed':
             document.getElementById('resetBtn').disabled = false;
             document.getElementById('startBtn').disabled = false;
-            document.getElementById('typingInput').disabled = true;
-            document.getElementById('textDisplay').textContent =
-              state.targetText;
+            typingInput.disabled = true;
             break;
         }
-        document.getElementById('statTime').textContent = state.timeLimit;
-        // TODO 11: Difficulty Button Active States
-        // Target IDs: `diffEasy`, `diffMedium`, `diffHard`
-        // Goal: Apply 'active' class to selected difficulty button, remove from others based on state.difficulty.
 
-        // TODO 12: Prompt Message Visibility
-        // Target ID: `promptMessage`
-        // Goal: Show/hide instructional text based on status.
-        // Behavior: Display 'block' if status is 'idle'. Display 'none' if status is 'active' or 'completed'.
-        // TODO 13: Button State Management
-        // Target IDs: `startBtn`, `resetBtn`
-        // Goal: Enable/disable buttons based on test status.
-        // Behavior: Disable start button if status is 'active'. Enable reset button if status is 'active' or 'completed'. Disable reset if 'idle'.
-        // TODO 14: Input Field State Management
-        // Target ID: `typingInput`
-        // Goal: Sync textarea value and disabled state with test status.
-        // Behavior: Set input value to state.userInput. Disable if status is NOT 'active'. Enable and focus() if status IS 'active'.
-        // TODO 15: Stats Bar Updates
-        // Target IDs: `statTime`, `statWPM`, `statAccuracy`, `statProgress`
-        // Goal: Update live statistics during test.
-        // Behavior: Set textContent for timeRemaining, calculated WPM, calculated accuracy (with % symbol), and progress (format: "currentIndex / targetText.length").
-        // TODO 16: Text Display Rendering
-        // Target IDs: `textWrapper`, `textDisplay`
-        // Goal: Render formatted text and update wrapper state classes.
-        // Behavior: Update innerHTML of textDisplay with the HTML string from TODO 10. Apply classes to textWrapper based on status: 'idle', 'active', or 'completed' (make sure to remove old classes).
-        // TODO 17: Results Panel Display
-        // Target IDs: `resultsPanel`, `resultWPM`, `resultAccuracy`, `resultChars`, `resultErrors`, `resultsMessage`
-        // Goal: Show results panel with final statistics when test completes.
-        // Behavior: Add 'visible' class to panel if status is 'completed', remove if not. Populate all result stat IDs with final values. Call TODO 9 to display the performance message.
+        // 5. Dashboards & Visuals
+        document.getElementById('statTime').textContent = state.timeRemaining;
+        document.getElementById('statWPM').textContent = state.wpm;
+        document.getElementById('statAccuracy').textContent =
+          state.accuracy + '%';
+        document.getElementById('statProgress').textContent =
+          state.currentIndex + '/' + state.targetText.length;
+
+        document.getElementById('promptMessage').style.display =
+          state.status === 'idle' ? 'block' : 'none';
+        document.getElementById('textWrapper').className =
+          'text-display-wrapper ' + state.status;
+
+        // TODO 17 & 9: The Final Results Panel
+        // (We will write this part next!)
+        const resultsPanel = document.getElementById('resultsPanel');
+
+        if (state.status === 'completed') {
+          // Add the visible class to trigger the CSS slide-in animation
+          resultsPanel.classList.add('visible');
+
+          // Populate the final numbers
+          document.getElementById('resultWPM').textContent = state.wpm;
+          document.getElementById('resultAccuracy').textContent =
+            state.accuracy + '%';
+          document.getElementById('resultChars').textContent = state.totalTyped;
+          document.getElementById('resultErrors').textContent =
+            state.incorrectCount;
+
+          // Call our helper function to show the custom message
+          document.getElementById('resultsMessage').textContent =
+            getPerformanceMessage(state.wpm, state.accuracy);
+        } else {
+          // If the game resets or is active, hide the panel!
+          resultsPanel.classList.remove('visible');
+        }
       };
 
-      // Initial render
+      // Initial Boot
       render(state);
     </script>
   </body>

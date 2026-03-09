@@ -496,9 +496,7 @@
         </p>
         <form id="form17">
           <input type="text" placeholder="Press Enter to submit" />
-          <button type="submit" onclick="ex17wrong(event)">
-            Wrong Handler
-          </button>
+          <button type="submit">Wrong Handler</button>
         </form>
         <div class="output" id="out17">
           Use onsubmit on form, not onclick on button!
@@ -620,13 +618,8 @@
 
       function ex3(e) {
         // TODO: Prevent default and determine which button was clicked
-        if (e.target.value === 'save') {
-          const button = e.target.value; // Get submitter
-        } else {
-          const button = e.target.value;
-        }
         e.preventDefault();
-
+        const button = e.submitter;
         const action = button ? button.value : 'unknown';
         log('out3', `Button: ${action}`);
         updateStats(3);
@@ -634,6 +627,7 @@
 
       function ex4(e) {
         // TODO: Prevent first! Then check checkbox
+        e.preventDefault();
 
         const agreed = document.getElementById('agree4').checked;
         log('out4', agreed ? '✅ Agreed!' : '❌ Must agree!');
@@ -642,46 +636,70 @@
 
       function ex5(e) {
         // TODO: Prevent first! Then validate email
-
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        e.preventDefault();
         const email = document.getElementById('email5').value;
-        const isValid = false; // Check if valid email
+        const isValid = emailPattern.test(email); // Check if valid email
         log('out5', isValid ? `✅ Valid: ${email}` : '❌ Invalid email!');
         updateStats(5);
       }
 
       function ex6outer(e) {
         // TODO: Prevent outer form
-
-        log('out6', 'Outer form');
+        e.preventDefault();
+        if (e.submitter && e.submitter.textContent.includes('Inner')) {
+          log('out6', 'Inner form (prevented outer)');
+        }
+        if (e.submitter && e.submitter.textContent.includes('Outer')) {
+          log('out6', 'Outer form');
+        }
         updateStats(6);
       }
 
       function ex6inner(e) {
         // TODO: Prevent inner AND stop bubbling to outer!
-
-        log('out6', 'Inner form (prevented outer)');
       }
 
       // Ex 7: Setup SPA routing
       // TODO: Add click listener to #nav7, prevent default, update URL
       document.getElementById('nav7').addEventListener('click', (e) => {
         // YOUR CODE HERE
+        e.preventDefault();
+        if (e.target.tagName === 'A') {
+          const href = e.target.getAttribute('href');
+          log('out7', `Current Page" ${href}`);
+        }
       });
 
       // Ex 8: Keyboard shortcuts
       document.getElementById('editor8').addEventListener('keydown', (e) => {
         // TODO: If Ctrl+S, prevent default and show custom save
+        if (e.ctrlKey && e.key === 's') {
+          e.preventDefault();
+          log('out8', `💾 Custom save triggered!: ${e.target.value}`);
+          updateStats(8);
+        }
       });
 
       function ex9(e) {
         // TODO: Prevent context menu
-
+        e.preventDefault();
         log('out9', 'Custom menu!');
         updateStats(9);
       }
 
       // Ex 10: Drag and drop
       const dropzone = document.getElementById('dropzone10');
+      dropzone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropzone.style.background = '#e5e7eb';
+      });
+      dropzone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropzone.style.background = 'transparent';
+        log('out10', '📁 File drop intercepted!');
+        updateStats(10);
+      });
       // TODO: Add dragover listener with preventDefault
       // TODO: Add drop listener with preventDefault
 
@@ -696,38 +714,44 @@
       function ex12add() {
         // TODO: Add input field dynamically
         fieldCount++;
+        const newInput = document.createElement('input');
+        newInput.type = 'text';
+        newInput.placeholder = `Field ${fieldCount}`;
+        document.getElementById('fields12').appendChild(newInput);
       }
 
       function ex12submit(e) {
         // TODO: Prevent and collect all field values
-
+        e.preventDefault();
         log('out12', `Submitted ${fieldCount} fields`);
+        fieldCount = 0;
+        document.getElementById('fields12').innerHTML = '';
         updateStats(12);
       }
 
       function ex13(e) {
         // TODO: Prevent spacebar scroll
-
+        e.preventDefault();
         log('out13', 'Spacebar prevented!');
         updateStats(13);
       }
 
       function ex14copy(e) {
         // TODO: Prevent copy
-
+        e.preventDefault();
         log('out14', '❌ Copy prevented!');
         updateStats(14);
       }
 
       function ex14paste(e) {
         // TODO: Prevent paste
-
+        e.preventDefault();
         log('out14', '❌ Paste prevented!');
       }
 
       function ex15(e) {
         // TODO: Prevent, then ask confirmation
-
+        e.preventDefault();
         log('out15', 'Reset prevented');
         updateStats(15);
       }
@@ -736,7 +760,7 @@
 
       function ex16(e) {
         // TODO: Prevent FIRST, then validate
-
+        e.preventDefault();
         const value = document.getElementById('input16').value;
         log('out16', value === 'valid' ? '✅ Valid!' : '❌ Invalid!');
         updateStats(16);
@@ -744,8 +768,16 @@
 
       // Ex 17: Setup correct form listener
       // TODO: Add submit listener to form17, NOT click listener
-
+      document.getElementById('form17').addEventListener('submit', (e) => {
+        e.preventDefault();
+        log(
+          'out17',
+          '✅ Correct: Caught form submit (Works for Enter AND Click!)'
+        );
+        updateStats(17);
+      });
       function ex17wrong(e) {
+        e.preventDefault();
         log('out17', '❌ Wrong: onclick misses Enter key!');
       }
 
@@ -755,7 +787,7 @@
 
       function ex18child(e) {
         // TODO: Stop propagation!
-
+        e.stopPropagation();
         log('out18', '✅ Child clicked (prevented bubbling)');
         updateStats(18);
       }
@@ -764,13 +796,16 @@
         // TODO: Only prevent if internal link (starts with /)
 
         const href = e.target.getAttribute('href');
+        if (href && href.startsWith('/')) {
+          e.preventDefault();
+        }
         log('out19', `Link: ${href}`);
         updateStats(19);
       }
 
       function ex20(e) {
         // TODO: Use preventDefault(), don't rely on return false
-
+        e.preventDefault();
         log('out20', '✅ Correct: Using preventDefault()');
         updateStats(20);
         return false; // Don't rely on this!

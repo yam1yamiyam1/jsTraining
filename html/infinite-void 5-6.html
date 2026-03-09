@@ -396,15 +396,15 @@
           data-field="field8"
         />
         <input
-          type="number"
+          type="text"
           id="input-9"
-          placeholder="Number 9"
+          placeholder="Text 9"
           data-field="field9"
         />
         <input
-          type="number"
+          type="text"
           id="input-10"
-          placeholder="Number 10"
+          placeholder="Text 10"
           data-field="field10"
         />
         <input
@@ -2173,58 +2173,151 @@
       // ===================================
 
       // 76. Get value from #input-1 and set it as textContent of #target-66
-      const target66Value = document.getElementById('input-1').value;
-      document.getElementById('target-66').textContent = target66Value;
+      const target66text = document.getElementById('target-66');
+      document.getElementById('input-1').addEventListener('input', (e) => {
+        target66text.textContent = e.target.value;
+      });
+      updateStatus();
       // 77. Get value from #input-2 and log it to console
-
+      document.getElementById('input-2').addEventListener('input', (e) => {
+        console.log(e.target.value);
+      });
+      updateStatus();
       // 78. Set value of #input-3 to 'Injected Value'
-
+      document.getElementById('input-3').value = 'Injected Value';
+      updateStatus();
       // 79. Get data-value from #target-67 and set as textContent of #target-68
-
+      const target67value = document.getElementById('target-67').dataset.value;
+      document.getElementById('target-68').textContent = target67value;
+      updateStatus();
       // 80. Read #input-4 value and if empty, add class '.error'
-
+      document.getElementById('input-4').disabled = false;
+      document.getElementById('input-4').addEventListener('input', (e) => {
+        if (e.target.value === '') {
+          e.target.classList.add('error');
+        } else {
+          e.target.classList.remove('error');
+        }
+      });
+      updateStatus();
       // 81. Get value from #input-5, convert to uppercase, set to #target-69 textContent
 
+      const target69 = document.getElementById('target-69');
+      document.getElementById('input-5').addEventListener('input', (e) => {
+        target69.textContent = e.target.value.toUpperCase();
+      });
+      updateStatus();
       // 82. Create a new <div> with textContent 'Created Element' and append to #container-4
-
+      const newDiv = document.createElement('div');
+      newDiv.textContent = 'Created Element';
+      document.getElementById('container-4').appendChild(newDiv);
+      updateStatus();
       // 83. Get data-id from #container-5 and set as textContent of #target-70
-
+      const cont5id = document.getElementById('container-5').dataset.id;
+      document.getElementById('target-70').textContent = cont5id;
+      updateStatus();
       // 84. Set innerHTML of #target-71 to '<span>Injected HTML</span>'
-
+      document.getElementById('target-71').innerHTML =
+        '<span>Injected HTML</span>';
+      updateStatus();
       // 85. Get value from #input-6 (number), multiply by 2, display in #target-72
-
+      const target72 = document.getElementById('target-72');
+      document.getElementById('input-6').addEventListener('input', (e) => {
+        target72.textContent = e.target.value * 2;
+      });
+      updateStatus();
       // 86. Read dataset.field from #input-7 and log to console
-
+      document.getElementById('input-7').addEventListener('input', (e) => {
+        console.log(e.target.value);
+      });
+      updateStatus();
       // 87. Create new <button> with id 'dynamic-btn-1', append to #container-6
-
+      const newBtn = document.createElement('button');
+      newBtn.id = 'dynamic-btn-1';
+      document.getElementById('container-6').appendChild(newBtn);
+      updateStatus();
       // 88. Get value from #input-8, parse as integer, add 10, display in #target-73
-
+      const target73 = document.getElementById('target-73');
+      document.getElementById('input-8').addEventListener('input', (e) => {
+        target73.textContent = parseInt(e.target.value) + 10;
+      });
+      updateStatus();
       // 89. Set data-custom attribute on #target-74 to 'custom-value'
-
+      document.getElementById('target-74').dataset.custom = 'custom-value';
+      updateStatus();
       // 90. Get textContent from #target-75, append ' - Modified', set back
-
+      const t75cont = document.getElementById('target-75');
+      t75cont.textContent = t75cont.textContent + ' - Modified';
+      updateStatus();
       // 91. Read value from #input-9, check if contains '@', add '.error' if not
-
+      document.getElementById('input-9').addEventListener('input', (e) => {
+        if (!e.target.value.includes('@')) {
+          e.target.classList.add('error');
+        } else {
+          e.target.classList.remove('error');
+        }
+      });
+      updateStatus();
       // 92. Create <li> element with text 'Dynamic Item', append to #list-1
-
+      const newLi = document.createElement('li');
+      newLi.textContent = 'Dynamic Item';
+      document.getElementById('list-1').appendChild(newLi);
+      updateStatus();
       // 93. Get data-value from #target-76, convert to number, log if > 50
-
+      const t76val = Number(document.getElementById('target-76').dataset.value);
+      if (t76val > 50) {
+        console.log(t76val);
+      }
+      updateStatus();
       // 94. Set innerHTML of #container-7 to '<p>New Content</p>'
-
+      document.getElementById('container-7').innerHTML = '<p>New Content</p>';
+      updateStatus();
       // 95. Get value from #input-10 and if it equals 'secret', add '.rainbow' to #target-77
-
+      document.getElementById('input-10').addEventListener('input', (e) => {
+        if (e.target.value === 'secret') {
+          e.target.classList.add('rainbow');
+        } else {
+          e.target.classList.remove('rainbow');
+        }
+      });
+      updateStatus();
       // 96. Create <span> with textContent from #input-11, append to #target-78
-
+      const span = document.createElement('span');
+      document.getElementById('input-11').addEventListener('input', (e) => {
+        span.textContent = e.target.value;
+      });
+      document.getElementById('target-78').appendChild(span);
+      updateStatus();
       // 97. Read data-id from #container-8, set as id of newly created <div>
-
+      const c8did = document.getElementById('container-8');
+      const newDiv2 = document.createElement('div');
+      newDiv2.dataset.id = c8did.dataset.id;
+      c8did.appendChild(newDiv2);
+      updateStatus();
       // 98. Get value from #input-12, split by space, count words, display in #target-79
-
+      const t79 = document.getElementById('target-79');
+      document.getElementById('input-12').addEventListener('input', (e) => {
+        const text = e.target.value.trim();
+        const count = text.length;
+        t79.innerHTML = `<span>Text: ${text}</span><span>Count: ${count}</span>`;
+      });
+      updateStatus();
       // 99. Set multiple data attributes on #target-80: data-a='1', data-b='2', data-c='3'
-
+      document.getElementById('target-80').dataset.a = '1';
+      document.getElementById('target-80').dataset.b = '2';
+      document.getElementById('target-80').dataset.c = '3';
+      updateStatus();
       // 100. Get textContent from #target-81, reverse string, set back
-
+      const t81 = document.getElementById('target-81');
+      const rvrs = t81.textContent.split('').reverse().join('');
+      t81.textContent = rvrs;
+      updateStatus();
       // 101. Create new <input> with type='text' and placeholder='Dynamic', append to #form-1
-
+      const newInput2 = document.createElement('input');
+      newInput2.type = 'text';
+      newInput2.placeholder = 'Dynamic';
+      document.getElementById('form-1').appendChild(newInput2);
+      updateStatus();
       // 102. Get value from #input-13, check length > 5, toggle '.active' on #target-82
 
       // 103. Read dataset.value from #target-83, log to console

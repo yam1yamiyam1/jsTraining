@@ -98,7 +98,9 @@ function setupAll() {
   document.getElementById('input-35').value = 'split this string';
   document.getElementById('input-36').value = 'test@example.com';
   document.getElementById('input-37').value = 'Test Length';
-
+  document.getElementById('form-input-1').setAttribute('name', 'formInput1');
+  document.getElementById('form-input-2').setAttribute('name', 'formInput2');
+  document.getElementById('form-input-3').setAttribute('name', 'formInput3');
   // PHASE 4: Domain Expansion (226-300)
   // Delegation zone elements are already set up in HTML
 
@@ -510,6 +512,7 @@ updateStatus();
 const newInput2 = document.createElement('input');
 newInput2.type = 'text';
 newInput2.placeholder = 'Dynamic';
+newInput2.name = 'dynamicInput';
 document.getElementById('form-1').appendChild(newInput2);
 updateStatus();
 // 102. Get value from #input-13, check length > 5, toggle '.active' on #target-82
@@ -774,77 +777,197 @@ updateStatus();
 // ===================================
 
 // 151. Add click listener to #form-btn-1, prevent form submission
-
+// document.getElementById('form-btn-1').addEventListener('click', (e) => {
+//   e.preventDefault();
+// });
+updateStatus();
 // 152. Add click listener to #target-143, use e?.target to safely get id
-
+document.getElementById('target-143').addEventListener('click', (e) => {
+  e.preventDefault();
+  console.log(e?.target.id);
+});
+updateStatus();
 // 153. Add submit listener to #form-1, prevent default and log form data
-
+document.getElementById('form-1').addEventListener('submit', (e) => {
+  e.preventDefault();
+  console.log('form submitted');
+  const data = new FormData(e.target); // Step 2: Collect data
+  const formValues = Object.fromEntries(data); // Step 3: Convert to object
+  console.log(formValues);
+});
+updateStatus();
 // 154. Get #target-144 safely with optional chaining, add '.active' if exists
-
+document.getElementById('target-144')?.classList.add('active');
+updateStatus();
 // 155. Add click listener to #target-145, prevent default, stop propagation
-
+document.getElementById('target-145').addEventListener('click', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  console.log(e.target);
+});
+updateStatus();
 // 156. Safely read #input-30?.value, default to 'N/A' if null
-
+document.getElementById('input-30')?.value ?? 'N/A';
+updateStatus();
 // 157. Add click to #form-btn-2, prevent submit, validate #form-input-2 not empty
-
+// document.getElementById('form-btn-2').addEventListener('click', (e) => {
+//   e.preventDefault();
+//   const fi2 = document.getElementById('form-input-2');
+//   if (fi2?.value) {
+//     console.log(fi2.value);
+//   } else {
+//     console.log('empty');
+//   }
+// });
+updateStatus();
 // 158. Get #target-146 safely, check if exists before adding class
-
+document.getElementById('target-146')?.classList.add('error');
+updateStatus();
 // 159. Add submit to #form-2, preventDefault, check if input value contains '@'
-
+document.getElementById('form-2').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const data = new FormData(e.target);
+  const { formInput2 } = Object.fromEntries(data);
+  console.log(formInput2?.includes('@'));
+});
+updateStatus();
 // 160. Safely access #nest-3?.dataset?.depth, log with ?? 'unknown'
-
+console.log(document.getElementById('nest-3')?.dataset?.depth ?? 'unknown');
+updateStatus();
 // 161. Add click to #target-147, e.stopPropagation(), toggle '.active'
-
+document.getElementById('target-147').addEventListener('click', (e) => {
+  e.stopPropagation();
+  e.target.classList.toggle('active');
+});
+updateStatus();
 // 162. Get #input-31?.value, safely convert to uppercase with ?.toUpperCase()
-
+console.log(document.getElementById('input-31')?.value?.toUpperCase());
+updateStatus();
 // 163. Add submit to #form-3, prevent default, get submitter button id
-
+document.getElementById('form-3').addEventListener('submit', (e) => {
+  e.preventDefault();
+  console.log(e.submitter.id);
+});
+updateStatus();
 // 164. Safely read #target-148?.textContent, default 'Empty' if falsy
-
+console.log(document.getElementById('target-148')?.textContent ?? 'Empty');
+updateStatus();
 // 165. Add click to #target-149, prevent if has class '.disabled'
-
+document.getElementById('target-149').addEventListener('click', (e) => {
+  if (e.target.classList.contains('disabled')) {
+    e.preventDefault();
+    console.log('blocked');
+    return;
+  }
+  console.log('allowed');
+});
+updateStatus();
 // 166. Get #container-13?.querySelector('#target-113'), add '.highlight' if exists
-
+const c13 = document.getElementById('container-13');
+const target = c13?.querySelector('#target-113');
+if (target) {
+  target.classList.add('highlight');
+}
+updateStatus();
 // 167. Add submit to #form-4, preventDefault, validate multiple fields safely
-
+document.getElementById('form-4').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const data = e.target.elements['form-input-4'].value.trim();
+  console.log(data === '' ? 'empty' : data);
+});
+updateStatus();
 // 168. Safely chain #target-150?.parentElement?.classList?.add('active')
-
+document.getElementById('target-150')?.parentElement?.classList.add('active');
+updateStatus();
 // 169. Add click to #target-151, check e?.target?.matches('.card'), prevent if true
-
+document.getElementById('target-151').addEventListener('click', (e) => {
+  e?.target?.matches('.card') ? e.preventDefault() : console.log(false);
+});
+updateStatus();
 // 170. Get #input-32?.value, parse as int safely with parseInt() ?? 0
-
+console.log(parseInt(document.getElementById('input-32')?.value) || 0);
+updateStatus();
 // 171. Add contextmenu listener to #target-152, preventDefault to block right-click
-
+document.getElementById('target-152').addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+});
+updateStatus();
 // 172. Safely access #item-5?.dataset?.id, log with nullish coalescing
-
+console.log(document.getElementById('item-5')?.dataset?.id ?? 'none');
+updateStatus();
 // 173. Add submit to #form-5, prevent default, use e?.submitter?.value
-
+document.getElementById('form-5').addEventListener('submit', (e) => {
+  e.preventDefault();
+  console.log(e?.submitter?.value || 'none');
+});
+updateStatus();
 // 174. Get #target-153 safely, read data-value with ??, default '0'
-
+console.log(document.getElementById('target-153')?.dataset?.value ?? 0);
+updateStatus();
 // 175. Add click to #target-154, e.stopPropagation(), safely toggle class
-
+document.getElementById('target-154').addEventListener('click', (e) => {
+  e.stopPropagation();
+  e?.target?.classList.toggle('error');
+});
+updateStatus();
 // 176. Read #input-33?.value, safely call ?.trim()?.toLowerCase()
-
+console.log(
+  document.getElementById('input-33')?.value?.trim()?.toLowerCase() || 'empty'
+);
+updateStatus();
 // 177. Add submit to #form-6, preventDefault, check if reset or submit button
-
+document.getElementById('form-6').addEventListener('submit', (e) => {
+  e.preventDefault();
+  console.log(e.submitter.type);
+});
+document.getElementById('form-6').addEventListener('reset', (e) => {
+  e.preventDefault();
+  console.log('reset');
+});
+updateStatus();
 // 178. Safely get #target-155?.closest('.card'), add '.active' if exists
-
+document
+  .getElementById('target-155')
+  ?.closest('.card')
+  ?.classList.add('active');
+updateStatus();
 // 179. Add dragstart to #target-156, preventDefault to block drag
-
+document.getElementById('target-156').addEventListener('dragstart', (e) => {
+  e.preventDefault();
+});
+updateStatus();
 // 180. Get #nest-4?.dataset?.depth, safely convert to number with ?? 0
-
+console.log(document.getElementById('nest-4')?.dataset?.depth ?? 0);
+updateStatus();
 // 181. Add click to #target-157, prevent default only if data-prevent='true'
-
+document.getElementById('target-157').addEventListener('click', (e) => {
+  if (e.target.dataset.prevent === 'true') {
+    e.preventDefault();
+  }
+});
+updateStatus();
 // 182. Safely read #input-34?.checked, default false with ?? false
-
+console.log(document.getElementById('input-34')?.checked ?? false);
+updateStatus();
 // 183. Add submit to #form-7, preventDefault, safely access form elements
-
+document.getElementById('form-7').addEventListener('submit', (e) => {
+  e.preventDefault();
+  console.log(e?.target?.elements);
+});
+updateStatus();
 // 184. Get #target-158, use e?.target?.closest('.card'), safely read data-id
-
+console.log(
+  document.getElementById('target-158')?.closest('.card')?.dataset.id ?? 'none'
+);
+updateStatus();
 // 185. Add click to #target-159, stopPropagation, safely access parent
-
+document.getElementById('target-159').addEventListener('click', (e) => {
+  e.stopPropagation();
+});
+updateStatus();
 // 186. Read #input-35?.value, safely split with ?.split(' ') ?? []
-
+console.log(document.getElementById('input-35')?.value?.split(' ') ?? []);
+updateStatus();
 // 187. Add submit to #form-8, prevent default, validate with optional chaining
 
 // 188. Get #target-160 safely, check existence with ?., add class conditionally

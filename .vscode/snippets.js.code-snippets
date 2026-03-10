@@ -1,7 +1,7 @@
 {
   "Query Selector ID": {
     "prefix": "qw",
-    "body": ["document.getElementById('target-${1}')"],
+    "body": ["document.getElementById('${1}')"],
     "description": "document.querySelector for an ID",
   },
   "Query Selector Pair": {
@@ -14,11 +14,7 @@
   },
   "Add Event Listener Basic": {
     "prefix": "ew",
-    "body": [
-      "${1}.addEventListener('${2}', () => {",
-      "  output${3}.innerText = ${4};",
-      "});",
-    ],
+    "body": ["${1}.addEventListener('${2}', (${3}) => {", "  ${4}", "});"],
     "description": "Basic event listener (No 'e' parameter)",
   },
   "Insert Template Variable": {

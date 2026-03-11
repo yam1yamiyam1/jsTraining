@@ -788,13 +788,13 @@ document.getElementById('target-143').addEventListener('click', (e) => {
 });
 updateStatus();
 // 153. Add submit listener to #form-1, prevent default and log form data
-document.getElementById('form-1').addEventListener('submit', (e) => {
-  e.preventDefault();
-  console.log('form submitted');
-  const data = new FormData(e.target); // Step 2: Collect data
-  const formValues = Object.fromEntries(data); // Step 3: Convert to object
-  console.log(formValues);
-});
+// document.getElementById('form-1').addEventListener('submit', (e) => {
+//   e.preventDefault();
+//   console.log('form submitted');
+//   const data = new FormData(e.target); // Step 2: Collect data
+//   const formValues = Object.fromEntries(data); // Step 3: Convert to object
+//   console.log(formValues);
+// });
 updateStatus();
 // 154. Get #target-144 safely with optional chaining, add '.active' if exists
 document.getElementById('target-144')?.classList.add('active');
@@ -969,75 +969,191 @@ updateStatus();
 console.log(document.getElementById('input-35')?.value?.split(' ') ?? []);
 updateStatus();
 // 187. Add submit to #form-8, prevent default, validate with optional chaining
-
+document.getElementById('form-8').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const input = e.target.elements['form-input-8'].value;
+  console.log(input || 'No Input!');
+});
+updateStatus();
 // 188. Get #target-160 safely, check existence with ?., add class conditionally
-
+document.getElementById('target-160')?.classList.add('new-class');
+updateStatus();
 // 189. Add click to #target-161, use e?.target?.matches('button'), prevent if true
-
+document.getElementById('target-161')?.addEventListener('click', (e) => {
+  if (e?.target?.matches('.button')) {
+    e.preventDefault();
+  }
+});
+updateStatus();
 // 190. Safely access #container-14?.children?.[0]?.textContent
-
+console.log(
+  document.getElementById('container-14')?.children?.[0]?.textContent
+);
+updateStatus();
 // 191. Add submit to #form-9, preventDefault, safely get all input values
-
+document.getElementById('form-9')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const allInputs = [...(e?.target?.elements ?? [])]
+    .filter((e) => e.tagName === 'INPUT')
+    .map(({ id, value }) => ({ id, value: value.trim() || 'no input' }));
+  allInputs.forEach((i) => console.log(i));
+});
+updateStatus();
 // 192. Get #target-162?.dataset?.value, parse safely with Number() ?? 0
-
+console.log(Number(document.getElementById('target-162')?.dataset?.value) ?? 0);
+updateStatus();
 // 193. Add click to #target-163, check if e?.ctrlKey, prevent if true
-
+document.getElementById('target-163').addEventListener('click', (e) => {
+  if (e?.ctrlKey) {
+    e.preventDefault();
+  }
+});
+updateStatus();
 // 194. Read #input-36?.value, safely validate email with ?.includes('@')
-
+console.log(
+  document.getElementById('input-36')?.value?.includes('@') ?? 'no @'
+);
+updateStatus();
 // 195. Add submit to #form-10, prevent default, use e?.target?.elements
-
+// document.getElementById('form-10').addEventListener('submit', (e) => {
+//   e.preventDefault();
+//   console.log(e?.target?.elements);
+// });
+updateStatus();
 // 196. Get #target-164 safely, use ?.classList?.toggle()
-
+document.getElementById('target-164')?.classList?.toggle('error') ??
+  console.log('id invalid');
+updateStatus();
 // 197. Add click to #target-165, e.preventDefault(), safely log e?.type
-
+document.getElementById('target-165')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  console.log(e?.type);
+});
+updateStatus();
 // 198. Safely access #nest-5?.parentElement?.dataset?.depth
-
+console.log(
+  document.getElementById('nest-5')?.parentElement?.dataset?.depth ?? 'none'
+);
+updateStatus();
 // 199. Add click to #target-166, check e?.target?.tagName === 'BUTTON'
-
+document.getElementById('target-166')?.addEventListener('click', (e) => {
+  console.log(e?.target?.tagName === 'BUTTON');
+});
+updateStatus();
 // 200. Get #input-37?.value, safely calculate length with ?.length ?? 0
-
+console.log(document.getElementById('input-37')?.value?.length ?? 0);
+updateStatus();
 // 201. Add click to #target-167, prevent default, safely access e?.currentTarget
-
+document.getElementById('target-167').addEventListener('click', (e) => {
+  e.preventDefault();
+  console.log(e?.currentTarget);
+});
+updateStatus();
 // 202. Read #target-168?.getAttribute('data-value'), use ?? 'default'
-
+console.log(
+  document.getElementById('target-168')?.getAttribute('data-value') ?? 'default'
+);
+updateStatus();
 // 203. Add submit to #form-1 (again), prevent, safely serialize form data
-
+// document.getElementById('form-1').addEventListener('submit', (e) => {
+//   e.preventDefault();
+//   const data = new FormData(e?.target);
+//   const formValues = Object.fromEntries(data);
+//   console.log(formValues);
+// });
+updateStatus();
 // 204. Get #target-169 safely, check if null before accessing properties
-
+console.log(document.getElementById('target-169')?.textContent ?? 'null');
+updateStatus();
 // 205. Add click to #target-170, e.stopPropagation(), safely get siblings
-
+document.getElementById('target-170').addEventListener('click', (e) => {
+  e.stopPropagation();
+});
+updateStatus();
 // 206. Safely read #input-38?.type, default 'text' with ?? 'text'
-
+console.log(document.getElementById('input-38')?.type ?? 'text');
+updateStatus();
 // 207. Add click to #target-171, prevent if data-disabled='true' exists
-
+document.getElementById('target-171')?.addEventListener('click', (e) => {
+  if (e?.target?.dataset?.disabled === 'true') {
+    e.preventDefault();
+    console.log('prevented');
+  } else {
+    console.log('not prevented');
+  }
+});
+updateStatus();
 // 208. Get #container-15?.querySelector('span'), safely access textContent
-
+console.log(
+  document.getElementById('container-15')?.querySelector('span')?.textContent ??
+    'none'
+);
+updateStatus();
 // 209. Add click to #target-172, use e?.target?.dataset?.action
-
+document.getElementById('target-172').addEventListener('click', (e) => {
+  console.log(e?.target?.dataset?.action ?? 'none');
+});
+updateStatus();
 // 210. Safely access #target-173?.previousElementSibling?.id
-
+console.log(document.getElementById('target-173')?.previousElementSibling?.id);
+updateStatus();
 // 211. Add submit to form, prevent, safely access e?.submitter?.name
-
+document.getElementById('form-1').addEventListener('submit', (e) => {
+  e.preventDefault();
+  console.log(e?.submitter?.name ?? 'none');
+});
+updateStatus();
 // 212. Get #input-39?.value, safely validate with ?.match(/pattern/) ?? false
-
+console.log(
+  document.getElementById('input-39')?.value?.match('/pattern/') ?? false
+);
+updateStatus();
 // 213. Add click to #target-174, check e?.shiftKey, toggle class if true
-
+document.getElementById('target-174').addEventListener('click', (e) => {
+  if (e?.shiftKey) {
+    e?.target?.classList.toggle('error');
+  }
+});
+updateStatus();
 // 214. Safely chain #target-175?.closest('.nested-chaos')?.dataset?.depth
-
+console.log(
+  document.getElementById('target-175')?.closest('.nested-chaos')?.dataset
+    ?.depth ?? 'none'
+);
+updateStatus();
 // 215. Add click to #target-176, prevent default, safely log event properties
-
+document.getElementById('target-176')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  console.log(e);
+});
+updateStatus();
 // 216. Get #target-177 with ??, add class only if element exists
-
+document.getElementById('target-177')?.classList.add('new-class');
+updateStatus();
+document.getElementById('target-178').parentElement.classList.remove('active');
 // 217. Add click to #target-178, e.stopPropagation(), safely modify parent
-
+document.getElementById('target-178')?.addEventListener('click', (e) => {
+  e.stopPropagation();
+  e?.target.parentElement.classList.toggle('active');
+});
+updateStatus();
 // 218. Read #input-40?.disabled, safely toggle with ?? false
-
+console.log(document.getElementById('input-40')?.disabled ?? false);
+updateStatus();
 // 219. Add click to #target-179, prevent if element has '.disabled' class
-
+document.getElementById('target-179')?.addEventListener('click', (e) => {
+  if (e?.target?.classList.contains('disabled')) {
+    e.preventDefault();
+  }
+});
+updateStatus();
 // 220. Safely access #list-5?.children?.[0]?.dataset?.id
-
+console.log(document.getElementById('list-5')?.children?.[0].dataset?.id);
+updateStatus();
 // 221. Add click to #target-180, use e?.target?.closest('button')
-
+document.getElementById('target-180')?.addEventListener('click', (e) => {
+  console.log(e?.target?.closest('button') ?? 'no button');
+});
 // 222. Get #input-41?.value, safely convert with Number() and ?? 0
 
 // 223. Add click to #target-181, prevent, safely access e?.target?.attributes

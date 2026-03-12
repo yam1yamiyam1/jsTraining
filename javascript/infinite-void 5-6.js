@@ -1154,164 +1154,219 @@ updateStatus();
 document.getElementById('target-180')?.addEventListener('click', (e) => {
   console.log(e?.target?.closest('button') ?? 'no button');
 });
+updateStatus();
 // 222. Get #input-41?.value, safely convert with Number() and ?? 0
-
+console.log(Number(document.getElementById('input-41')?.value) ?? 0);
+updateStatus();
 // 223. Add click to #target-181, prevent, safely access e?.target?.attributes
-
+document.getElementById('target-181')?.addEventListener('click', (e) => {
+  e.preventDefault();
+  console.log(e?.target?.attributes);
+});
+updateStatus();
 // 224. Safely read #target-182?.nextElementSibling?.textContent
-
+console.log(
+  document.getElementById('target-182')?.nextElementSibling?.textContent ??
+    'none'
+);
+updateStatus();
 // 225. Add click to #target-183, check multiple conditions safely with ?.
-
+document.getElementById('target-183')?.addEventListener('click', (e) => {
+  console.log(e?.target?.textContent);
+  console.log(e?.target?.value ?? 'none');
+});
+updateStatus();
 // ===================================
 // PHASE 4: DOMAIN EXPANSION (Reps 226-300)
 // ===================================
 
 // 226. Add ONE click listener to #delegation-zone, handle all .delegate-btn clicks
+updateStatus();
+updateStatus();
+updateStatus();
+updateStatus();
+updateStatus();
+updateStatus();
+updateStatus();
+updateStatus();
+updateStatus();
+updateStatus();
+const dzone226 = document.getElementById('delegation-zone');
+dzone226?.addEventListener('click', (e) => {
+  const target = e.target.closest('.delegate-btn');
+  // 227. On click of .delegate-btn, use e.target.closest() to find button, log data-action
+  if (target && dzone226.contains(target)) {
+    console.log(target.dataset?.action ?? 'nothing found');
+    // 228. Delegate click to #delegation-zone, toggle '.active' on clicked button only
+    document.getElementById(`${target.id}`)?.classList.toggle('active') ??
+      console.log('has no id');
+    // 229. On .delegate-btn click, read data-zone, add '.highlight' to all buttons in same zone
+    document
+      .querySelectorAll(`[data-zone="${target.dataset.zone}"]`)
+      .forEach((e) => e.classList.toggle('highlight'));
+    // 230. Delegate to #delegation-zone, on click get data-action and update #target-184 text
+    document.getElementById('target-184').textContent =
+      target.dataset?.action ?? 'has no action';
+    // 231. On .delegate-btn click, find closest .card parent, toggle '.active'
+    target.closest('.card')?.classList?.toggle('active') ??
+      console.log('dumb fuck there is no card here');
+    // 232. Delegate click, if data-action='action1', update #target-185, #target-186, #target-187
+    if (target.dataset?.action === 'action1' ?? console.log('no action')) {
+      const t18567 = ['target-185', 'target-186', 'target-187'];
+      t18567.forEach(
+        (t) => (document.getElementById(`${t}`).textContent = 'action1')
+      );
+    }
+    const targetsToBonk = [];
+    while (targetsToBonk.length < 3) {
+      const randomNum = Math.floor(Math.random() * 100) + 201;
+      if (!targetsToBonk.includes(randomNum)) {
+        targetsToBonk.push(randomNum);
+      }
+    }
+    targetsToBonk.forEach((t) => {
+      const bonked = document.getElementById(`target-${t}`);
+      if (bonked) {
+        bonked.disabled = true;
+        bonked.textContent = 'BONKED';
+        bonked.classList.toggle('error');
+      }
+    });
 
-// 227. On click of .delegate-btn, use e.target.closest() to find button, log data-action
+    // 235. On .delegate-btn click, get data-zone, count buttons in that zone, display count
+    console.log(
+      document.querySelectorAll(`[data-zone="${target.dataset?.zone}"]`).length
+    );
+    // 236. Delegate click, find closest button, read dataset, update multiple IDs based on logic
 
-// 228. Delegate click to #delegation-zone, toggle '.active' on clicked button only
+    // 237. On click in #delegation-zone, prevent default, get submitter if form
 
-// 229. On .delegate-btn click, read data-zone, add '.highlight' to all buttons in same zone
+    // 238. Delegate to parent, toggle class on clicked item AND next sibling
 
-// 230. Delegate to #delegation-zone, on click get data-action and update #target-184 text
+    // 239. On .delegate-btn click, read data-action, if 'action5' update 5 targets
 
-// 231. On .delegate-btn click, find closest .card parent, toggle '.active'
+    // 240. Delegate click, use e.target.closest() to find card, update card AND child span
 
-// 232. Delegate click, if data-action='action1', update #target-185, #target-186, #target-187
+    // 241. On button click, read data-zone, remove '.active' from all in zone, add to clicked
 
-// 233. On button click in #delegation-zone, read data-value, update 3 different targets
+    // 242. Delegate to #delegation-zone, on click update rep counter in status panel
 
-// 234. Delegate to parent, on click check e.target.matches('.delegate-btn'), stop if not
+    // 243. On .delegate-btn click, check if Ctrl key pressed, different action if true
 
-// 235. On .delegate-btn click, get data-zone, count buttons in that zone, display count
+    // 244. Delegate click, get data-action, switch statement with 5 cases, each updates target
 
-// 236. Delegate click, find closest button, read dataset, update multiple IDs based on logic
+    // 245. On click, find closest button, get index in parent, update target with that index
 
-// 237. On click in #delegation-zone, prevent default, get submitter if form
+    // 246. Delegate to parent, on click toggle class on clicked AND previous element
 
-// 238. Delegate to parent, toggle class on clicked item AND next sibling
+    // 247. On .delegate-btn click, read data-value, update #target-188 if value > 50
 
-// 239. On .delegate-btn click, read data-action, if 'action5' update 5 targets
+    // 248. Delegate click, use closest() to find container, update all children
 
-// 240. Delegate click, use e.target.closest() to find card, update card AND child span
+    // 249. On click in #delegation-zone, count total active buttons, display in #target-189
 
-// 241. On button click, read data-zone, remove '.active' from all in zone, add to clicked
+    // 250. Delegate click, on button press read data, update 3 targets with different values
 
-// 242. Delegate to #delegation-zone, on click update rep counter in status panel
+    // 251. On .delegate-btn click, remove all '.highlight' classes, add to clicked only
 
-// 243. On .delegate-btn click, check if Ctrl key pressed, different action if true
+    // 252. Delegate to parent, on click get button id, parse number, update that numbered target
 
-// 244. Delegate click, get data-action, switch statement with 5 cases, each updates target
+    // 253. On click, use e.target.dataset to read multiple attrs, update multiple targets
 
-// 245. On click, find closest button, get index in parent, update target with that index
+    // 254. Delegate click, if data-zone='zone25', update #target-190 AND toggle #target-191
 
-// 246. Delegate to parent, on click toggle class on clicked AND previous element
+    // 255. On .delegate-btn click, find all buttons in same zone, toggle class on all
 
-// 247. On .delegate-btn click, read data-value, update #target-188 if value > 50
+    // 256. Delegate to #delegation-zone, on click update phase name in status tracker
 
-// 248. Delegate click, use closest() to find container, update all children
+    // 257. On click, read data-action, if starts with 'action2', update #target-192
 
-// 249. On click in #delegation-zone, count total active buttons, display in #target-189
+    // 258. Delegate click, use closest() to find button, update button AND parent container
 
-// 250. Delegate click, on button press read data, update 3 targets with different values
+    // 259. On .delegate-btn click, calculate index in list, update target at that index
 
-// 251. On .delegate-btn click, remove all '.highlight' classes, add to clicked only
+    // 260. Delegate to parent, on click toggle class on clicked, next, AND previous elements
 
-// 252. Delegate to parent, on click get button id, parse number, update that numbered target
+    // 261. On click in #delegation-zone, read data-zone, highlight first button in that zone
 
-// 253. On click, use e.target.dataset to read multiple attrs, update multiple targets
+    // 262. Delegate click, if button has '.active', remove from all, else add to clicked
 
-// 254. Delegate click, if data-zone='zone25', update #target-190 AND toggle #target-191
+    // 263. On .delegate-btn click, get id number, update target with same number + 100
 
-// 255. On .delegate-btn click, find all buttons in same zone, toggle class on all
+    // 264. Delegate to parent, on click check if shift key, select range if true
 
-// 256. Delegate to #delegation-zone, on click update phase name in status tracker
+    // 265. On click, read data-action number, update that many consecutive targets
 
-// 257. On click, read data-action, if starts with 'action2', update #target-192
+    // 266. Delegate click, find closest card, update card AND all children with class
 
-// 258. Delegate click, use closest() to find button, update button AND parent container
+    // 267. On .delegate-btn click, count clicks on that button, display count in target
 
-// 259. On .delegate-btn click, calculate index in list, update target at that index
+    // 268. Delegate to #delegation-zone, on click update completion % in status panel
 
-// 260. Delegate to parent, on click toggle class on clicked, next, AND previous elements
+    // 269. On click, use closest() chain to find grandparent, update grandparent class
 
-// 261. On click in #delegation-zone, read data-zone, highlight first button in that zone
+    // 270. Delegate click, read data-zone, add '.rainbow' to all odd buttons in zone
 
-// 262. Delegate click, if button has '.active', remove from all, else add to clicked
+    // 271. On .delegate-btn click, if data-action contains 'action3', chain 3 updates
 
-// 263. On .delegate-btn click, get id number, update target with same number + 100
+    // 272. Delegate to parent, on click swap classes between clicked and sibling
 
-// 264. Delegate to parent, on click check if shift key, select range if true
+    // 273. On click, read multiple data attributes, update targets based on values
 
-// 265. On click, read data-action number, update that many consecutive targets
+    // 274. Delegate click, find button by closest(), update button text to click count
 
-// 266. Delegate click, find closest card, update card AND all children with class
+    // 275. On .delegate-btn click, get zone, toggle all buttons in zone simultaneously
 
-// 267. On .delegate-btn click, count clicks on that button, display count in target
+    // 276. Delegate to #delegation-zone, on click create new element and append
 
-// 268. Delegate to #delegation-zone, on click update completion % in status panel
+    // 277. On click, use e.target.matches() to check type, different logic for each
 
-// 269. On click, use closest() chain to find grandparent, update grandparent class
+    // 278. Delegate click, read data-action, filter targets, update filtered set
 
-// 270. Delegate click, read data-zone, add '.rainbow' to all odd buttons in zone
+    // 279. On .delegate-btn click, find position in parent, update that numbered container
 
-// 271. On .delegate-btn click, if data-action contains 'action3', chain 3 updates
+    // 280. Delegate to parent, on click update clicked AND all matching data-zone
 
-// 272. Delegate to parent, on click swap classes between clicked and sibling
+    // 281. On click in #delegation-zone, read data, update rep-tracker dynamically
 
-// 273. On click, read multiple data attributes, update targets based on values
+    // 282. Delegate click, use closest() to find button, clone and append to parent
 
-// 274. Delegate click, find button by closest(), update button text to click count
+    // 283. On .delegate-btn click, calculate distance from first button, update target
 
-// 275. On .delegate-btn click, get zone, toggle all buttons in zone simultaneously
+    // 284. Delegate to parent, on click toggle class on clicked, siblings, AND parent
 
-// 276. Delegate to #delegation-zone, on click create new element and append
+    // 285. On click, read data-action, split by number, update that ID
 
-// 277. On click, use e.target.matches() to check type, different logic for each
+    // 286. Delegate click, find closest button, get all data attrs, update 5 targets
 
-// 278. Delegate click, read data-action, filter targets, update filtered set
+    // 287. On .delegate-btn click, check if last in zone, special action if true
 
-// 279. On .delegate-btn click, find position in parent, update that numbered container
+    // 288. Delegate to #delegation-zone, on click get index, update target-(index)
 
-// 280. Delegate to parent, on click update clicked AND all matching data-zone
+    // 289. On click, use closest() to find container, update container AND nested children
 
-// 281. On click in #delegation-zone, read data, update rep-tracker dynamically
+    // 290. Delegate click, read data-zone, remove '.error' from all, add to clicked zone
 
-// 282. Delegate click, use closest() to find button, clone and append to parent
+    // 291. On .delegate-btn click, get id, extract number, update input with that number
 
-// 283. On .delegate-btn click, calculate distance from first button, update target
+    // 292. Delegate to parent, on click find all buttons with same data-action, toggle all
 
-// 284. Delegate to parent, on click toggle class on clicked, siblings, AND parent
+    // 293. On click in #delegation-zone, calculate total buttons, update #target-193
 
-// 285. On click, read data-action, split by number, update that ID
+    // 294. Delegate click, use e.submitter if form, else use e.target for button
 
-// 286. Delegate click, find closest button, get all data attrs, update 5 targets
+    // 295. On .delegate-btn click, read data-value, update multiple targets if value matches
 
-// 287. On .delegate-btn click, check if last in zone, special action if true
+    // 296. Delegate to parent, on click get clicked element, update it AND 2 random targets
 
-// 288. Delegate to #delegation-zone, on click get index, update target-(index)
+    // 297. On click, use closest() multiple times to traverse DOM, update each level
 
-// 289. On click, use closest() to find container, update container AND nested children
+    // 298. Delegate click, find button by id, swap textContent with another button
 
-// 290. Delegate click, read data-zone, remove '.error' from all, add to clicked zone
-
-// 291. On .delegate-btn click, get id, extract number, update input with that number
-
-// 292. Delegate to parent, on click find all buttons with same data-action, toggle all
-
-// 293. On click in #delegation-zone, calculate total buttons, update #target-193
-
-// 294. Delegate click, use e.submitter if form, else use e.target for button
-
-// 295. On .delegate-btn click, read data-value, update multiple targets if value matches
-
-// 296. Delegate to parent, on click get clicked element, update it AND 2 random targets
-
-// 297. On click, use closest() multiple times to traverse DOM, update each level
-
-// 298. Delegate click, find button by id, swap textContent with another button
-
-// 299. On .delegate-btn click, read all data attrs, create object, log to console
-
+    // 299. On .delegate-btn click, read all data attrs, create object, log to console
+  } // 234. Delegate to parent, on click check e.target.matches('.delegate-btn'), stop if not
+  if (!e.target.matches('.delegate-btn')) {
+    console.log('where u even going mate');
+  }
+});
 // 300. FINAL REP: Add ONE master listener to entire body, log every click with target id, update rep-tracker to 300, add '.rainbow' to all targets, celebrate completion
